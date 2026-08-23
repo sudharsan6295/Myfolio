@@ -1,6 +1,6 @@
 # Project: Personal Site
 
-A personal blog / portfolio (About Me, Blogs, Additional Projects) built so
+A personal blog / portfolio (About Me, Blogs, Workbench) built so
 content updates never require touching code — see `README.md` for the full
 content-authoring guide (how to add a post/project, folder structure,
 frontmatter templates). This file is for working on the *code*; `README.md`
@@ -65,7 +65,7 @@ background, in the burgundy + brass palette. Tokens live in
 
 ## Working on this project
 
-- Nav labels (About Me / Blogs / Additional Projects) are defined once in
+- Nav labels (About Me / Blogs / Workbench) are defined once in
   `src/components/Nav.astro` — don't hardcode nav links elsewhere.
 - Every page goes through `src/layouts/BaseLayout.astro` for `<head>`,
   the nav, and the footer.

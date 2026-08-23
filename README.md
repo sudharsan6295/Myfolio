@@ -1,6 +1,6 @@
 # Personal Site
 
-A personal blog / portfolio — About Me, Blogs, and Additional Projects — built
+A personal blog / portfolio — About Me, Blogs, and Workbench (projects) — built
 so that **updating content never means touching code**. Every real word on
 this site (bio, work history, blog posts, project write-ups) lives in a plain
 Markdown file under `src/content/`. Add or edit a file, push, and the live
@@ -119,12 +119,20 @@ To pull a post down temporarily without deleting it, set `draft: true`.
 ## How to update About Me / work experience
 
 Edit the single file `src/content/about/about.md`. The frontmatter holds your
-name, role, tagline, contact links, and the `experience` list (most recent
-role first); the Markdown body below the frontmatter is your bio paragraph(s),
-shown at the top of the `/about` page. There's only ever one file in this
-folder.
+name, role, tagline, contact links, the "at a glance" fields below, and the
+`experience` list (most recent role first); the Markdown body below the
+frontmatter is your bio paragraph(s), shown at the top of the `/about` page.
+There's only ever one file in this folder.
 
 ```yaml
+currently: "One sentence on what you're focused on right now."
+focusAreas:
+  - "Short tag, e.g. AI Product Strategy"
+tools:
+  - "Short tag, e.g. Python"
+principles:
+  - title: "A short principle title"
+    description: "One or two sentences explaining it."
 experience:
   - company: "Company name"
     role: "Your title"
@@ -135,6 +143,10 @@ experience:
       - "One accomplishment per line."
       - "Keep these concrete and specific — numbers help."
 ```
+
+`currently`, `focusAreas`, `tools`, and `principles` are all optional — each
+section on `/about` only renders if its list/field is non-empty, so you can
+leave any of them out.
 
 ## Adding images
 

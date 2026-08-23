@@ -9,6 +9,27 @@ social:
   linkedin: "https://www.linkedin.com/in/example"
   github: "https://github.com/example"
   twitter: "https://twitter.com/example"
+currently: "Building the eval harness for a retrieval-augmented assistant at Northwind AI, and writing a longer piece on confidence thresholds as a product surface."
+focusAreas:
+  - "AI Product Strategy"
+  - "Applied ML & Evals"
+  - "Technical Leadership"
+  - "0→1 Product Development"
+tools:
+  - "Python"
+  - "SQL"
+  - "Figma"
+  - "Linear"
+  - "Amplitude"
+  - "LangChain"
+  - "Notion"
+principles:
+  - title: "Evals before opinions"
+    description: "If a feature can't be measured against real, messy inputs before launch, its 'accuracy' is a guess wearing a lab coat."
+  - title: "Design the failure state first"
+    description: "What a user sees when the model is wrong or uncertain isn't a loading-spinner afterthought — for a meaningful slice of users, the fallback is the product."
+  - title: "Translate risk into money"
+    description: "A confusion matrix means nothing to Finance or Legal. My job is turning precision and recall into a cost-of-error number someone can actually approve or reject."
 experience:
   - company: "Northwind AI"
     role: "Senior Product Manager, Applied AI"
@@ -55,4 +76,5 @@ just-for-me stuff lives — the [field notes](/blog) I didn't write for a
 company blog, and the [prototypes](/projects) that never needed a roadmap.
 
 If you're evaluating me for a role, hiring for a team, or just want to argue
-about eval methodology, the fastest way to reach me is the email above.
+about eval methodology, the fastest way to reach me is the email in the
+panel alongside this.

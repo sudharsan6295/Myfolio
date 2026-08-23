@@ -7,17 +7,24 @@ const allPosts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 
+const [aboutEntry] = await getCollection("about");
+const about = aboutEntry?.data;
+
 const categories = ["AI", "Business", "AI Product Management"] as const;
+const categoryCounts = categories.map((c) => ({
+  label: c,
+  count: allPosts.filter((p) => p.data.category === c).length,
+}));
 ---
 
 <BaseLayout
   title="Blogs"
   description="Field notes on AI, business, and product management — written from the inside of shipping AI products, not from the outside looking in."
 >
-  <div class="mx-auto max-w-3xl px-6 pt-14 sm:pt-20 pb-24">
+  <div class="mx-auto max-w-5xl px-6 pt-14 sm:pt-20 pb-24">
     <div class="glass rounded-3xl p-8 sm:p-10 mb-8">
       <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-4">Blogs</p>
-      <h1 class="font-display italic font-medium text-4xl sm:text-5xl text-ink leading-tight">
+      <h1 class="font-display font-normal text-4xl sm:text-[3.25rem] leading-[1.1] tracking-[-0.01em] text-ink text-balance">
         Field Notes
       </h1>
       <p class="mt-4 text-ink-soft leading-relaxed max-w-xl">
@@ -33,37 +40,56 @@ const categories = ["AI", "Business", "AI Product Management"] as const;
           aria-pressed="true"
           class="filter-btn inline-flex items-center font-mono text-[0.65rem] uppercase tracking-[0.14em] border rounded-[3px] px-2 py-1 -rotate-2 transition-colors border-pen/50 text-pen"
         >
-          All
+          All ({allPosts.length})
         </button>
-        {categories.map((c) => (
+        {categoryCounts.map(({ label, count }) => (
           <button
             type="button"
-            data-filter={c}
+            data-filter={label}
             aria-pressed="false"
             class="filter-btn inline-flex items-center font-mono text-[0.65rem] uppercase tracking-[0.14em] border rounded-[3px] px-2 py-1 -rotate-2 transition-colors border-ink/40 text-ink opacity-60 hover:opacity-100"
           >
-            {c}
+            {label} ({count})
           </button>
         ))}
       </div>
     </div>
 
-    <div id="post-list">
-      {allPosts.length === 0 ? (
-        <p class="text-ink-soft text-sm py-10">
-          No entries yet — add a Markdown file to <code class="font-mono text-xs bg-paper-raised px-1.5 py-0.5 rounded">src/content/blog/</code> and redeploy.
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-6 lg:gap-8 items-start">
+      <div>
+        <div id="post-list">
+          {allPosts.length === 0 ? (
+            <p class="text-ink-soft text-sm py-10">
+              No entries yet — add a Markdown file to <code class="font-mono text-xs bg-paper-raised px-1.5 py-0.5 rounded">src/content/blog/</code> and redeploy.
+            </p>
+          ) : (
+            allPosts.map((post, i) => (
+              <div data-category={post.data.category}>
+                <PostCard post={post} entryNumber={allPosts.length - i} />
+              </div>
+            ))
+          )}
+        </div>
+        <p id="empty-state" class="hidden text-ink-soft text-sm py-10">
+          Nothing filed under this category yet.
         </p>
-      ) : (
-        allPosts.map((post, i) => (
-          <div data-category={post.data.category}>
-            <PostCard post={post} entryNumber={allPosts.length - i} />
-          </div>
-        ))
-      )}
+      </div>
+
+      <aside aria-label="About the author" class="glass rounded-3xl p-6 sticky top-24">
+        <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-3 border-b border-line pb-2">
+          Written by
+        </p>
+        <p class="font-display text-lg text-ink">{about?.name ?? "Jordan Rao"}</p>
+        <p class="text-sm text-ink-soft mt-1">{about?.role}</p>
+        <p class="text-sm text-ink-soft leading-relaxed mt-3">{about?.tagline}</p>
+        <a
+          href="/about"
+          class="mt-4 inline-flex items-center gap-1.5 font-mono text-[0.7rem] uppercase tracking-[0.1em] text-pen hover:text-ink transition-colors"
+        >
+          More about me →
+        </a>
+      </aside>
     </div>
-    <p id="empty-state" class="hidden text-ink-soft text-sm py-10">
-      Nothing filed under this category yet.
-    </p>
   </div>
 
   <script>

@@ -3,8 +3,11 @@
 
 /* ---------------------------------------------------------------------------
  * Fonts
- * Fraunces   — display serif, used large and often italic. The one voice-y
- *              typeface on the page; everything else stays quiet around it.
+ * Fraunces   — display serif, set non-italic at heading sizes (italic at
+ *              that weight/size read as too heavy — see global.css history);
+ *              italic is reserved for the small nav wordmark and blockquotes.
+ *              The one voice-y typeface on the page; everything else stays
+ *              quiet around it.
  * Work Sans  — body copy. Humanist, warm, reads comfortably at length.
  * IBM Plex Mono — utility face: dates, tags, status stamps, entry numbers.
  * ------------------------------------------------------------------------ */

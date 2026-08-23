@@ -13,33 +13,92 @@ const { Content } = await render(aboutEntry);
 ---
 
 <BaseLayout title="About Me" description={about.tagline}>
-  <article class="mx-auto max-w-3xl px-6 pt-14 sm:pt-20 pb-24">
-    <div class="glass rounded-3xl p-8 sm:p-12">
-      <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-4">About Me</p>
-      <h1 class="font-display italic font-medium text-4xl sm:text-5xl text-ink leading-tight">
-        {about.name}
-      </h1>
-      <p class="mt-3 text-lg text-ink-soft">{about.role}</p>
+  <article class="mx-auto max-w-5xl px-6 pt-14 sm:pt-20 pb-24">
+    <!-- Intro + at-a-glance -->
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6 lg:gap-8 items-start">
+      <div class="glass rounded-3xl p-8 sm:p-12">
+        <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-4">About Me</p>
+        <h1 class="font-display font-normal text-4xl sm:text-[3.25rem] leading-[1.1] tracking-[-0.01em] text-ink text-balance">
+          {about.name}
+        </h1>
+        <p class="mt-3 text-lg text-ink-soft">{about.role}</p>
 
-      <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-ink-soft border-y border-line py-4">
-        {about.location && <span>{about.location}</span>}
-        {about.email && (
-          <a href={`mailto:${about.email}`} class="hover:text-pen transition-colors">{about.email}</a>
-        )}
-        {about.resumeUrl && (
-          <a href={about.resumeUrl} class="hover:text-pen transition-colors underline decoration-line underline-offset-4">
-            Download résumé
-          </a>
-        )}
+        <div class="prose mt-8 max-w-none">
+          <Content />
+        </div>
       </div>
 
-      <div class="prose mt-10 max-w-none">
-        <Content />
-      </div>
+      <aside aria-label="At a glance" class="glass rounded-3xl p-6 flex flex-col gap-6">
+        <div>
+          <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-3 border-b border-line pb-2">
+            At a glance
+          </p>
+          <ul class="space-y-1.5 font-mono text-xs text-ink-soft">
+            {about.location && <li>{about.location}</li>}
+            {about.email && (
+              <li><a href={`mailto:${about.email}`} class="hover:text-pen transition-colors">{about.email}</a></li>
+            )}
+            {about.resumeUrl && (
+              <li><a href={about.resumeUrl} class="hover:text-pen transition-colors underline decoration-line underline-offset-4">Download résumé</a></li>
+            )}
+          </ul>
+        </div>
+
+        {about.currently && (
+          <div>
+            <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-2">Currently</p>
+            <p class="text-sm text-ink leading-relaxed">{about.currently}</p>
+          </div>
+        )}
+
+        {about.focusAreas.length > 0 && (
+          <div>
+            <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-2">Focus areas</p>
+            <ul class="flex flex-wrap gap-1.5">
+              {about.focusAreas.map((area) => (
+                <li class="font-mono text-[0.65rem] text-pen border border-pen/30 rounded-full px-2 py-0.5 bg-paper/50">
+                  {area}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {about.tools.length > 0 && (
+          <div>
+            <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-2">Tools</p>
+            <ul class="flex flex-wrap gap-1.5">
+              {about.tools.map((tool) => (
+                <li class="font-mono text-[0.65rem] text-ink-soft border border-line rounded-full px-2 py-0.5 bg-paper/50">
+                  {tool}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </aside>
     </div>
 
+    <!-- How I approach AI product work -->
+    {about.principles.length > 0 && (
+      <div class="mt-6 lg:mt-8 glass rounded-3xl p-8 sm:p-10">
+        <p class="font-mono text-xs uppercase tracking-[0.14em] text-ink-soft mb-6 border-b border-line pb-2">
+          How I approach AI product work
+        </p>
+        <div class="grid sm:grid-cols-3 gap-6 sm:gap-8">
+          {about.principles.map((principle) => (
+            <div>
+              <h3 class="font-display text-lg text-ink mb-2">{principle.title}</h3>
+              <p class="text-sm text-ink-soft leading-relaxed">{principle.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Work experience -->
     {about.experience.length > 0 && (
-      <div class="mt-8 glass rounded-3xl p-8 sm:p-12">
+      <div class="mt-6 lg:mt-8 glass rounded-3xl p-8 sm:p-12">
         <p class="font-mono text-xs uppercase tracking-[0.14em] text-ink-soft mb-6 border-b border-line pb-2">
           Work experience
         </p>

@@ -15,6 +15,9 @@ const formattedDate = pubDate.toLocaleDateString("en-US", {
   day: "numeric",
   year: "numeric",
 });
+
+const wordCount = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
+const readingMinutes = Math.max(1, Math.round(wordCount / 200));
 ---
 
 <a
@@ -28,10 +31,10 @@ const formattedDate = pubDate.toLocaleDateString("en-US", {
       </span>
     )}
     <Stamp label={category} tone="pen" />
-    <span class="font-mono text-[0.7rem] text-ink-soft">{formattedDate}</span>
+    <span class="font-mono text-[0.7rem] text-ink-soft">{formattedDate} · {readingMinutes} min read</span>
   </div>
 
-  <h3 class="font-display text-2xl sm:text-[1.65rem] leading-snug text-ink group-hover:text-pen transition-colors">
+  <h3 class="font-display font-normal text-2xl sm:text-[1.6rem] leading-snug tracking-[-0.005em] text-ink group-hover:text-pen transition-colors">
     {title}
   </h3>
   <p class="mt-2 text-ink-soft leading-relaxed max-w-2xl">{description}</p>

@@ -20,6 +20,9 @@ const formattedDate = pubDate.toLocaleDateString("en-US", {
   day: "numeric",
   year: "numeric",
 });
+
+const wordCount = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
+const readingMinutes = Math.max(1, Math.round(wordCount / 200));
 ---
 
 <BaseLayout title={title} description={description}>
@@ -35,12 +38,12 @@ const formattedDate = pubDate.toLocaleDateString("en-US", {
       <div class="flex items-center gap-3 mb-5">
         <Stamp label={category} tone="pen" />
         <span class="font-mono text-xs text-ink-soft">
-          {formattedDate}
+          {formattedDate} · {readingMinutes} min read
           {updatedDate && ` · updated ${updatedDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`}
         </span>
       </div>
 
-      <h1 class="font-display italic font-medium text-3xl sm:text-4xl text-ink leading-tight text-balance">
+      <h1 class="font-display font-normal text-3xl sm:text-[2.5rem] leading-[1.15] tracking-[-0.01em] text-ink text-balance">
         {title}
       </h1>
       <p class="mt-4 text-lg text-ink-soft leading-relaxed">{description}</p>

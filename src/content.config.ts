@@ -70,6 +70,21 @@ const about = defineCollection({
           twitter: z.string().url().optional(),
         })
         .default({}),
+      // What to focus on right now — shown in the "At a glance" panel.
+      currently: z.string().optional(),
+      // Short tags, e.g. "AI Product Strategy" — shown as chips.
+      focusAreas: z.array(z.string()).default([]),
+      // Short tags, e.g. "Python" — shown as chips.
+      tools: z.array(z.string()).default([]),
+      // A handful of working principles — shown as their own panel.
+      principles: z
+        .array(
+          z.object({
+            title: z.string(),
+            description: z.string(),
+          }),
+        )
+        .default([]),
       experience: z
         .array(
           z.object({
