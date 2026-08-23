@@ -85,6 +85,16 @@ body {
   box-shadow: 0 1px 2px rgba(43, 33, 31, 0.04), 0 12px 32px -16px rgba(43, 33, 31, 0.16);
 }
 
+/* The sticky top nav is a full-bleed glass bar, not a floating inset
+   panel — it used to be inset with padding around it, which left gaps
+   (no blur/background) that scrolled content showed through above/around
+   the bar. Edge-to-edge with only a bottom edge fixes that. */
+.nav-glass {
+  border-radius: 0;
+  border-width: 0 0 1px;
+  box-shadow: 0 1px 2px rgba(43, 33, 31, 0.04), 0 16px 28px -20px rgba(43, 33, 31, 0.14);
+}
+
 /* Long-form article typography, applied via .prose on rendered Markdown. */
 .prose {
   font-family: var(--font-body);
