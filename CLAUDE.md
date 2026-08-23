@@ -23,21 +23,42 @@ is for working on the *content*.
 
 ## Design system
 
-Warm editorial "field notebook" identity — deliberately not a corporate/
-LinkedIn look. Tokens live in `src/styles/global.css`'s `@theme` block:
+"Letterpress, seen through glass" — a hybrid of a warm manuscript/stationery
+identity and soft glassmorphism, deliberately not a corporate/LinkedIn look.
+Tokens live in `src/styles/global.css`'s `@theme` block:
 
-- Colors: `paper` (#F6F1E6, background), `paper-raised` (card bg), `ink`
-  (#23201B, text), `ink-soft` (muted text), `pen` (#2D5A6B, the accent —
-  links, active states), `highlight` (#E0A930, ochre, used sparingly),
-  `line` (hairline borders).
-- Fonts: `font-display` = Fraunces (headings, used italic for the voice-y
-  moments), `font-body` = Work Sans, `font-mono` = IBM Plex Mono (dates,
-  tags, status labels — never body text).
-- Signature motif: `<Stamp>` (`src/components/Stamp.astro`) — a small
-  rotated ink-stamp label, mono/uppercase/bordered. Used for blog
-  categories, project status (live/prototype/archived), and nowhere else —
-  keep it rare, it's the one recurring visual idea on the page, not a
-  general-purpose badge component.
+- Colors: `mesh-a`/`mesh-b`/`mesh-c` (#FCE1CE peach / #F1DCE6 blush /
+  #F7ECD8 warm cream — the fixed gradient mesh painted on `body`, see
+  below), `paper` (#FBF8F3, the frosted-glass panel base color, *not* a
+  flat page background), `paper-raised` (denser panel fill), `ink`
+  (#2B211F, warm charcoal text), `ink-soft` (muted text), `pen` (#5B1A22,
+  burgundy — the one accent: links, active states, headings), `pen-soft`
+  (lighter burgundy, hovers), `highlight` (#B9975B, brass — seal rims,
+  metallic accents, used sparingly), `line` (soft warm hairline border).
+- Fonts: `font-display` = Playfair Display (headings, used italic —
+  the "letterpress" half), `font-body` = Lora (a warm literary serif, not
+  a sans — reads like a printed letter), `font-mono` = Courier Prime (a
+  typewriter face for dates/tags/status labels — deliberately not a
+  coder's monospace, fits the stationery half of the identity).
+- **The gradient mesh + glass panels are the layout mechanic, not
+  decoration.** `body` paints a fixed radial/linear gradient mesh (the
+  "glass" half); every surface above it — nav, footer, cards, section
+  panels — is a `.glass` panel (`src/styles/global.css`): translucent
+  `color-mix()` background, `backdrop-filter: blur(18px) saturate(135%)`,
+  a soft light border, a soft shadow. Never give a section a flat opaque
+  background — it should float over the mesh, not hide it. New sections
+  should get `class="glass rounded-3xl p-8"` (or similar), not a plain
+  Tailwind background color.
+- Signature motif: `<Seal>` (`src/components/Seal.astro`) — a small
+  frosted-glass circular medallion (a modern "wax seal") showing the
+  label's first letter, next to a mono uppercase caption. Used for blog
+  categories and project status (live/prototype/archived), and nowhere
+  else — keep it rare, it's the one recurring visual idea on the page.
+  There is no `Stamp.astro` any more; `Seal` fully replaced it.
+- Long-form Markdown bodies (post/project content, the about bio) get a
+  drop-cap on their first paragraph via `.prose > p:first-of-type::first-letter`
+  in `global.css` — part of the letterpress/manuscript feel, don't remove
+  it when touching `.prose`.
 
 ## Working on this project
 

@@ -2,7 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PostCard from "../components/PostCard.astro";
 import ProjectCard from "../components/ProjectCard.astro";
-import Stamp from "../components/Stamp.astro";
+import Seal from "../components/Seal.astro";
 import { getCollection } from "astro:content";
 
 const [aboutEntry] = await getCollection("about");
@@ -21,14 +21,14 @@ const previewProjects = allProjects.slice(0, 3);
 ---
 
 <BaseLayout title={about?.name ?? "Jordan Rao"} description={about?.tagline}>
-  <!-- Hero: the notebook cover -->
+  <!-- Hero -->
   <section class="mx-auto max-w-5xl px-6 pt-14 sm:pt-20 pb-16">
-    <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12 lg:gap-16 items-start">
-      <div>
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8 lg:gap-10 items-start">
+      <div class="glass rounded-3xl p-8 sm:p-10">
         <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-5">
-          Field Notebook — {about?.role}
+          {about?.role}
         </p>
-        <h1 class="font-display italic font-medium text-[2.4rem] sm:text-[3.1rem] leading-[1.12] text-ink text-balance">
+        <h1 class="font-display italic font-semibold text-[2.4rem] sm:text-[3.1rem] leading-[1.12] text-ink text-balance">
           {about?.tagline}
         </h1>
         <p class="mt-6 max-w-xl text-ink-soft leading-relaxed text-[1.05rem]">
@@ -37,13 +37,13 @@ const previewProjects = allProjects.slice(0, 3);
           Start with <a href="/about" class="text-pen underline decoration-line hover:decoration-pen underline-offset-4">About Me</a>,
           or jump straight into the <a href="/blog" class="text-pen underline decoration-line hover:decoration-pen underline-offset-4">field notes</a>.
         </p>
-        <div class="mt-7 flex flex-wrap items-center gap-2.5">
-          {about?.location && <Stamp label={about.location} tone="ink" />}
-          <Stamp label="Open to AI PM roles" tone="highlight" />
+        <div class="mt-7 flex flex-wrap items-center gap-4">
+          {about?.location && <Seal label={about.location} tone="ink" />}
+          <Seal label="Open to AI PM roles" tone="highlight" />
         </div>
       </div>
 
-      <aside aria-label="Recent entries" class="lg:pt-1">
+      <aside aria-label="Recent entries" class="glass rounded-3xl p-6">
         <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-4 border-b border-line pb-2">
           Recent entries
         </p>
@@ -64,10 +64,10 @@ const previewProjects = allProjects.slice(0, 3);
   </section>
 
   <!-- Field Notes preview -->
-  <section class="mx-auto max-w-5xl px-6 py-14 border-t border-line">
+  <section class="mx-auto max-w-5xl px-6 py-14">
     <div class="flex items-baseline justify-between mb-2">
-      <h2 class="font-display text-2xl text-ink">Field Notes</h2>
-      <a href="/blog" class="font-mono text-xs uppercase tracking-[0.1em] text-pen hover:text-ink transition-colors">
+      <h2 class="font-display italic font-semibold text-2xl text-ink">Field Notes</h2>
+      <a href="/blog" class="font-mono text-xs uppercase tracking-[0.1em] text-pen hover:text-pen-soft transition-colors">
         View all →
       </a>
     </div>
@@ -78,10 +78,10 @@ const previewProjects = allProjects.slice(0, 3);
   </section>
 
   <!-- Workbench preview -->
-  <section class="mx-auto max-w-5xl px-6 py-14 border-t border-line">
+  <section class="mx-auto max-w-5xl px-6 py-14">
     <div class="flex items-baseline justify-between mb-2">
-      <h2 class="font-display text-2xl text-ink">The Workbench</h2>
-      <a href="/projects" class="font-mono text-xs uppercase tracking-[0.1em] text-pen hover:text-ink transition-colors">
+      <h2 class="font-display italic font-semibold text-2xl text-ink">The Workbench</h2>
+      <a href="/projects" class="font-mono text-xs uppercase tracking-[0.1em] text-pen hover:text-pen-soft transition-colors">
         View all →
       </a>
     </div>
@@ -92,17 +92,17 @@ const previewProjects = allProjects.slice(0, 3);
   </section>
 
   <!-- About teaser -->
-  <section class="mx-auto max-w-5xl px-6 py-16 border-t border-line">
-    <div class="rounded-lg border border-line bg-paper-raised/50 p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10 justify-between">
+  <section class="mx-auto max-w-5xl px-6 py-16">
+    <div class="glass rounded-3xl p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10 justify-between">
       <div>
         <p class="font-mono text-xs uppercase tracking-[0.14em] text-ink-soft mb-2">About</p>
-        <h2 class="font-display text-xl text-ink max-w-md">
+        <h2 class="font-display italic font-semibold text-xl text-ink max-w-md">
           Career history, the roles I've held, and how I ended up doing AI product work.
         </h2>
       </div>
       <a
         href="/about"
-        class="shrink-0 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.1em] text-paper bg-ink hover:bg-pen transition-colors rounded-[3px] px-4 py-2.5"
+        class="shrink-0 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.1em] text-paper bg-pen hover:bg-pen-soft transition-colors rounded-full px-5 py-2.5"
       >
         Read About Me →
       </a>

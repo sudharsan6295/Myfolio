@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import Stamp from "./Stamp.astro";
+import Seal from "./Seal.astro";
 
 interface Props {
   post: CollectionEntry<"blog">;
@@ -19,7 +19,7 @@ const formattedDate = pubDate.toLocaleDateString("en-US", {
 
 <a
   href={`/blog/${post.id}`}
-  class="group block py-7 border-b border-line first:pt-0 last:border-b-0"
+  class="group glass block rounded-2xl p-6 sm:p-7 mb-4 last:mb-0 hover:bg-paper/75 transition-colors"
 >
   <div class="flex items-center gap-3 mb-3">
     {entryNumber !== undefined && (
@@ -27,11 +27,11 @@ const formattedDate = pubDate.toLocaleDateString("en-US", {
         №{String(entryNumber).padStart(3, "0")}
       </span>
     )}
-    <Stamp label={category} tone="pen" />
+    <Seal label={category} tone="pen" />
     <span class="font-mono text-[0.7rem] text-ink-soft">{formattedDate}</span>
   </div>
 
-  <h3 class="font-display text-2xl sm:text-[1.65rem] leading-snug text-ink group-hover:text-pen transition-colors">
+  <h3 class="font-display italic font-semibold text-2xl sm:text-[1.65rem] leading-snug text-ink group-hover:text-pen transition-colors">
     {title}
   </h3>
   <p class="mt-2 text-ink-soft leading-relaxed max-w-2xl">{description}</p>

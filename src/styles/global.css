@@ -1,38 +1,55 @@
 /* ---------------------------------------------------------------------------
- * Fonts
- * Fraunces   — display serif, used large and often italic. The one voice-y
- *              typeface on the page; everything else stays quiet around it.
- * Work Sans  — body copy. Humanist, warm, reads comfortably at length.
- * IBM Plex Mono — utility face: dates, tags, status stamps, entry numbers.
- * (@import rules must precede all other rules, so this comes before the
- * Tailwind import below.)
+ * Fonts — "Letterpress, seen through glass."
+ * Playfair Display — display serif, engraved/high-contrast, used italic for
+ *                     the voice-y moments (the letterpress half of the pair).
+ * Lora              — body copy. Warm literary serif, reads like a printed
+ *                     letter, not a screen.
+ * Courier Prime      — utility face: dates, tags, status, entry numbers —
+ *                     a typewriter face, not a coder's monospace.
+ * (@import rules must precede all other rules, so fonts come before Tailwind.)
  * ------------------------------------------------------------------------ */
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Courier+Prime:wght@400;700&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #f6f1e6;
-  --color-paper-raised: #efe7d6;
-  --color-ink: #23201b;
-  --color-ink-soft: #6b6355;
-  --color-pen: #2d5a6b;
-  --color-pen-soft: #4a7b8c;
-  --color-highlight: #e0a930;
-  --color-line: #ddd2ba;
+  /* Gradient-mesh ground (glass) rendered behind everything — see body below. */
+  --color-mesh-a: #fce1ce; /* peach */
+  --color-mesh-b: #f1dce6; /* blush */
+  --color-mesh-c: #f7ecd8; /* warm gold-cream, third mesh stop */
 
-  --font-display: "Fraunces", ui-serif, Georgia, serif;
-  --font-body: "Work Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+  /* "paper" is now the frosted-glass panel base, not a flat page background. */
+  --color-paper: #fbf8f3;
+  --color-paper-raised: #f5efe4;
+
+  --color-ink: #2b211f; /* warm charcoal body text */
+  --color-ink-soft: #7a655f; /* muted secondary text */
+
+  /* The letterpress half: burgundy ink is the one accent color. */
+  --color-pen: #5b1a22; /* burgundy — links, active states, headings accent */
+  --color-pen-soft: #8a3b45; /* lighter burgundy, hovers/secondary emphasis */
+
+  --color-highlight: #b9975b; /* brass — seal rims, rules, metallic accents */
+  --color-line: #e7d6cf; /* soft warm hairline border */
+
+  --font-display: "Playfair Display", ui-serif, Georgia, serif;
+  --font-body: "Lora", ui-serif, Georgia, serif;
+  --font-mono: "Courier Prime", ui-monospace, "SFMono-Regular", monospace;
 }
 
 html {
-  background: var(--color-paper);
   color: var(--color-ink);
   scroll-behavior: smooth;
 }
 
+/* The gradient mesh lives fixed behind the whole page; every surface above
+   it (nav, footer, cards) is a translucent "glass" panel over this ground. */
 body {
   font-family: var(--font-body);
+  background:
+    radial-gradient(ellipse 70% 55% at 12% 8%, var(--color-mesh-c), transparent 60%),
+    radial-gradient(ellipse 65% 60% at 88% 18%, var(--color-mesh-b), transparent 60%),
+    linear-gradient(165deg, var(--color-mesh-a), var(--color-mesh-b) 55%, var(--color-mesh-c));
+  background-attachment: fixed;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -49,11 +66,23 @@ body {
   }
 }
 
-/* Visible keyboard focus everywhere, styled instead of suppressed. */
 :focus-visible {
   outline: 2px solid var(--color-pen);
   outline-offset: 3px;
   border-radius: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+ * Glass panel — the shared surface treatment for nav, footer, and cards.
+ * Frosted, translucent, soft-edged: depth comes from blur, never a shadow
+ * doing all the work alone.
+ * ------------------------------------------------------------------------ */
+.glass {
+  background: color-mix(in srgb, var(--color-paper) 62%, transparent);
+  backdrop-filter: blur(18px) saturate(135%);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  border: 1px solid color-mix(in srgb, white 55%, var(--color-line));
+  box-shadow: 0 1px 2px rgba(91, 26, 34, 0.04), 0 12px 32px -16px rgba(91, 26, 34, 0.18);
 }
 
 /* Long-form article typography, applied via .prose on rendered Markdown. */
@@ -62,21 +91,32 @@ body {
   color: var(--color-ink);
   line-height: 1.75;
 }
+.prose > p:first-of-type::first-letter {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 3.4em;
+  line-height: 0.8;
+  float: left;
+  padding: 0.05em 0.09em 0 0;
+  color: var(--color-pen);
+}
 .prose p {
   margin-top: 1.4em;
   margin-bottom: 0;
 }
 .prose h2 {
   font-family: var(--font-display);
-  font-weight: 500;
+  font-style: italic;
+  font-weight: 600;
   font-size: 1.6rem;
   margin-top: 2.6em;
   margin-bottom: 0.7em;
-  color: var(--color-ink);
+  color: var(--color-pen);
 }
 .prose h3 {
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 600;
   font-size: 1.25rem;
   margin-top: 2em;
   margin-bottom: 0.6em;
@@ -111,7 +151,7 @@ body {
   content: "—";
   position: absolute;
   left: 0;
-  color: var(--color-pen-soft);
+  color: var(--color-highlight);
 }
 .prose blockquote {
   margin: 2em 0;
@@ -120,7 +160,7 @@ body {
   font-family: var(--font-display);
   font-style: italic;
   font-size: 1.2rem;
-  color: var(--color-ink-soft);
+  color: var(--color-pen-soft);
 }
 .prose code {
   font-family: var(--font-mono);
