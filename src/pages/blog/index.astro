@@ -15,40 +15,38 @@ const categories = ["AI", "Business", "AI Product Management"] as const;
   description="Field notes on AI, business, and product management — written from the inside of shipping AI products, not from the outside looking in."
 >
   <div class="mx-auto max-w-3xl px-6 pt-14 sm:pt-20 pb-24">
-    <div class="glass rounded-3xl p-8 sm:p-10 mb-8">
-      <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-4">Blogs</p>
-      <h1 class="font-display italic font-semibold text-4xl sm:text-5xl text-ink leading-tight">
-        Field Notes
-      </h1>
-      <p class="mt-4 text-ink-soft leading-relaxed max-w-xl">
-        Writing on AI, business, and product management — mostly the parts that
-        don't survive the trip into a company blog post.
-      </p>
+    <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-4">Blogs</p>
+    <h1 class="font-display italic font-medium text-4xl sm:text-5xl text-ink leading-tight">
+      Field Notes
+    </h1>
+    <p class="mt-4 text-ink-soft leading-relaxed max-w-xl">
+      Writing on AI, business, and product management — mostly the parts that
+      don't survive the trip into a company blog post.
+    </p>
 
-      <!-- Category filter — client-side only, no navigation, keeps this a plain static page. -->
-      <div id="category-filter" class="mt-8 flex flex-wrap gap-2">
+    <!-- Category filter — client-side only, no navigation, keeps this a plain static page. -->
+    <div id="category-filter" class="mt-8 flex flex-wrap gap-2">
+      <button
+        type="button"
+        data-filter="all"
+        aria-pressed="true"
+        class="filter-btn inline-flex items-center font-mono text-[0.65rem] uppercase tracking-[0.14em] border rounded-[3px] px-2 py-1 -rotate-2 transition-colors border-pen/50 text-pen"
+      >
+        All
+      </button>
+      {categories.map((c) => (
         <button
           type="button"
-          data-filter="all"
-          aria-pressed="true"
-          class="filter-btn font-mono text-[0.65rem] uppercase tracking-[0.12em] rounded-full px-3 py-1.5 -rotate-1 transition-colors border border-pen/50 text-pen bg-paper/60"
+          data-filter={c}
+          aria-pressed="false"
+          class="filter-btn inline-flex items-center font-mono text-[0.65rem] uppercase tracking-[0.14em] border rounded-[3px] px-2 py-1 -rotate-2 transition-colors border-ink/40 text-ink opacity-60 hover:opacity-100"
         >
-          All
+          {c}
         </button>
-        {categories.map((c) => (
-          <button
-            type="button"
-            data-filter={c}
-            aria-pressed="false"
-            class="filter-btn font-mono text-[0.65rem] uppercase tracking-[0.12em] rounded-full px-3 py-1.5 -rotate-1 transition-colors border border-line text-ink-soft opacity-70 hover:opacity-100"
-          >
-            {c}
-          </button>
-        ))}
-      </div>
+      ))}
     </div>
 
-    <div id="post-list">
+    <div id="post-list" class="mt-10">
       {allPosts.length === 0 ? (
         <p class="text-ink-soft text-sm py-10">
           No entries yet — add a Markdown file to <code class="font-mono text-xs bg-paper-raised px-1.5 py-0.5 rounded">src/content/blog/</code> and redeploy.
@@ -81,11 +79,10 @@ const categories = ["AI", "Business", "AI Product Management"] as const;
           b.setAttribute("aria-pressed", String(active));
           b.classList.toggle("border-pen/50", active);
           b.classList.toggle("text-pen", active);
-          b.classList.toggle("bg-paper/60", active);
           b.classList.toggle("opacity-100", active);
-          b.classList.toggle("border-line", !active);
-          b.classList.toggle("text-ink-soft", !active);
-          b.classList.toggle("opacity-70", !active);
+          b.classList.toggle("border-ink/40", !active);
+          b.classList.toggle("text-ink", !active);
+          b.classList.toggle("opacity-60", !active);
         });
 
         items.forEach((item) => {

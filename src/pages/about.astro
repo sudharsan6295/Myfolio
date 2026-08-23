@@ -14,32 +14,30 @@ const { Content } = await render(aboutEntry);
 
 <BaseLayout title="About Me" description={about.tagline}>
   <article class="mx-auto max-w-3xl px-6 pt-14 sm:pt-20 pb-24">
-    <div class="glass rounded-3xl p-8 sm:p-12">
-      <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-4">About Me</p>
-      <h1 class="font-display italic font-semibold text-4xl sm:text-5xl text-ink leading-tight">
-        {about.name}
-      </h1>
-      <p class="mt-3 text-lg text-ink-soft">{about.role}</p>
+    <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-4">About Me</p>
+    <h1 class="font-display italic font-medium text-4xl sm:text-5xl text-ink leading-tight">
+      {about.name}
+    </h1>
+    <p class="mt-3 text-lg text-ink-soft">{about.role}</p>
 
-      <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-ink-soft border-y border-line py-4">
-        {about.location && <span>{about.location}</span>}
-        {about.email && (
-          <a href={`mailto:${about.email}`} class="hover:text-pen transition-colors">{about.email}</a>
-        )}
-        {about.resumeUrl && (
-          <a href={about.resumeUrl} class="hover:text-pen transition-colors underline decoration-line underline-offset-4">
-            Download résumé
-          </a>
-        )}
-      </div>
+    <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-ink-soft border-y border-line py-4">
+      {about.location && <span>{about.location}</span>}
+      {about.email && (
+        <a href={`mailto:${about.email}`} class="hover:text-pen transition-colors">{about.email}</a>
+      )}
+      {about.resumeUrl && (
+        <a href={about.resumeUrl} class="hover:text-pen transition-colors underline decoration-line underline-offset-4">
+          Download résumé
+        </a>
+      )}
+    </div>
 
-      <div class="prose mt-10 max-w-none">
-        <Content />
-      </div>
+    <div class="prose mt-10 max-w-none">
+      <Content />
     </div>
 
     {about.experience.length > 0 && (
-      <div class="mt-8 glass rounded-3xl p-8 sm:p-12">
+      <div class="mt-16">
         <p class="font-mono text-xs uppercase tracking-[0.14em] text-ink-soft mb-6 border-b border-line pb-2">
           Work experience
         </p>
@@ -50,14 +48,14 @@ const { Content } = await render(aboutEntry);
                 {role.start} — {role.end}
               </p>
               <div>
-                <h3 class="font-display italic font-semibold text-lg text-ink">{role.role}</h3>
+                <h3 class="font-display text-lg text-ink">{role.role}</h3>
                 <p class="text-sm text-ink-soft mb-3">
                   {role.company}{role.location ? ` · ${role.location}` : ""}
                 </p>
                 {role.bullets.length > 0 && (
                   <ul class="space-y-1.5">
                     {role.bullets.map((bullet) => (
-                      <li class="text-sm text-ink leading-relaxed pl-4 relative before:content-['—'] before:absolute before:left-0 before:text-highlight">
+                      <li class="text-sm text-ink leading-relaxed pl-4 relative before:content-['—'] before:absolute before:left-0 before:text-pen-soft">
                         {bullet}
                       </li>
                     ))}
