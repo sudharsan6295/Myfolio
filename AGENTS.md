@@ -24,17 +24,30 @@ is for working on the *content*.
 ## Design system
 
 Warm editorial "field notebook" identity — deliberately not a corporate/
-LinkedIn look. This is the original structure/layout/type system, carried
-forward with a new palette pulled from a later design review (burgundy +
-brass, in place of the original teal + ochre). Tokens live in
+LinkedIn look. Structure/layout/type is the original field-notebook system;
+the palette is burgundy + brass (pulled from a later design review, in
+place of the original teal + ochre); the page background is the
+Glassmorphic Studio concept's gradient mesh. Tokens live in
 `src/styles/global.css`'s `@theme` block:
 
-- Colors: `paper` (#F8ECDD, flat page background — no gradient/glass, this
-  build is solid color throughout), `paper-raised` (#F2E2CC, card bg),
-  `ink` (#2B211F, text), `ink-soft` (#7A655F, muted text), `pen` (#5B1A22,
-  burgundy — the accent: links, active states), `pen-soft` (#8A3B45,
-  lighter burgundy for hovers/secondary emphasis), `highlight` (#B9975B,
-  brass, used sparingly), `line` (#E4D2C0, hairline borders).
+- Colors: `paper` (#F8ECDD, used for cards/panels, not the page bg — see
+  below), `paper-raised` (#F2E2CC, denser card bg), `ink` (#2B211F, text),
+  `ink-soft` (#7A655F, muted text), `pen` (#5B1A22, burgundy — the accent:
+  links, active states), `pen-soft` (#8A3B45, lighter burgundy for
+  hovers/secondary emphasis), `highlight` (#B9975B, brass, used
+  sparingly), `line` (#E4D2C0, hairline borders).
+- **Page background**: `body` (not `html`, and *not* a `bg-paper` Tailwind
+  class — that would override it, see the comment in `global.css`) paints
+  a fixed gradient mesh from `mesh-a`/`mesh-b`/`mesh-c` (#FCE1CE peach /
+  #F1DCE6 blush / #F7ECD8 warm cream — Glassmorphic Studio's stops,
+  rehued to match the burgundy/brass palette instead of that concept's
+  original peach/sky). `html` keeps a flat `--color-paper` background only
+  as a fallback. Surfaces that already carry a translucent/semi-transparent
+  background (nav's `bg-paper/90 backdrop-blur`, cards' `bg-paper-raised/50`)
+  read as glass over this automatically — no `.glass` utility class or
+  `backdrop-filter` was added elsewhere; keep new sections' backgrounds
+  translucent (`/40`–`/70` opacity) rather than fully opaque so the mesh
+  keeps showing through.
 - Fonts: `font-display` = Fraunces (headings, used italic for the voice-y
   moments), `font-body` = Work Sans, `font-mono` = IBM Plex Mono (dates,
   tags, status labels — never body text).
@@ -43,13 +56,13 @@ brass, in place of the original teal + ochre). Tokens live in
   categories, project status (live/prototype/archived), and nowhere else —
   keep it rare, it's the one recurring visual idea on the page, not a
   general-purpose badge component.
-- A "Letterpress & Seal × Glassmorphic Studio" variant (gradient-mesh
-  background, `.glass` translucent panels, `<Seal>` medallion instead of
-  `<Stamp>`, Playfair Display/Lora/Courier Prime type) was built and
-  reviewed but is **not** the current direction — this build intentionally
-  reverted to the field-notebook structure above and kept only that
-  variant's color palette. Don't reintroduce `backdrop-filter`/gradient-mesh
-  panels or the `Seal` component unless asked.
+- A fuller "Letterpress & Seal × Glassmorphic Studio" variant (full
+  `.glass` translucent panels everywhere, `<Seal>` medallion instead of
+  `<Stamp>`, Playfair Display/Lora/Courier Prime type, a drop-cap on
+  Markdown bodies) was built and reviewed but is **not** the current
+  direction — only that variant's palette and background gradient carried
+  forward. Don't reintroduce `.glass`/`backdrop-filter` panels or the
+  `Seal` component unless asked.
 
 ## Working on this project
 

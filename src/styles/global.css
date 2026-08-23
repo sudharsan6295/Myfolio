@@ -10,9 +10,9 @@
  * ------------------------------------------------------------------------ */
 @theme {
   /* Palette carried over from the "Letterpress & Seal" hybrid review —
-     burgundy ink + brass highlight, on a flat warm-cream page (no gradient
-     mesh / glass here — that mechanic belonged to the hybrid concept only,
-     this build is back to the original field-notebook structure). */
+     burgundy ink + brass highlight. The page background below is the
+     Glassmorphic Studio concept's gradient mesh, warmed to match this
+     palette (peach/blush/cream instead of that concept's peach/sky). */
   --color-paper: #f8ecdd;
   --color-paper-raised: #f2e2cc;
   --color-ink: #2b211f;
@@ -22,19 +22,32 @@
   --color-highlight: #b9975b;
   --color-line: #e4d2c0;
 
+  /* Gradient-mesh background stops (Glassmorphic Studio). */
+  --color-mesh-a: #fce1ce; /* peach */
+  --color-mesh-b: #f1dce6; /* blush */
+  --color-mesh-c: #f7ecd8; /* warm cream */
+
   --font-display: "Fraunces", ui-serif, Georgia, serif;
   --font-body: "Work Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
 }
 
 html {
-  background: var(--color-paper);
+  background: var(--color-paper); /* fallback if the gradient can't paint */
   color: var(--color-ink);
   scroll-behavior: smooth;
 }
 
+/* Glassmorphic Studio background — a fixed, soft gradient mesh behind the
+   whole page. Surfaces above it (nav's bg-paper/90 backdrop-blur, cards'
+   semi-transparent bg-paper-raised/50, etc.) read as glass over this. */
 body {
   font-family: var(--font-body);
+  background:
+    radial-gradient(ellipse 70% 55% at 12% 8%, var(--color-mesh-c), transparent 60%),
+    radial-gradient(ellipse 65% 60% at 88% 18%, var(--color-mesh-b), transparent 60%),
+    linear-gradient(165deg, var(--color-mesh-a), var(--color-mesh-b) 55%, var(--color-mesh-c));
+  background-attachment: fixed;
 }
 
 @media (prefers-reduced-motion: reduce) {
