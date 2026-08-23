@@ -1,0 +1,71 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection, render } from "astro:content";
+
+const [aboutEntry] = await getCollection("about");
+if (!aboutEntry) {
+  throw new Error(
+    "No entry found in src/content/about/ — add about.md following the template in README.md.",
+  );
+}
+const about = aboutEntry.data;
+const { Content } = await render(aboutEntry);
+---
+
+<BaseLayout title="About Me" description={about.tagline}>
+  <article class="mx-auto max-w-3xl px-6 pt-14 sm:pt-20 pb-24">
+    <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-4">About Me</p>
+    <h1 class="font-display italic font-medium text-4xl sm:text-5xl text-ink leading-tight">
+      {about.name}
+    </h1>
+    <p class="mt-3 text-lg text-ink-soft">{about.role}</p>
+
+    <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-ink-soft border-y border-line py-4">
+      {about.location && <span>{about.location}</span>}
+      {about.email && (
+        <a href={`mailto:${about.email}`} class="hover:text-pen transition-colors">{about.email}</a>
+      )}
+      {about.resumeUrl && (
+        <a href={about.resumeUrl} class="hover:text-pen transition-colors underline decoration-line underline-offset-4">
+          Download résumé
+        </a>
+      )}
+    </div>
+
+    <div class="prose mt-10 max-w-none">
+      <Content />
+    </div>
+
+    {about.experience.length > 0 && (
+      <div class="mt-16">
+        <p class="font-mono text-xs uppercase tracking-[0.14em] text-ink-soft mb-6 border-b border-line pb-2">
+          Work experience
+        </p>
+        <ol class="space-y-10">
+          {about.experience.map((role) => (
+            <li class="grid sm:grid-cols-[140px_1fr] gap-2 sm:gap-6">
+              <p class="font-mono text-xs text-ink-soft pt-1">
+                {role.start} — {role.end}
+              </p>
+              <div>
+                <h3 class="font-display text-lg text-ink">{role.role}</h3>
+                <p class="text-sm text-ink-soft mb-3">
+                  {role.company}{role.location ? ` · ${role.location}` : ""}
+                </p>
+                {role.bullets.length > 0 && (
+                  <ul class="space-y-1.5">
+                    {role.bullets.map((bullet) => (
+                      <li class="text-sm text-ink leading-relaxed pl-4 relative before:content-['—'] before:absolute before:left-0 before:text-pen-soft">
+                        {bullet}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    )}
+  </article>
+</BaseLayout>

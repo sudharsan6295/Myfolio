@@ -1,0 +1,42 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Stamp from "./Stamp.astro";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+const { title, summary, status, stack } = project.data;
+
+const statusTone: Record<string, "pen" | "highlight" | "ink"> = {
+  live: "pen",
+  prototype: "highlight",
+  archived: "ink",
+};
+---
+
+<a
+  href={`/projects/${project.id}`}
+  class="group block p-6 sm:p-7 rounded-lg border border-line bg-paper-raised/50 hover:bg-paper-raised hover:border-ink/20 transition-colors"
+>
+  <div class="flex items-center justify-between gap-3 mb-4">
+    <Stamp label={status} tone={statusTone[status] ?? "ink"} />
+    <span class="font-mono text-[0.65rem] text-ink-soft">
+      {new Date(project.data.startDate).getFullYear()}
+    </span>
+  </div>
+
+  <h3 class="font-display text-xl leading-snug text-ink group-hover:text-pen transition-colors">
+    {title}
+  </h3>
+  <p class="mt-2 text-sm text-ink-soft leading-relaxed">{summary}</p>
+
+  <ul class="mt-4 flex flex-wrap gap-1.5">
+    {stack.slice(0, 4).map((item) => (
+      <li class="font-mono text-[0.65rem] text-ink-soft border border-line rounded-[3px] px-1.5 py-0.5">
+        {item}
+      </li>
+    ))}
+  </ul>
+</a>

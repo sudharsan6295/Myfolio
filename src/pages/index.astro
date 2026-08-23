@@ -1,0 +1,111 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostCard from "../components/PostCard.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import Stamp from "../components/Stamp.astro";
+import { getCollection } from "astro:content";
+
+const [aboutEntry] = await getCollection("about");
+const about = aboutEntry?.data;
+
+const allPosts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const recentPosts = allPosts.slice(0, 4);
+const previewPosts = allPosts.slice(0, 3);
+
+const allProjects = (await getCollection("projects", ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const previewProjects = allProjects.slice(0, 3);
+---
+
+<BaseLayout title={about?.name ?? "Jordan Rao"} description={about?.tagline}>
+  <!-- Hero: the notebook cover -->
+  <section class="mx-auto max-w-5xl px-6 pt-14 sm:pt-20 pb-16">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12 lg:gap-16 items-start">
+      <div>
+        <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-5">
+          Field Notebook — {about?.role}
+        </p>
+        <h1 class="font-display italic font-medium text-[2.4rem] sm:text-[3.1rem] leading-[1.12] text-ink text-balance">
+          {about?.tagline}
+        </h1>
+        <p class="mt-6 max-w-xl text-ink-soft leading-relaxed text-[1.05rem]">
+          I'm {about?.name} — this is where I keep the writing that doesn't fit
+          a company blog, and the prototypes that never needed a roadmap.
+          Start with <a href="/about" class="text-pen underline decoration-line hover:decoration-pen underline-offset-4">About Me</a>,
+          or jump straight into the <a href="/blog" class="text-pen underline decoration-line hover:decoration-pen underline-offset-4">field notes</a>.
+        </p>
+        <div class="mt-7 flex flex-wrap items-center gap-2.5">
+          {about?.location && <Stamp label={about.location} tone="ink" />}
+          <Stamp label="Open to AI PM roles" tone="highlight" />
+        </div>
+      </div>
+
+      <aside aria-label="Recent entries" class="lg:pt-1">
+        <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-4 border-b border-line pb-2">
+          Recent entries
+        </p>
+        <ol class="space-y-4">
+          {recentPosts.map((post, i) => (
+            <li>
+              <a href={`/blog/${post.id}`} class="group flex items-baseline gap-3">
+                <span class="font-mono text-[0.7rem] text-ink-soft/70 shrink-0">{String(i + 1).padStart(3, "0")}</span>
+                <span class="text-sm leading-snug text-ink group-hover:text-pen transition-colors">
+                  {post.data.title}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Field Notes preview -->
+  <section class="mx-auto max-w-5xl px-6 py-14 border-t border-line">
+    <div class="flex items-baseline justify-between mb-2">
+      <h2 class="font-display text-2xl text-ink">Field Notes</h2>
+      <a href="/blog" class="font-mono text-xs uppercase tracking-[0.1em] text-pen hover:text-ink transition-colors">
+        View all →
+      </a>
+    </div>
+    <p class="text-ink-soft text-sm mb-6">Writing on AI, business, and product management.</p>
+    <div>
+      {previewPosts.map((post, i) => <PostCard post={post} entryNumber={allPosts.length - i} />)}
+    </div>
+  </section>
+
+  <!-- Workbench preview -->
+  <section class="mx-auto max-w-5xl px-6 py-14 border-t border-line">
+    <div class="flex items-baseline justify-between mb-2">
+      <h2 class="font-display text-2xl text-ink">The Workbench</h2>
+      <a href="/projects" class="font-mono text-xs uppercase tracking-[0.1em] text-pen hover:text-ink transition-colors">
+        View all →
+      </a>
+    </div>
+    <p class="text-ink-soft text-sm mb-6">MVPs and prototypes built outside the day job.</p>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {previewProjects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <!-- About teaser -->
+  <section class="mx-auto max-w-5xl px-6 py-16 border-t border-line">
+    <div class="rounded-lg border border-line bg-paper-raised/50 p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10 justify-between">
+      <div>
+        <p class="font-mono text-xs uppercase tracking-[0.14em] text-ink-soft mb-2">About</p>
+        <h2 class="font-display text-xl text-ink max-w-md">
+          Career history, the roles I've held, and how I ended up doing AI product work.
+        </h2>
+      </div>
+      <a
+        href="/about"
+        class="shrink-0 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.1em] text-paper bg-ink hover:bg-pen transition-colors rounded-[3px] px-4 py-2.5"
+      >
+        Read About Me →
+      </a>
+    </div>
+  </section>
+</BaseLayout>

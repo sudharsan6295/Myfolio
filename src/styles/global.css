@@ -1,0 +1,171 @@
+/* ---------------------------------------------------------------------------
+ * Fonts
+ * Fraunces   — display serif, used large and often italic. The one voice-y
+ *              typeface on the page; everything else stays quiet around it.
+ * Work Sans  — body copy. Humanist, warm, reads comfortably at length.
+ * IBM Plex Mono — utility face: dates, tags, status stamps, entry numbers.
+ * (@import rules must precede all other rules, so this comes before the
+ * Tailwind import below.)
+ * ------------------------------------------------------------------------ */
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #f6f1e6;
+  --color-paper-raised: #efe7d6;
+  --color-ink: #23201b;
+  --color-ink-soft: #6b6355;
+  --color-pen: #2d5a6b;
+  --color-pen-soft: #4a7b8c;
+  --color-highlight: #e0a930;
+  --color-line: #ddd2ba;
+
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-body: "Work Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+}
+
+html {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Visible keyboard focus everywhere, styled instead of suppressed. */
+:focus-visible {
+  outline: 2px solid var(--color-pen);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Long-form article typography, applied via .prose on rendered Markdown. */
+.prose {
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  line-height: 1.75;
+}
+.prose p {
+  margin-top: 1.4em;
+  margin-bottom: 0;
+}
+.prose h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.6rem;
+  margin-top: 2.6em;
+  margin-bottom: 0.7em;
+  color: var(--color-ink);
+}
+.prose h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.25rem;
+  margin-top: 2em;
+  margin-bottom: 0.6em;
+}
+.prose a {
+  color: var(--color-pen);
+  text-decoration: underline;
+  text-decoration-color: var(--color-line);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 150ms ease;
+}
+.prose a:hover {
+  text-decoration-color: var(--color-pen);
+}
+.prose ul,
+.prose ol {
+  margin-top: 1.4em;
+  padding-left: 1.3em;
+}
+.prose li + li {
+  margin-top: 0.5em;
+}
+.prose ul {
+  list-style: none;
+  padding-left: 0;
+}
+.prose ul li {
+  position: relative;
+  padding-left: 1.4em;
+}
+.prose ul li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--color-pen-soft);
+}
+.prose blockquote {
+  margin: 2em 0;
+  padding: 0.2em 0 0.2em 1.3em;
+  border-left: 2px solid var(--color-highlight);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--color-ink-soft);
+}
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--color-paper-raised);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+}
+.prose pre {
+  margin-top: 1.6em;
+  padding: 1.1em 1.2em;
+  border-radius: 6px;
+  border: 1px solid var(--color-line);
+  overflow-x: auto;
+  font-size: 0.85em;
+}
+.prose pre code {
+  background: none;
+  padding: 0;
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.6em;
+  font-size: 0.95em;
+}
+.prose th,
+.prose td {
+  border: 1px solid var(--color-line);
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+.prose th {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--color-paper-raised);
+}
+.prose img {
+  border-radius: 6px;
+  margin-top: 1.6em;
+}
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--color-line);
+  margin: 3em 0;
+}

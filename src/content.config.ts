@@ -1,0 +1,88 @@
+import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
+
+// ---------------------------------------------------------------------------
+// Blog posts — one Markdown file per post in src/content/blog/*.md
+// ---------------------------------------------------------------------------
+const blog = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      pubDate: z.coerce.date(),
+      updatedDate: z.coerce.date().optional(),
+      // Keep this list in sync with the categories mentioned in README.md.
+      category: z.enum(['AI', 'Business', 'AI Product Management']),
+      tags: z.array(z.string()).default([]),
+      coverImage: image().optional(),
+      coverImageAlt: z.string().optional(),
+      draft: z.boolean().default(false),
+      featured: z.boolean().default(false),
+    }),
+});
+
+// ---------------------------------------------------------------------------
+// Side projects / MVPs — one Markdown file per project in src/content/projects/*.md
+// ---------------------------------------------------------------------------
+const projects = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      summary: z.string(),
+      status: z.enum(['live', 'prototype', 'archived']),
+      startDate: z.coerce.date(),
+      stack: z.array(z.string()).default([]),
+      coverImage: image().optional(),
+      coverImageAlt: z.string().optional(),
+      links: z
+        .object({
+          demo: z.string().url().optional(),
+          repo: z.string().url().optional(),
+          writeup: z.string().url().optional(),
+        })
+        .default({}),
+      draft: z.boolean().default(false),
+      featured: z.boolean().default(false),
+      // Lower sorts first among featured projects; ties broken by startDate.
+      order: z.number().default(0),
+    }),
+});
+
+// ---------------------------------------------------------------------------
+// About Me — a single entry in src/content/about/about.md
+// ---------------------------------------------------------------------------
+const about = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/about' }),
+  schema: () =>
+    z.object({
+      name: z.string(),
+      role: z.string(),
+      tagline: z.string(),
+      location: z.string().optional(),
+      email: z.string().email().optional(),
+      resumeUrl: z.string().optional(),
+      social: z
+        .object({
+          linkedin: z.string().url().optional(),
+          github: z.string().url().optional(),
+          twitter: z.string().url().optional(),
+        })
+        .default({}),
+      experience: z
+        .array(
+          z.object({
+            company: z.string(),
+            role: z.string(),
+            start: z.string(),
+            end: z.string(), // e.g. "Present"
+            location: z.string().optional(),
+            bullets: z.array(z.string()).default([]),
+          }),
+        )
+        .default([]),
+    }),
+});
+
+export const collections = { blog, projects, about };

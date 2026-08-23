@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import { getCollection } from "astro:content";
+
+const projects = (await getCollection("projects", ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order || b.data.startDate.valueOf() - a.data.startDate.valueOf(),
+);
+---
+
+<BaseLayout
+  title="Additional Projects"
+  description="MVPs and prototypes built outside the day job — some live, some archived, all documented for what they actually taught me."
+>
+  <div class="mx-auto max-w-5xl px-6 pt-14 sm:pt-20 pb-24">
+    <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-4">Additional Projects</p>
+    <h1 class="font-display italic font-medium text-4xl sm:text-5xl text-ink leading-tight">
+      The Workbench
+    </h1>
+    <p class="mt-4 text-ink-soft leading-relaxed max-w-xl">
+      Side projects, MVPs, and prototypes — built to test an idea, not to hit a
+      roadmap. Each one notes what shipped, what didn't, and why.
+    </p>
+
+    <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {projects.length === 0 ? (
+        <p class="text-ink-soft text-sm py-10 col-span-full">
+          No projects yet — add a Markdown file to <code class="font-mono text-xs bg-paper-raised px-1.5 py-0.5 rounded">src/content/projects/</code> and redeploy.
+        </p>
+      ) : (
+        projects.map((project) => <ProjectCard project={project} />)
+      )}
+    </div>
+  </div>
+</BaseLayout>

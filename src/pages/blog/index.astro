@@ -1,0 +1,98 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostCard from "../../components/PostCard.astro";
+import { getCollection } from "astro:content";
+
+const allPosts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const categories = ["AI", "Business", "AI Product Management"] as const;
+---
+
+<BaseLayout
+  title="Blogs"
+  description="Field notes on AI, business, and product management — written from the inside of shipping AI products, not from the outside looking in."
+>
+  <div class="mx-auto max-w-3xl px-6 pt-14 sm:pt-20 pb-24">
+    <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-4">Blogs</p>
+    <h1 class="font-display italic font-medium text-4xl sm:text-5xl text-ink leading-tight">
+      Field Notes
+    </h1>
+    <p class="mt-4 text-ink-soft leading-relaxed max-w-xl">
+      Writing on AI, business, and product management — mostly the parts that
+      don't survive the trip into a company blog post.
+    </p>
+
+    <!-- Category filter — client-side only, no navigation, keeps this a plain static page. -->
+    <div id="category-filter" class="mt-8 flex flex-wrap gap-2">
+      <button
+        type="button"
+        data-filter="all"
+        aria-pressed="true"
+        class="filter-btn inline-flex items-center font-mono text-[0.65rem] uppercase tracking-[0.14em] border rounded-[3px] px-2 py-1 -rotate-2 transition-colors border-pen/50 text-pen"
+      >
+        All
+      </button>
+      {categories.map((c) => (
+        <button
+          type="button"
+          data-filter={c}
+          aria-pressed="false"
+          class="filter-btn inline-flex items-center font-mono text-[0.65rem] uppercase tracking-[0.14em] border rounded-[3px] px-2 py-1 -rotate-2 transition-colors border-ink/40 text-ink opacity-60 hover:opacity-100"
+        >
+          {c}
+        </button>
+      ))}
+    </div>
+
+    <div id="post-list" class="mt-10">
+      {allPosts.length === 0 ? (
+        <p class="text-ink-soft text-sm py-10">
+          No entries yet — add a Markdown file to <code class="font-mono text-xs bg-paper-raised px-1.5 py-0.5 rounded">src/content/blog/</code> and redeploy.
+        </p>
+      ) : (
+        allPosts.map((post, i) => (
+          <div data-category={post.data.category}>
+            <PostCard post={post} entryNumber={allPosts.length - i} />
+          </div>
+        ))
+      )}
+    </div>
+    <p id="empty-state" class="hidden text-ink-soft text-sm py-10">
+      Nothing filed under this category yet.
+    </p>
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll<HTMLButtonElement>(".filter-btn");
+    const items = document.querySelectorAll<HTMLElement>("#post-list > [data-category]");
+    const emptyState = document.getElementById("empty-state");
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const filter = btn.dataset.filter;
+        let visibleCount = 0;
+
+        buttons.forEach((b) => {
+          const active = b === btn;
+          b.setAttribute("aria-pressed", String(active));
+          b.classList.toggle("border-pen/50", active);
+          b.classList.toggle("text-pen", active);
+          b.classList.toggle("opacity-100", active);
+          b.classList.toggle("border-ink/40", !active);
+          b.classList.toggle("text-ink", !active);
+          b.classList.toggle("opacity-60", !active);
+        });
+
+        items.forEach((item) => {
+          const show = filter === "all" || item.dataset.category === filter;
+          item.style.display = show ? "" : "none";
+          if (show) visibleCount++;
+        });
+
+        emptyState?.classList.toggle("hidden", visibleCount !== 0);
+      });
+    });
+  </script>
+</BaseLayout>
