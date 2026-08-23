@@ -76,6 +76,18 @@ const about = defineCollection({
       focusAreas: z.array(z.string()).default([]),
       // Short tags, e.g. "Python" — shown as chips.
       tools: z.array(z.string()).default([]),
+      // Short tags, e.g. "Professional Scrum Master (PSM)" — shown as chips.
+      certifications: z.array(z.string()).default([]),
+      // Academic history, most recent first.
+      education: z
+        .array(
+          z.object({
+            degree: z.string(),
+            institution: z.string(),
+            year: z.string(),
+          }),
+        )
+        .default([]),
       // A handful of working principles — shown as their own panel.
       principles: z
         .array(

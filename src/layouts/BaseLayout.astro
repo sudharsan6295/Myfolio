@@ -1,6 +1,7 @@
 ---
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
+import { getCollection } from "astro:content";
 import "../styles/global.css";
 
 interface Props {
@@ -8,8 +9,10 @@ interface Props {
   description?: string;
 }
 
-const { title, description = "AI product notes, projects, and a running record of what's being built." } = Astro.props;
-const siteTitle = "Jordan Rao";
+const { title, description = "Personal site — field notes and project write-ups." } = Astro.props;
+
+const [aboutEntry] = await getCollection("about");
+const siteTitle = aboutEntry?.data.name ?? "Jordan Rao";
 const pageTitle = title === siteTitle ? title : `${title} · ${siteTitle}`;
 ---
 

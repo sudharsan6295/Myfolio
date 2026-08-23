@@ -76,14 +76,41 @@ const { Content } = await render(aboutEntry);
             </ul>
           </div>
         )}
+
+        {about.certifications.length > 0 && (
+          <div>
+            <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-2">Certifications</p>
+            <ul class="flex flex-wrap gap-1.5">
+              {about.certifications.map((cert) => (
+                <li class="font-mono text-[0.65rem] text-highlight border border-highlight/40 rounded-full px-2 py-0.5 bg-paper/50">
+                  {cert}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {about.education.length > 0 && (
+          <div>
+            <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-2">Education</p>
+            <ul class="space-y-2">
+              {about.education.map((edu) => (
+                <li class="text-sm text-ink leading-snug">
+                  {edu.degree}
+                  <span class="block text-xs text-ink-soft mt-0.5">{edu.institution} · {edu.year}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </aside>
     </div>
 
-    <!-- How I approach AI product work -->
+    <!-- How I approach delivery -->
     {about.principles.length > 0 && (
       <div class="mt-6 lg:mt-8 glass rounded-3xl p-8 sm:p-10">
         <p class="font-mono text-xs uppercase tracking-[0.14em] text-ink-soft mb-6 border-b border-line pb-2">
-          How I approach AI product work
+          How I approach delivery
         </p>
         <div class="grid sm:grid-cols-3 gap-6 sm:gap-8">
           {about.principles.map((principle) => (
