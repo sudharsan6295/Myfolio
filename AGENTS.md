@@ -23,46 +23,45 @@ is for working on the *content*.
 
 ## Design system
 
-Warm editorial "field notebook" identity — deliberately not a corporate/
-LinkedIn look. Structure/layout/type is the original field-notebook system;
-the palette is burgundy + brass (pulled from a later design review, in
-place of the original teal + ochre); the page background is the
-Glassmorphic Studio concept's gradient mesh. Tokens live in
+Warm editorial "field notebook" identity, in full Glassmorphic Studio
+layout: type is the original field-notebook system (Fraunces/Work
+Sans/IBM Plex Mono) and the signature motif is `<Stamp>` (not `<Seal>`),
+but every surface — nav, footer, hero, section wrappers, and every card —
+is a frosted `.glass` panel floating over a fixed gradient-mesh
+background, in the burgundy + brass palette. Tokens live in
 `src/styles/global.css`'s `@theme` block:
 
-- Colors: `paper` (#F8ECDD, used for cards/panels, not the page bg — see
-  below), `paper-raised` (#F2E2CC, denser card bg), `ink` (#2B211F, text),
-  `ink-soft` (#7A655F, muted text), `pen` (#5B1A22, burgundy — the accent:
-  links, active states), `pen-soft` (#8A3B45, lighter burgundy for
-  hovers/secondary emphasis), `highlight` (#B9975B, brass, used
-  sparingly), `line` (#E4D2C0, hairline borders).
-- **Page background**: `body` (not `html`, and *not* a `bg-paper` Tailwind
-  class — that would override it, see the comment in `global.css`) paints
-  a fixed gradient mesh from `mesh-a`/`mesh-b`/`mesh-c` (#FCE1CE peach /
-  #F1DCE6 blush / #F7ECD8 warm cream — Glassmorphic Studio's stops,
-  rehued to match the burgundy/brass palette instead of that concept's
-  original peach/sky). `html` keeps a flat `--color-paper` background only
-  as a fallback. Surfaces that already carry a translucent/semi-transparent
-  background (nav's `bg-paper/90 backdrop-blur`, cards' `bg-paper-raised/50`)
-  read as glass over this automatically — no `.glass` utility class or
-  `backdrop-filter` was added elsewhere; keep new sections' backgrounds
-  translucent (`/40`–`/70` opacity) rather than fully opaque so the mesh
-  keeps showing through.
+- Colors: `paper` (#F8ECDD), `paper-raised` (#F2E2CC, denser panel fill),
+  `ink` (#2B211F, text), `ink-soft` (#7A655F, muted text), `pen`
+  (#5B1A22, burgundy — the accent: links, active states), `pen-soft`
+  (#8A3B45, lighter burgundy for hovers), `highlight` (#B9975B, brass,
+  used sparingly), `line` (#E4D2C0, hairline borders used *inside* glass
+  panels, e.g. under a card's metadata row).
+- **Page background**: `body` (not `html`, and *not* a `bg-paper`
+  Tailwind class — that would override it, see the comment in
+  `global.css`) paints a fixed gradient mesh from `mesh-a`/`mesh-b`/`mesh-c`
+  (#FCE1CE peach / #F1DCE6 blush / #F7ECD8 warm cream). `html` keeps a
+  flat `--color-paper` background only as a fallback.
+- **`.glass` is the standard surface treatment now** (`global.css`):
+  `color-mix()` translucent background, `backdrop-filter: blur(18px)
+  saturate(135%)`, a soft light border, a soft shadow. Nav, footer,
+  `PostCard`, `ProjectCard`, and every page-section wrapper (hero panels,
+  the About bio/experience panels, blog/project intro blocks, article
+  bodies) use `class="glass rounded-2xl"` / `rounded-3xl` rather than a
+  flat `bg-paper-raised` + `border-line` combo. **When adding a new
+  section, wrap it in `.glass`, not a plain bordered box** — an opaque
+  flat background on a new section would look like a mistake against
+  everything else on the page.
 - Fonts: `font-display` = Fraunces (headings, used italic for the voice-y
   moments), `font-body` = Work Sans, `font-mono` = IBM Plex Mono (dates,
   tags, status labels — never body text).
 - Signature motif: `<Stamp>` (`src/components/Stamp.astro`) — a small
   rotated ink-stamp label, mono/uppercase/bordered. Used for blog
-  categories, project status (live/prototype/archived), and nowhere else —
-  keep it rare, it's the one recurring visual idea on the page, not a
-  general-purpose badge component.
-- A fuller "Letterpress & Seal × Glassmorphic Studio" variant (full
-  `.glass` translucent panels everywhere, `<Seal>` medallion instead of
-  `<Stamp>`, Playfair Display/Lora/Courier Prime type, a drop-cap on
-  Markdown bodies) was built and reviewed but is **not** the current
-  direction — only that variant's palette and background gradient carried
-  forward. Don't reintroduce `.glass`/`backdrop-filter` panels or the
-  `Seal` component unless asked.
+  categories, project status (live/prototype/archived), and nowhere
+  else. There is no `Seal.astro`/circular-medallion variant in this
+  build — that belonged to a different reviewed-but-unused direction
+  (Playfair Display/Lora/Courier Prime type, a Markdown drop-cap); don't
+  reintroduce those unless asked.
 
 ## Working on this project
 

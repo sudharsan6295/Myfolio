@@ -32,60 +32,62 @@ const linkLabels: Record<string, string> = {
   <article class="mx-auto max-w-3xl px-6 pt-14 sm:pt-20 pb-24">
     <a
       href="/projects"
-      class="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.1em] text-ink-soft hover:text-pen transition-colors mb-8"
+      class="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.1em] text-ink-soft hover:text-pen transition-colors mb-6"
     >
       ← All projects
     </a>
 
-    <div class="flex items-center gap-3 mb-5">
-      <Stamp label={status} tone={statusTone[status] ?? "ink"} />
-      <span class="font-mono text-xs text-ink-soft">
-        Started {startDate.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
-      </span>
-    </div>
-
-    <h1 class="font-display italic font-medium text-3xl sm:text-4xl text-ink leading-tight text-balance">
-      {title}
-    </h1>
-    <p class="mt-4 text-lg text-ink-soft leading-relaxed">{summary}</p>
-
-    {stack.length > 0 && (
-      <div class="mt-6 flex flex-wrap gap-1.5">
-        {stack.map((item) => (
-          <span class="font-mono text-[0.65rem] text-ink-soft border border-line rounded-[3px] px-2 py-0.5">
-            {item}
-          </span>
-        ))}
+    <div class="glass rounded-3xl p-8 sm:p-12">
+      <div class="flex items-center gap-3 mb-5">
+        <Stamp label={status} tone={statusTone[status] ?? "ink"} />
+        <span class="font-mono text-xs text-ink-soft">
+          Started {startDate.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+        </span>
       </div>
-    )}
 
-    {coverImage && (
-      <img
-        src={coverImage.src}
-        alt={coverImageAlt ?? ""}
-        class="mt-8 w-full rounded-lg border border-line"
-      />
-    )}
+      <h1 class="font-display italic font-medium text-3xl sm:text-4xl text-ink leading-tight text-balance">
+        {title}
+      </h1>
+      <p class="mt-4 text-lg text-ink-soft leading-relaxed">{summary}</p>
 
-    <div class="prose mt-10 max-w-none">
-      <Content />
-    </div>
+      {stack.length > 0 && (
+        <div class="mt-6 flex flex-wrap gap-1.5">
+          {stack.map((item) => (
+            <span class="font-mono text-[0.65rem] text-ink-soft border border-line rounded-[3px] px-2 py-0.5 bg-paper/50">
+              {item}
+            </span>
+          ))}
+        </div>
+      )}
 
-    {Object.entries(links).filter(([, url]) => url).length > 0 && (
-      <div class="mt-12 pt-6 border-t border-line flex flex-wrap gap-4">
-        {Object.entries(links).map(([key, url]) =>
-          url ? (
-            <a
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.1em] text-pen hover:text-ink transition-colors"
-            >
-              {linkLabels[key] ?? key} ↗
-            </a>
-          ) : null,
-        )}
+      {coverImage && (
+        <img
+          src={coverImage.src}
+          alt={coverImageAlt ?? ""}
+          class="mt-8 w-full rounded-2xl border border-line"
+        />
+      )}
+
+      <div class="prose mt-10 max-w-none">
+        <Content />
       </div>
-    )}
+
+      {Object.entries(links).filter(([, url]) => url).length > 0 && (
+        <div class="mt-12 pt-6 border-t border-line flex flex-wrap gap-4">
+          {Object.entries(links).map(([key, url]) =>
+            url ? (
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.1em] text-pen hover:text-ink transition-colors"
+              >
+                {linkLabels[key] ?? key} ↗
+              </a>
+            ) : null,
+          )}
+        </div>
+      )}
+    </div>
   </article>
 </BaseLayout>

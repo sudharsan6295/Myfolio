@@ -71,6 +71,20 @@ body {
   border-radius: 2px;
 }
 
+/* ---------------------------------------------------------------------------
+ * Glass panel — full Glassmorphic Studio layout: every surface (nav,
+ * footer, hero, section wrappers, cards) is a frosted panel floating over
+ * the gradient mesh, not a flat/bordered block. Depth comes from blur, not
+ * a heavy shadow doing all the work alone.
+ * ------------------------------------------------------------------------ */
+.glass {
+  background: color-mix(in srgb, var(--color-paper) 62%, transparent);
+  backdrop-filter: blur(18px) saturate(135%);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  border: 1px solid color-mix(in srgb, white 55%, var(--color-line));
+  box-shadow: 0 1px 2px rgba(43, 33, 31, 0.04), 0 12px 32px -16px rgba(43, 33, 31, 0.16);
+}
+
 /* Long-form article typography, applied via .prose on rendered Markdown. */
 .prose {
   font-family: var(--font-body);

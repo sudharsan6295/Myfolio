@@ -6,23 +6,25 @@ const about = aboutEntry?.data;
 const year = new Date().getFullYear();
 ---
 
-<footer class="border-t border-line mt-24">
-  <div class="mx-auto max-w-5xl px-6 py-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-    <p class="font-mono text-xs text-ink-soft tracking-wide">
-      © {year} {about?.name ?? "Jordan Rao"} · Notebook last stamped {
-        new Date().toLocaleDateString("en-US", { month: "short", year: "numeric" })
-      }
-    </p>
-    <ul class="flex items-center gap-5 font-mono text-xs uppercase tracking-[0.08em] text-ink-soft">
-      {about?.email && (
-        <li><a href={`mailto:${about.email}`} class="hover:text-pen transition-colors">Email</a></li>
-      )}
-      {about?.social?.linkedin && (
-        <li><a href={about.social.linkedin} class="hover:text-pen transition-colors" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-      )}
-      {about?.social?.github && (
-        <li><a href={about.social.github} class="hover:text-pen transition-colors" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-      )}
-    </ul>
+<footer class="px-4 pb-4 mt-24">
+  <div class="mx-auto max-w-5xl">
+    <div class="glass rounded-2xl px-6 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <p class="font-mono text-xs text-ink-soft tracking-wide">
+        © {year} {about?.name ?? "Jordan Rao"} · Notebook last stamped {
+          new Date().toLocaleDateString("en-US", { month: "short", year: "numeric" })
+        }
+      </p>
+      <ul class="flex items-center gap-5 font-mono text-xs uppercase tracking-[0.08em] text-ink-soft">
+        {about?.email && (
+          <li><a href={`mailto:${about.email}`} class="hover:text-pen transition-colors">Email</a></li>
+        )}
+        {about?.social?.linkedin && (
+          <li><a href={about.social.linkedin} class="hover:text-pen transition-colors" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+        )}
+        {about?.social?.github && (
+          <li><a href={about.social.github} class="hover:text-pen transition-colors" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        )}
+      </ul>
+    </div>
   </div>
 </footer>

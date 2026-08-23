@@ -21,10 +21,10 @@ const previewProjects = allProjects.slice(0, 3);
 ---
 
 <BaseLayout title={about?.name ?? "Jordan Rao"} description={about?.tagline}>
-  <!-- Hero: the notebook cover -->
+  <!-- Hero -->
   <section class="mx-auto max-w-5xl px-6 pt-14 sm:pt-20 pb-16">
-    <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-12 lg:gap-16 items-start">
-      <div>
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8 lg:gap-10 items-start">
+      <div class="glass rounded-3xl p-8 sm:p-10">
         <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-5">
           Field Notebook — {about?.role}
         </p>
@@ -43,7 +43,7 @@ const previewProjects = allProjects.slice(0, 3);
         </div>
       </div>
 
-      <aside aria-label="Recent entries" class="lg:pt-1">
+      <aside aria-label="Recent entries" class="glass rounded-3xl p-6">
         <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-4 border-b border-line pb-2">
           Recent entries
         </p>
@@ -64,7 +64,7 @@ const previewProjects = allProjects.slice(0, 3);
   </section>
 
   <!-- Field Notes preview -->
-  <section class="mx-auto max-w-5xl px-6 py-14 border-t border-line">
+  <section class="mx-auto max-w-5xl px-6 py-14">
     <div class="flex items-baseline justify-between mb-2">
       <h2 class="font-display text-2xl text-ink">Field Notes</h2>
       <a href="/blog" class="font-mono text-xs uppercase tracking-[0.1em] text-pen hover:text-ink transition-colors">
@@ -78,7 +78,7 @@ const previewProjects = allProjects.slice(0, 3);
   </section>
 
   <!-- Workbench preview -->
-  <section class="mx-auto max-w-5xl px-6 py-14 border-t border-line">
+  <section class="mx-auto max-w-5xl px-6 py-14">
     <div class="flex items-baseline justify-between mb-2">
       <h2 class="font-display text-2xl text-ink">The Workbench</h2>
       <a href="/projects" class="font-mono text-xs uppercase tracking-[0.1em] text-pen hover:text-ink transition-colors">
@@ -92,8 +92,8 @@ const previewProjects = allProjects.slice(0, 3);
   </section>
 
   <!-- About teaser -->
-  <section class="mx-auto max-w-5xl px-6 py-16 border-t border-line">
-    <div class="rounded-lg border border-line bg-paper-raised/50 p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10 justify-between">
+  <section class="mx-auto max-w-5xl px-6 py-16">
+    <div class="glass rounded-3xl p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10 justify-between">
       <div>
         <p class="font-mono text-xs uppercase tracking-[0.14em] text-ink-soft mb-2">About</p>
         <h2 class="font-display text-xl text-ink max-w-md">
@@ -102,7 +102,7 @@ const previewProjects = allProjects.slice(0, 3);
       </div>
       <a
         href="/about"
-        class="shrink-0 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.1em] text-paper bg-ink hover:bg-pen transition-colors rounded-[3px] px-4 py-2.5"
+        class="shrink-0 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.1em] text-paper bg-ink hover:bg-pen transition-colors rounded-full px-5 py-2.5"
       >
         Read About Me →
       </a>

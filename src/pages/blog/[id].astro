@@ -26,44 +26,46 @@ const formattedDate = pubDate.toLocaleDateString("en-US", {
   <article class="mx-auto max-w-3xl px-6 pt-14 sm:pt-20 pb-24">
     <a
       href="/blog"
-      class="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.1em] text-ink-soft hover:text-pen transition-colors mb-8"
+      class="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.1em] text-ink-soft hover:text-pen transition-colors mb-6"
     >
       ← All entries
     </a>
 
-    <div class="flex items-center gap-3 mb-5">
-      <Stamp label={category} tone="pen" />
-      <span class="font-mono text-xs text-ink-soft">
-        {formattedDate}
-        {updatedDate && ` · updated ${updatedDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`}
-      </span>
-    </div>
-
-    <h1 class="font-display italic font-medium text-3xl sm:text-4xl text-ink leading-tight text-balance">
-      {title}
-    </h1>
-    <p class="mt-4 text-lg text-ink-soft leading-relaxed">{description}</p>
-
-    {coverImage && (
-      <img
-        src={coverImage.src}
-        alt={coverImageAlt ?? ""}
-        class="mt-8 w-full rounded-lg border border-line"
-      />
-    )}
-
-    <div class="prose mt-10 max-w-none">
-      <Content />
-    </div>
-
-    {tags.length > 0 && (
-      <div class="mt-12 pt-6 border-t border-line flex flex-wrap gap-2">
-        {tags.map((tag) => (
-          <span class="font-mono text-[0.65rem] text-ink-soft border border-line rounded-[3px] px-2 py-0.5">
-            #{tag}
-          </span>
-        ))}
+    <div class="glass rounded-3xl p-8 sm:p-12">
+      <div class="flex items-center gap-3 mb-5">
+        <Stamp label={category} tone="pen" />
+        <span class="font-mono text-xs text-ink-soft">
+          {formattedDate}
+          {updatedDate && ` · updated ${updatedDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`}
+        </span>
       </div>
-    )}
+
+      <h1 class="font-display italic font-medium text-3xl sm:text-4xl text-ink leading-tight text-balance">
+        {title}
+      </h1>
+      <p class="mt-4 text-lg text-ink-soft leading-relaxed">{description}</p>
+
+      {coverImage && (
+        <img
+          src={coverImage.src}
+          alt={coverImageAlt ?? ""}
+          class="mt-8 w-full rounded-2xl border border-line"
+        />
+      )}
+
+      <div class="prose mt-10 max-w-none">
+        <Content />
+      </div>
+
+      {tags.length > 0 && (
+        <div class="mt-12 pt-6 border-t border-line flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <span class="font-mono text-[0.65rem] text-ink-soft border border-line rounded-[3px] px-2 py-0.5 bg-paper/50">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
   </article>
 </BaseLayout>

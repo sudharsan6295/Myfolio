@@ -12,36 +12,38 @@ function isActive(href: string) {
 }
 ---
 
-<header class="sticky top-0 z-40 bg-paper/90 backdrop-blur border-b border-line">
-  <div class="mx-auto max-w-5xl px-6">
-    <nav class="flex items-center justify-between h-16" aria-label="Primary">
-      <a
-        href="/"
-        class="font-display italic text-lg text-ink hover:text-pen transition-colors"
-      >
-        Jordan Rao
-      </a>
+<header class="sticky top-0 z-40 px-4 pt-4">
+  <div class="mx-auto max-w-5xl">
+    <nav class="glass rounded-2xl px-4 sm:px-6" aria-label="Primary">
+      <div class="flex items-center justify-between h-16">
+        <a
+          href="/"
+          class="font-display italic text-lg text-ink hover:text-pen transition-colors"
+        >
+          Jordan Rao
+        </a>
 
-      <ul class="flex items-center gap-1 sm:gap-2 font-mono text-[0.7rem] uppercase tracking-[0.1em]">
-        {
-          links.map((link) => (
-            <li>
-              <a
-                href={link.href}
-                aria-current={isActive(link.href) ? "page" : undefined}
-                class:list={[
-                  "inline-block px-3 py-2 rounded-[3px] transition-colors",
-                  isActive(link.href)
-                    ? "text-ink bg-paper-raised"
-                    : "text-ink-soft hover:text-ink hover:bg-paper-raised/60",
-                ]}
-              >
-                {link.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+        <ul class="flex items-center gap-1 sm:gap-2 font-mono text-[0.7rem] uppercase tracking-[0.1em]">
+          {
+            links.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  aria-current={isActive(link.href) ? "page" : undefined}
+                  class:list={[
+                    "inline-block px-3 py-2 rounded-[3px] transition-colors",
+                    isActive(link.href)
+                      ? "text-ink bg-paper-raised/70"
+                      : "text-ink-soft hover:text-ink hover:bg-paper-raised/40",
+                  ]}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </nav>
   </div>
 </header>
