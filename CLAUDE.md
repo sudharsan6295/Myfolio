@@ -162,11 +162,15 @@ background, in the burgundy + brass palette. Tokens live in
   — update it once there's a real domain (used for canonical URLs / any
   future RSS feed).
 - **Bottom spacing before the footer comes from `Footer.astro`'s own
-  `mt-24` only.** Page-level containers use `pb-8`, not `pb-24` — an
+  `mt-10` only.** Page-level containers use `pb-8`, not `pb-24` — an
   earlier version had both, which stacked into a large empty gap above
-  the footer. Don't add a large `pb-*` to a page's outer container; a
-  little breathing room (`pb-8` or less) is fine, the footer's own
-  margin does the real spacing.
+  the footer (later tightened further from `mt-24` to `mt-10` after
+  feedback that pages still felt too spaced out). Don't add a large
+  `pb-*` to a page's outer container; a little breathing room (`pb-8` or
+  less) is fine, the footer's own margin does the real spacing. Page top
+  padding is `pt-10 sm:pt-14` (tightened from `pt-14 sm:pt-20` in the
+  same pass), and stacked homepage `<section>`s use `pt-6 pb-8` rather
+  than the older `py-14`/`py-16`.
 - The Blogs page's subscribe form (`src/pages/blog/index.astro`) is
   wired to Netlify Forms (`data-netlify="true"` + a honeypot field +
   AJAX submit) — it only actually captures emails once deployed to

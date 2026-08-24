@@ -22,8 +22,8 @@ const previewProjects = allProjects.slice(0, 3);
 
 <BaseLayout title={about?.name ?? "Sudharsan Balaji"} description={about?.tagline}>
   <!-- Hero -->
-  <section class="mx-auto max-w-5xl px-6 pt-14 sm:pt-20 pb-16">
-    <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8 lg:gap-10 items-start">
+  <section class="mx-auto max-w-5xl px-6 pt-10 sm:pt-14 pb-10">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6 lg:gap-8 items-start">
       <div class="glass rounded-3xl p-8 sm:p-10">
         <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-5">
           Field Notebook — {about?.role}
@@ -64,35 +64,35 @@ const previewProjects = allProjects.slice(0, 3);
   </section>
 
   <!-- Field Notes preview -->
-  <section class="mx-auto max-w-5xl px-6 py-14">
+  <section class="mx-auto max-w-5xl px-6 pt-6 pb-8">
     <div class="flex items-baseline justify-between mb-2">
       <h2 class="font-display text-2xl text-ink">Field Notes</h2>
       <a href="/blog" class="font-mono text-xs uppercase tracking-[0.1em] text-pen hover:text-ink transition-colors">
         View all →
       </a>
     </div>
-    <p class="text-ink-soft text-sm mb-6">Writing on AI, business, and product management.</p>
+    <p class="text-ink-soft text-sm mb-4">Writing on AI, business, and product management.</p>
     <div>
       {previewPosts.map((post, i) => <PostCard post={post} entryNumber={allPosts.length - i} />)}
     </div>
   </section>
 
   <!-- Workbench preview -->
-  <section class="mx-auto max-w-5xl px-6 py-14">
+  <section class="mx-auto max-w-5xl px-6 pt-6 pb-8">
     <div class="flex items-baseline justify-between mb-2">
       <h2 class="font-display text-2xl text-ink">The Workbench</h2>
       <a href="/projects" class="font-mono text-xs uppercase tracking-[0.1em] text-pen hover:text-ink transition-colors">
         View all →
       </a>
     </div>
-    <p class="text-ink-soft text-sm mb-6">MVPs and prototypes built outside the day job.</p>
+    <p class="text-ink-soft text-sm mb-4">MVPs and prototypes built outside the day job.</p>
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {previewProjects.map((project) => <ProjectCard project={project} />)}
     </div>
   </section>
 
   <!-- About teaser -->
-  <section class="mx-auto max-w-5xl px-6 py-16">
+  <section class="mx-auto max-w-5xl px-6 pt-6 pb-8">
     <div class="glass rounded-3xl p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10 justify-between">
       <div>
         <p class="font-mono text-xs uppercase tracking-[0.14em] text-ink-soft mb-2">About</p>
