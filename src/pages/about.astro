@@ -13,7 +13,7 @@ const { Content } = await render(aboutEntry);
 ---
 
 <BaseLayout title="About Me" description={about.tagline}>
-  <article class="mx-auto max-w-5xl px-6 pt-14 sm:pt-20 pb-24">
+  <article class="mx-auto max-w-5xl px-6 pt-14 sm:pt-20 pb-8">
     <!-- Intro + at-a-glance -->
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6 lg:gap-8 items-start">
       <div class="glass rounded-3xl p-8 sm:p-12">
@@ -56,7 +56,7 @@ const { Content } = await render(aboutEntry);
             <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-2">Focus areas</p>
             <ul class="flex flex-wrap gap-1.5">
               {about.focusAreas.map((area) => (
-                <li class="font-mono text-[0.65rem] text-pen border border-pen/30 rounded-full px-2 py-0.5 bg-paper/50">
+                <li class="font-mono text-[0.65rem] text-pen border border-pen/30 rounded-[3px] px-2 py-0.5 bg-paper/50">
                   {area}
                 </li>
               ))}
@@ -69,7 +69,7 @@ const { Content } = await render(aboutEntry);
             <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-2">Tools</p>
             <ul class="flex flex-wrap gap-1.5">
               {about.tools.map((tool) => (
-                <li class="font-mono text-[0.65rem] text-ink-soft border border-line rounded-full px-2 py-0.5 bg-paper/50">
+                <li class="font-mono text-[0.65rem] text-ink-soft border border-line rounded-[3px] px-2 py-0.5 bg-paper/50">
                   {tool}
                 </li>
               ))}
@@ -82,7 +82,7 @@ const { Content } = await render(aboutEntry);
             <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-2">Certifications</p>
             <ul class="flex flex-wrap gap-1.5">
               {about.certifications.map((cert) => (
-                <li class="font-mono text-[0.65rem] text-highlight border border-highlight/40 rounded-full px-2 py-0.5 bg-paper/50">
+                <li class="font-mono text-[0.65rem] text-highlight border border-highlight/40 rounded-[3px] px-2 py-0.5 bg-paper/50">
                   {cert}
                 </li>
               ))}

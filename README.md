@@ -125,11 +125,19 @@ frontmatter is your bio paragraph(s), shown at the top of the `/about` page.
 There's only ever one file in this folder.
 
 ```yaml
+photo: "./me.jpg"          # optional — put the image file next to about.md
+photoAlt: "A photo of me"   # optional, defaults to "<name>'s profile photo"
 currently: "One sentence on what you're focused on right now."
 focusAreas:
   - "Short tag, e.g. AI Product Strategy"
 tools:
   - "Short tag, e.g. Python"
+certifications:
+  - "Short tag, e.g. Professional Scrum Master (PSM)"
+education:
+  - degree: "Degree name"
+    institution: "School name"
+    year: "2016"
 principles:
   - title: "A short principle title"
     description: "One or two sentences explaining it."
@@ -144,9 +152,11 @@ experience:
       - "Keep these concrete and specific — numbers help."
 ```
 
-`currently`, `focusAreas`, `tools`, and `principles` are all optional — each
-section on `/about` only renders if its list/field is non-empty, so you can
-leave any of them out.
+`photo`, `currently`, `focusAreas`, `tools`, `certifications`, `education`,
+and `principles` are all optional — each section on `/about` (and, for
+`photo`, the top nav) only renders if its field is set/non-empty, so you can
+leave any of them out. Without a `photo`, the nav shows your initials
+instead.
 
 ## Adding images
 
@@ -176,11 +186,12 @@ directory `dist`), so connecting it to Netlify is config-free:
    that's the whole content workflow.
 4. Once you have a real domain, update the `site` field in
    `astro.config.mjs` (used for canonical URLs).
-
-## What's placeholder right now
-
-Every piece of content — the name "Jordan Rao," the bio, the three blog
-posts, the three projects, all links and emails — is example data, written
-to demonstrate the structure and the visual design. Replace it by editing
-`src/content/about/about.md` and swapping the files in `src/content/blog/`
-and `src/content/projects/` for your own. Nothing else needs to change.
+5. The Blogs page's "Get new posts by email" form uses
+   [Netlify Forms](https://docs.netlify.com/manage/forms/setup/) —
+   detection is automatic (Netlify scans the deployed HTML for the
+   `data-netlify` form), no extra setup needed. Submissions show up under
+   **Site → Forms** in the Netlify dashboard. Note that Netlify Forms only
+   *collects* subscriber emails; it doesn't send anything to them when a
+   new post goes up. Actually emailing subscribers needs a real mailing
+   tool (Resend, Buttondown, Mailchimp, …) wired up separately — not built
+   yet.

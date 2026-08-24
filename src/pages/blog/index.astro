@@ -21,7 +21,7 @@ const categoryCounts = categories.map((c) => ({
   title="Blogs"
   description="Field notes on AI, business, and product management — written from the inside of shipping AI products, not from the outside looking in."
 >
-  <div class="mx-auto max-w-5xl px-6 pt-14 sm:pt-20 pb-24">
+  <div class="mx-auto max-w-5xl px-6 pt-14 sm:pt-20 pb-8">
     <div class="glass rounded-3xl p-8 sm:p-10 mb-8">
       <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-4">Blogs</p>
       <h1 class="font-display font-normal text-4xl sm:text-[3.25rem] leading-[1.1] tracking-[-0.01em] text-ink text-balance">
@@ -75,20 +75,61 @@ const categoryCounts = categories.map((c) => ({
         </p>
       </div>
 
-      <aside aria-label="About the author" class="glass rounded-3xl p-6 sticky top-24">
-        <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-3 border-b border-line pb-2">
-          Written by
-        </p>
-        <p class="font-display text-lg text-ink">{about?.name ?? "Sudharsan Balaji"}</p>
-        <p class="text-sm text-ink-soft mt-1">{about?.role}</p>
-        <p class="text-sm text-ink-soft leading-relaxed mt-3">{about?.tagline}</p>
-        <a
-          href="/about"
-          class="mt-4 inline-flex items-center gap-1.5 font-mono text-[0.7rem] uppercase tracking-[0.1em] text-pen hover:text-ink transition-colors"
-        >
-          More about me →
-        </a>
-      </aside>
+      <div class="flex flex-col gap-6">
+        <aside aria-label="About the author" class="glass rounded-3xl p-6">
+          <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-3 border-b border-line pb-2">
+            Written by
+          </p>
+          <p class="font-display text-lg text-ink">{about?.name ?? "Sudharsan Balaji"}</p>
+          <p class="text-sm text-ink-soft mt-1">{about?.role}</p>
+          <p class="text-sm text-ink-soft leading-relaxed mt-3">{about?.tagline}</p>
+          <a
+            href="/about"
+            class="mt-4 inline-flex items-center gap-1.5 font-mono text-[0.7rem] uppercase tracking-[0.1em] text-pen hover:text-ink transition-colors"
+          >
+            More about me →
+          </a>
+        </aside>
+
+        <aside aria-label="Subscribe" class="glass rounded-3xl p-6">
+          <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-3 border-b border-line pb-2">
+            Get new posts by email
+          </p>
+          <p class="text-sm text-ink-soft leading-relaxed mb-4">
+            No noise — just an email when a new entry goes up.
+          </p>
+          <form
+            name="blog-subscribe"
+            method="POST"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+            id="subscribe-form"
+            class="flex flex-col gap-2"
+          >
+            <input type="hidden" name="form-name" value="blog-subscribe" />
+            <p class="hidden">
+              <label>Don't fill this out: <input name="bot-field" /></label>
+            </p>
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="you@email.com"
+              class="w-full font-mono text-xs text-ink placeholder:text-ink-soft/70 bg-paper/60 border border-line rounded-[3px] px-3 py-2 focus:outline-none focus:border-pen"
+            />
+            <button
+              type="submit"
+              class="font-mono text-[0.7rem] uppercase tracking-[0.1em] text-paper bg-ink hover:bg-pen transition-colors rounded-[3px] px-3 py-2"
+            >
+              Subscribe
+            </button>
+          </form>
+          <p id="subscribe-success" class="hidden text-sm text-pen mt-3">Subscribed — thanks!</p>
+          <p id="subscribe-error" class="hidden text-sm text-ink-soft mt-3">
+            Something went wrong — try again, or email me directly.
+          </p>
+        </aside>
+      </div>
     </div>
   </div>
 
@@ -121,6 +162,34 @@ const categoryCounts = categories.map((c) => ({
 
         emptyState?.classList.toggle("hidden", visibleCount !== 0);
       });
+    });
+
+    // Netlify Forms: submit via fetch so the page doesn't reload. Only
+    // actually captures anything once this site is deployed to Netlify —
+    // locally (`astro dev`) the POST still resolves OK (so the success
+    // message shows either way) but there's no real Netlify backend behind
+    // it here, so nothing is actually saved until it's live.
+    const subscribeForm = document.getElementById("subscribe-form") as HTMLFormElement | null;
+    const subscribeSuccess = document.getElementById("subscribe-success");
+    const subscribeError = document.getElementById("subscribe-error");
+
+    subscribeForm?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      subscribeError?.classList.add("hidden");
+      const data = new FormData(subscribeForm);
+      try {
+        const response = await fetch("/", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams(data as unknown as Record<string, string>).toString(),
+        });
+        if (!response.ok) throw new Error(`${response.status}`);
+        subscribeForm.reset();
+        subscribeForm.classList.add("hidden");
+        subscribeSuccess?.classList.remove("hidden");
+      } catch {
+        subscribeError?.classList.remove("hidden");
+      }
     });
   </script>
 </BaseLayout>

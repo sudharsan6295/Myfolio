@@ -62,6 +62,17 @@ background, in the burgundy + brass palette. Tokens live in
   build — that belonged to a different reviewed-but-unused direction
   (Playfair Display/Lora/Courier Prime type, a Markdown drop-cap); don't
   reintroduce those unless asked.
+- **Tags/chips use `rounded-[3px]`, not `rounded-full`** — the About
+  page's focus-area/tools/certifications chips were originally pill-
+  shaped and were deliberately changed to match `<Stamp>`'s square-ish
+  corner radius (no circular edges is a stated preference). Any new
+  tag/chip UI should follow `rounded-[3px]`, not reach for a pill.
+- Nav avatar: `about.photo` (optional, `src/content.config.ts`) shows a
+  small circular image next to the name in the top nav
+  (`src/components/Nav.astro`), linked to `/`. Circular is correct here
+  — the "no circular edges" preference above is specifically about the
+  tag/chip components, not avatars. Without a photo, the nav falls back
+  to a circular initials badge computed from `about.name`.
 
 ## Working on this project
 
@@ -82,6 +93,18 @@ background, in the burgundy + brass palette. Tokens live in
 - `astro.config.mjs`'s `site` field is a placeholder (`https://example.com`)
   — update it once there's a real domain (used for canonical URLs / any
   future RSS feed).
+- **Bottom spacing before the footer comes from `Footer.astro`'s own
+  `mt-24` only.** Page-level containers use `pb-8`, not `pb-24` — an
+  earlier version had both, which stacked into a large empty gap above
+  the footer. Don't add a large `pb-*` to a page's outer container; a
+  little breathing room (`pb-8` or less) is fine, the footer's own
+  margin does the real spacing.
+- The Blogs page's subscribe form (`src/pages/blog/index.astro`) is
+  wired to Netlify Forms (`data-netlify="true"` + a honeypot field +
+  AJAX submit) — it only actually captures emails once deployed to
+  Netlify; locally it "succeeds" in the UI without saving anything. It
+  collects emails only, it doesn't send anything to subscribers — that
+  would need a real mailing tool wired up separately.
 - Images: reference them from frontmatter (`coverImage: "./file.jpg"`
   relative to the content file) so Astro's image pipeline optimizes them at
   build time — don't put content images in `public/` and hand-write `<img>`

@@ -55,7 +55,7 @@ const projects = defineCollection({
 // ---------------------------------------------------------------------------
 const about = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/about' }),
-  schema: () =>
+  schema: ({ image }) =>
     z.object({
       name: z.string(),
       role: z.string(),
@@ -63,6 +63,12 @@ const about = defineCollection({
       location: z.string().optional(),
       email: z.string().email().optional(),
       resumeUrl: z.string().optional(),
+      // Shown as a small avatar in the top nav, next to your name. Optional —
+      // without it, the nav shows your initials instead. To add one, put an
+      // image file next to about.md (e.g. src/content/about/me.jpg) and set
+      // photo: "./me.jpg" in the frontmatter.
+      photo: image().optional(),
+      photoAlt: z.string().optional(),
       social: z
         .object({
           linkedin: z.string().url().optional(),
