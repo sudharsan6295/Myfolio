@@ -5,8 +5,11 @@ tagline: "Lead Solution Consultant with a decade across program, project, and pr
 location: "Coimbatore, India"
 email: "sudharsan6295@gmail.com"
 resumeUrl: "/resume.pdf"
+photo: "./photo.jpg"
+photoAlt: "Sudharsan Balaji"
 social:
   linkedin: "https://www.linkedin.com/in/sudharsan-balaji-65a06791/"
+  github: "https://github.com/sudharsan6295"
 currently: "Pursuing a PGP in AI & Business with Scaler, building toward AI product management and analytics-translator roles between business and technical teams."
 focusAreas:
   - "Program, Project & Product Management"

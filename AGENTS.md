@@ -91,8 +91,16 @@ background, in the burgundy + brass palette. Tokens live in
 - GitHub (`about.social.github`) is read in four places — Nav's Connect
   panel, `Footer.astro`, `/about`'s "At a glance" aside, and a "More on
   GitHub →" link on `/projects` — all gated on the same field, so
-  setting it once in `about.md` turns all four on together. It's
-  currently unset (no fabricated URL was put in place of a real one).
+  setting it once in `about.md` turns all four on together (now set, to
+  `https://github.com/sudharsan6295`).
+- The nav/lightbox photo (`src/content/about/photo.jpg`) was supplied as
+  a full AI-generated portrait with a "Made with AI" watermark badge in
+  one corner; it was cropped (via a one-off `sharp` script, not a
+  standing tool — no image-editing dependency was added to the project)
+  to a tight head-and-shoulders frame that excludes the badge entirely,
+  and converted from ~1.9MB PNG to a ~70KB JPEG. The original upload and
+  the crop test files were deleted after — only the final cropped JPEG
+  is committed.
 - Blog category checkboxes (the subscribe form's per-category opt-in,
   `src/pages/blog/index.astro`) toggle their checked-state chip style
   via JS `classList`, not a CSS `peer-checked:` variant — a
