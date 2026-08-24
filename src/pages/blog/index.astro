@@ -10,7 +10,13 @@ const allPosts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
 const [aboutEntry] = await getCollection("about");
 const about = aboutEntry?.data;
 
-const categories = ["AI", "Business", "AI Product Management"] as const;
+const categories = [
+  "AI",
+  "Business",
+  "AI Product Management",
+  "Personal Finance",
+  "Aquascaping & Fish Hobby",
+] as const;
 const categoryCounts = categories.map((c) => ({
   label: c,
   count: allPosts.filter((p) => p.data.category === c).length,
@@ -19,7 +25,7 @@ const categoryCounts = categories.map((c) => ({
 
 <BaseLayout
   title="Blogs"
-  description="Field notes on AI, business, and product management — written from the inside of shipping AI products, not from the outside looking in."
+  description="Field notes on AI, business, product management, personal finance, and the occasional aquascaping deep dive."
 >
   <div class="mx-auto max-w-5xl px-6 pt-14 sm:pt-20 pb-8">
     <div class="glass rounded-3xl p-8 sm:p-10 mb-8">
@@ -28,8 +34,9 @@ const categoryCounts = categories.map((c) => ({
         Field Notes
       </h1>
       <p class="mt-4 text-ink-soft leading-relaxed max-w-xl">
-        Writing on AI, business, and product management — mostly the parts that
-        don't survive the trip into a company blog post.
+        Writing on AI, business, and product management — plus personal
+        finance and the occasional aquascaping deep dive — mostly the parts
+        that don't survive the trip into a company blog post.
       </p>
 
       <!-- Category filter — client-side only, no navigation, keeps this a plain static page. -->
@@ -96,7 +103,7 @@ const categoryCounts = categories.map((c) => ({
             Get new posts by email
           </p>
           <p class="text-sm text-ink-soft leading-relaxed mb-4">
-            No noise — just an email when a new entry goes up.
+            Pick the topics you care about — leave all unchecked for everything.
           </p>
           <form
             name="blog-subscribe"
@@ -104,7 +111,7 @@ const categoryCounts = categories.map((c) => ({
             data-netlify="true"
             netlify-honeypot="bot-field"
             id="subscribe-form"
-            class="flex flex-col gap-2"
+            class="flex flex-col gap-3"
           >
             <input type="hidden" name="form-name" value="blog-subscribe" />
             <p class="hidden">
@@ -117,6 +124,16 @@ const categoryCounts = categories.map((c) => ({
               placeholder="you@email.com"
               class="w-full font-mono text-xs text-ink placeholder:text-ink-soft/70 bg-paper/60 border border-line rounded-[3px] px-3 py-2 focus:outline-none focus:border-pen"
             />
+            <div class="flex flex-wrap gap-1.5">
+              {categories.map((c) => (
+                <label class="category-check-label cursor-pointer">
+                  <input type="checkbox" name="categories" value={c} class="sr-only" />
+                  <span class="inline-flex items-center font-mono text-[0.6rem] uppercase tracking-[0.08em] border rounded-[3px] px-2 py-1 border-line text-ink-soft transition-colors">
+                    {c}
+                  </span>
+                </label>
+              ))}
+            </div>
             <button
               type="submit"
               class="font-mono text-[0.7rem] uppercase tracking-[0.1em] text-paper bg-ink hover:bg-pen transition-colors rounded-[3px] px-3 py-2"
@@ -134,6 +151,26 @@ const categoryCounts = categories.map((c) => ({
   </div>
 
   <script>
+    // Subscribe form's category checkboxes: toggle the visible chip style
+    // via JS classList rather than a CSS peer-checked selector — the
+    // peer-checked variant matched (confirmed via .matches()) but didn't
+    // actually win the cascade in this deeply-nested context, so this is
+    // the reliable version, same approach as the filter buttons below.
+    document.querySelectorAll<HTMLElement>(".category-check-label").forEach((label) => {
+      const box = label.querySelector<HTMLInputElement>('input[type="checkbox"]');
+      const chip = label.querySelector<HTMLElement>("span");
+      if (!box || !chip) return;
+      const sync = () => {
+        chip.classList.toggle("border-pen", box.checked);
+        chip.classList.toggle("text-pen", box.checked);
+        chip.classList.toggle("bg-paper/60", box.checked);
+        chip.classList.toggle("border-line", !box.checked);
+        chip.classList.toggle("text-ink-soft", !box.checked);
+      };
+      box.addEventListener("change", sync);
+      sync();
+    });
+
     const buttons = document.querySelectorAll<HTMLButtonElement>(".filter-btn");
     const items = document.querySelectorAll<HTMLElement>("#post-list > [data-category]");
     const emptyState = document.getElementById("empty-state");
@@ -176,12 +213,18 @@ const categoryCounts = categories.map((c) => ({
     subscribeForm?.addEventListener("submit", async (e) => {
       e.preventDefault();
       subscribeError?.classList.add("hidden");
-      const data = new FormData(subscribeForm);
+      // Build params by hand (not `new URLSearchParams(new FormData(...))`) —
+      // that constructor collapses repeated keys, which the "categories"
+      // checkboxes rely on (one entry per checked box, same name).
+      const params = new URLSearchParams();
+      for (const [key, value] of new FormData(subscribeForm).entries()) {
+        params.append(key, value as string);
+      }
       try {
         const response = await fetch("/", {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams(data as unknown as Record<string, string>).toString(),
+          body: params.toString(),
         });
         if (!response.ok) throw new Error(`${response.status}`);
         subscribeForm.reset();

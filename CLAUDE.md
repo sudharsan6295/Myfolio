@@ -72,7 +72,27 @@ background, in the burgundy + brass palette. Tokens live in
   (`src/components/Nav.astro`), linked to `/`. Circular is correct here
   — the "no circular edges" preference above is specifically about the
   tag/chip components, not avatars. Without a photo, the nav falls back
-  to a circular initials badge computed from `about.name`.
+  to a circular initials badge computed from `about.name`. The name
+  itself is hidden below the `sm` breakpoint (avatar only) — with a
+  Contact item added to the nav, there isn't room for the full name on
+  a narrow screen too.
+- Nav Contact: a `<details>`/`<summary>` dropdown (no client framework
+  needed) showing email + LinkedIn, rendered as a sibling of the page
+  links' `<ul>`, not inside it — that `<ul>` is `overflow-x-auto` (a
+  mobile-width safety net for the 3 page links), and an overflow-auto
+  ancestor clips an absolutely-positioned popover, so Contact has to
+  sit outside it. A small inline `<script>` in Nav.astro closes it on
+  outside-click/Escape, since `<details>` has no built-in dismissal.
+- Blog category checkboxes (the subscribe form's per-category opt-in,
+  `src/pages/blog/index.astro`) toggle their checked-state chip style
+  via JS `classList`, not a CSS `peer-checked:` variant — a
+  `peer-checked:border-pen` utility was tried first and the selector
+  provably matched (`element.matches(...)` returned true) but still
+  lost the cascade to the base `border-line` class in that nested
+  component context, for reasons that didn't reproduce in isolation.
+  Don't reintroduce a `peer`/`peer-checked` pattern for this without
+  re-verifying it actually paints correctly, not just that the selector
+  matches.
 
 ## Working on this project
 

@@ -25,6 +25,18 @@ const links = [
 function isActive(href: string) {
   return pathname === href || pathname.startsWith(href + "/");
 }
+
+const linkedinHandle = about?.social?.linkedin
+  ? "in/" +
+    about.social.linkedin
+      .replace(/^https?:\/\/(www\.)?linkedin\.com\/in\//i, "")
+      .replace(/\/$/, "")
+  : null;
+
+// The Contact <details> below is rendered as a sibling of the <ul>, not
+// inside it — an overflow-x-auto ancestor (the <ul>, a mobile-width safety
+// net for the 3 page links) clips an absolutely-positioned popover, so
+// Contact has to live outside that scroll container to render unclipped.
 ---
 
 <header class="glass nav-glass sticky top-0 z-40">
@@ -47,31 +59,81 @@ function isActive(href: string) {
             {initials}
           </span>
         )}
-        <span class="font-display italic text-base text-ink group-hover:text-pen transition-colors">
+        <span class="hidden sm:inline font-display italic text-base text-ink group-hover:text-pen transition-colors">
           {name}
         </span>
       </a>
 
-      <ul class="flex items-center gap-1 sm:gap-2 font-mono text-[0.7rem] uppercase tracking-[0.1em]">
-        {
-          links.map((link) => (
-            <li>
-              <a
-                href={link.href}
-                aria-current={isActive(link.href) ? "page" : undefined}
-                class:list={[
-                  "inline-block px-3 py-2 rounded-[3px] transition-colors",
-                  isActive(link.href)
-                    ? "text-ink bg-paper-raised/70"
-                    : "text-ink-soft hover:text-ink hover:bg-paper-raised/40",
-                ]}
+      <div class="flex items-center gap-0.5 sm:gap-2 min-w-0">
+        <ul class="flex items-center gap-0.5 sm:gap-2 font-mono text-[0.65rem] sm:text-[0.7rem] uppercase tracking-[0.08em] sm:tracking-[0.1em] overflow-x-auto flex-nowrap min-w-0">
+          {
+            links.map((link) => (
+              <li class="shrink-0">
+                <a
+                  href={link.href}
+                  aria-current={isActive(link.href) ? "page" : undefined}
+                  class:list={[
+                    "inline-block px-2 sm:px-3 py-2 rounded-[3px] transition-colors",
+                    isActive(link.href)
+                      ? "text-ink bg-paper-raised/70"
+                      : "text-ink-soft hover:text-ink hover:bg-paper-raised/40",
+                  ]}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        {(about?.email || linkedinHandle) && (
+          <div class="relative shrink-0">
+            <details class="contact-dropdown group">
+              <summary
+                class="list-none [&::-webkit-details-marker]:hidden cursor-pointer inline-block px-2 sm:px-3 py-2 rounded-[3px] font-mono text-[0.65rem] sm:text-[0.7rem] uppercase tracking-[0.08em] sm:tracking-[0.1em] transition-colors text-ink-soft hover:text-ink hover:bg-paper-raised/40 group-open:text-ink group-open:bg-paper-raised/70"
               >
-                {link.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+                Contact
+              </summary>
+              <div class="glass absolute right-0 mt-2 w-60 rounded-2xl p-4 flex flex-col gap-2.5 z-50">
+                {about?.email && (
+                  <a
+                    href={`mailto:${about.email}`}
+                    class="font-mono text-xs normal-case text-ink-soft hover:text-pen transition-colors break-all"
+                  >
+                    {about.email}
+                  </a>
+                )}
+                {linkedinHandle && about?.social?.linkedin && (
+                  <a
+                    href={about.social.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="font-mono text-xs normal-case text-ink-soft hover:text-pen transition-colors"
+                  >
+                    {linkedinHandle}
+                  </a>
+                )}
+              </div>
+            </details>
+          </div>
+        )}
+      </div>
     </nav>
   </div>
 </header>
+
+<script>
+  // Close the Contact popover when clicking outside it, or on Escape —
+  // <details>/<summary> has no built-in outside-click dismissal.
+  document.addEventListener("click", (e) => {
+    document.querySelectorAll<HTMLDetailsElement>(".contact-dropdown[open]").forEach((el) => {
+      if (!el.contains(e.target as Node)) el.removeAttribute("open");
+    });
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    document.querySelectorAll<HTMLDetailsElement>(".contact-dropdown[open]").forEach((el) => {
+      el.removeAttribute("open");
+    });
+  });
+</script>

@@ -71,7 +71,7 @@ hyphen-separated filenames.
    title: "Your post title"
    description: "One or two sentences — this shows in the listing and in link previews."
    pubDate: 2026-08-23
-   category: "AI"   # one of: "AI" | "Business" | "AI Product Management"
+   category: "AI"   # one of: "AI" | "Business" | "AI Product Management" | "Personal Finance" | "Aquascaping & Fish Hobby"
    tags: ["optional", "tags", "here"]
    featured: false   # true pins it to the homepage's Recent Entries rail
    draft: false      # true keeps it out of every listing/route until you're ready
@@ -194,4 +194,8 @@ directory `dist`), so connecting it to Netlify is config-free:
    *collects* subscriber emails; it doesn't send anything to them when a
    new post goes up. Actually emailing subscribers needs a real mailing
    tool (Resend, Buttondown, Mailchimp, …) wired up separately — not built
-   yet.
+   yet. The form also collects which category checkboxes a subscriber
+   picked (same `categories` list as the blog filter buttons, in
+   `src/pages/blog/index.astro`) — each submission shows up in the
+   Netlify dashboard with its chosen categories, so a per-category send
+   is a manual filter on that data today, not automatic.

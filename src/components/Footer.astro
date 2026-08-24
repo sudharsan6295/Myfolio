@@ -14,19 +14,15 @@ const year = new Date().getFullYear();
           new Date().toLocaleDateString("en-US", { month: "short", year: "numeric" })
         }
       </p>
-      <ul class="flex flex-wrap items-center gap-x-5 gap-y-1 font-mono text-xs lowercase tracking-[0.02em] text-ink-soft">
+      <ul class="flex items-center gap-5 font-mono text-xs uppercase tracking-[0.08em] text-ink-soft">
         {about?.email && (
-          <li><a href={`mailto:${about.email}`} class="hover:text-pen transition-colors">{about.email}</a></li>
+          <li><a href={`mailto:${about.email}`} class="hover:text-pen transition-colors">Email</a></li>
         )}
         {about?.social?.linkedin && (
-          <li>
-            <a href={about.social.linkedin} class="hover:text-pen transition-colors" target="_blank" rel="noopener noreferrer">
-              in/{about.social.linkedin.replace(/^https?:\/\/(www\.)?linkedin\.com\/in\//i, "").replace(/\/$/, "")}
-            </a>
-          </li>
+          <li><a href={about.social.linkedin} class="hover:text-pen transition-colors" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
         )}
         {about?.social?.github && (
-          <li><a href={about.social.github} class="hover:text-pen transition-colors uppercase" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+          <li><a href={about.social.github} class="hover:text-pen transition-colors" target="_blank" rel="noopener noreferrer">GitHub</a></li>
         )}
       </ul>
     </div>
