@@ -22,7 +22,7 @@ const readingMinutes = Math.max(1, Math.round(wordCount / 200));
 
 <a
   href={`/blog/${post.id}`}
-  class="group glass block rounded-2xl p-6 sm:p-7 mb-4 last:mb-0 hover:bg-paper/75 transition-colors"
+  class="group glass block rounded-2xl p-6 sm:p-7 mb-4 last:mb-0 hover:bg-paper/75 hover:-translate-y-0.5 active:translate-y-0"
 >
   <div class="flex items-center gap-3 mb-3">
     {entryNumber !== undefined && (
@@ -30,7 +30,7 @@ const readingMinutes = Math.max(1, Math.round(wordCount / 200));
         №{String(entryNumber).padStart(3, "0")}
       </span>
     )}
-    <Stamp label={category} tone="pen" />
+    <Stamp label={category} tone="pen" class="group-hover:rotate-0!" />
     <span class="font-mono text-[0.7rem] text-ink-soft">{formattedDate} · {readingMinutes} min read</span>
   </div>
 
