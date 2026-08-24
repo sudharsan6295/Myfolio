@@ -6,6 +6,9 @@ import { getCollection } from "astro:content";
 const projects = (await getCollection("projects", ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order || b.data.startDate.valueOf() - a.data.startDate.valueOf(),
 );
+
+const [aboutEntry] = await getCollection("about");
+const github = aboutEntry?.data.social.github;
 ---
 
 <BaseLayout
@@ -22,6 +25,16 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft)).so
         Side projects, MVPs, and prototypes — built to test an idea, not to hit a
         roadmap. Each one notes what shipped, what didn't, and why.
       </p>
+      {github && (
+        <a
+          href={github}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-4 inline-flex items-center gap-1.5 font-mono text-[0.7rem] uppercase tracking-[0.1em] text-pen hover:text-ink transition-colors"
+        >
+          More on GitHub →
+        </a>
+      )}
     </div>
 
     <div class="grid sm:grid-cols-2 gap-4">

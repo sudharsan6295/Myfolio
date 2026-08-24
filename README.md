@@ -71,7 +71,7 @@ hyphen-separated filenames.
    title: "Your post title"
    description: "One or two sentences — this shows in the listing and in link previews."
    pubDate: 2026-08-23
-   category: "AI"   # one of: "AI" | "Business" | "AI Product Management" | "Personal Finance" | "Aquascaping & Fish Hobby"
+   category: "AI"   # one of: "AI" | "Business" | "AI Product Management" | "Personal Finance" | "Aquariums & Fishkeeping"
    tags: ["optional", "tags", "here"]
    featured: false   # true pins it to the homepage's Recent Entries rail
    draft: false      # true keeps it out of every listing/route until you're ready
@@ -127,6 +127,12 @@ There's only ever one file in this folder.
 ```yaml
 photo: "./me.jpg"          # optional — put the image file next to about.md
 photoAlt: "A photo of me"   # optional, defaults to "<name>'s profile photo"
+social:
+  linkedin: "https://www.linkedin.com/in/yourhandle/"
+  github: "https://github.com/yourhandle"   # shows up in the nav's Connect
+                                              # panel, the footer, /about, and
+                                              # /projects — all four read from
+                                              # this one field, add it once
 currently: "One sentence on what you're focused on right now."
 focusAreas:
   - "Short tag, e.g. AI Product Strategy"
@@ -152,11 +158,12 @@ experience:
       - "Keep these concrete and specific — numbers help."
 ```
 
-`photo`, `currently`, `focusAreas`, `tools`, `certifications`, `education`,
-and `principles` are all optional — each section on `/about` (and, for
-`photo`, the top nav) only renders if its field is set/non-empty, so you can
-leave any of them out. Without a `photo`, the nav shows your initials
-instead.
+`photo`, `social`, `currently`, `focusAreas`, `tools`, `certifications`,
+`education`, and `principles` are all optional — each section on `/about`
+(and, for `photo`/`social`, the top nav and footer) only renders if its
+field is set/non-empty, so you can leave any of them out. Without a
+`photo`, the nav shows your initials instead; with one, clicking the small
+nav photo opens it full-size in a lightbox.
 
 ## Adding images
 

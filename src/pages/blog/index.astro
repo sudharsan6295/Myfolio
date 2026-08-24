@@ -15,7 +15,7 @@ const categories = [
   "Business",
   "AI Product Management",
   "Personal Finance",
-  "Aquascaping & Fish Hobby",
+  "Aquariums & Fishkeeping",
 ] as const;
 const categoryCounts = categories.map((c) => ({
   label: c,
@@ -25,7 +25,7 @@ const categoryCounts = categories.map((c) => ({
 
 <BaseLayout
   title="Blogs"
-  description="Field notes on AI, business, product management, personal finance, and the occasional aquascaping deep dive."
+  description="Field notes on AI, business, product management, personal finance, and life with a home aquarium."
 >
   <div class="mx-auto max-w-5xl px-6 pt-14 sm:pt-20 pb-8">
     <div class="glass rounded-3xl p-8 sm:p-10 mb-8">
@@ -35,8 +35,8 @@ const categoryCounts = categories.map((c) => ({
       </h1>
       <p class="mt-4 text-ink-soft leading-relaxed max-w-xl">
         Writing on AI, business, and product management — plus personal
-        finance and the occasional aquascaping deep dive — mostly the parts
-        that don't survive the trip into a company blog post.
+        finance and life with a home aquarium — mostly the parts that don't
+        survive the trip into a company blog post.
       </p>
 
       <!-- Category filter — client-side only, no navigation, keeps this a plain static page. -->

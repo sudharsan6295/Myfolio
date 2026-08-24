@@ -20,7 +20,7 @@ const blog = defineCollection({
         'Business',
         'AI Product Management',
         'Personal Finance',
-        'Aquascaping & Fish Hobby',
+        'Aquariums & Fishkeeping',
       ]),
       tags: z.array(z.string()).default([]),
       coverImage: image().optional(),

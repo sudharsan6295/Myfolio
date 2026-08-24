@@ -33,36 +33,53 @@ const linkedinHandle = about?.social?.linkedin
       .replace(/\/$/, "")
   : null;
 
-// The Contact <details> below is rendered as a sibling of the <ul>, not
+const githubHandle = about?.social?.github
+  ? "@" +
+    about.social.github
+      .replace(/^https?:\/\/(www\.)?github\.com\//i, "")
+      .replace(/\/$/, "")
+  : null;
+
+const hasConnectLinks = about?.email || linkedinHandle || githubHandle;
+
+// The Connect <details> below is rendered as a sibling of the <ul>, not
 // inside it — an overflow-x-auto ancestor (the <ul>, a mobile-width safety
 // net for the 3 page links) clips an absolutely-positioned popover, so
-// Contact has to live outside that scroll container to render unclipped.
+// Connect has to live outside that scroll container to render unclipped.
 ---
 
 <header class="glass nav-glass sticky top-0 z-40">
   <div class="mx-auto max-w-5xl px-6">
     <nav class="flex items-center justify-between h-16" aria-label="Primary">
-      <a href="/" class="group flex items-center gap-2.5">
+      <div class="flex items-center gap-2.5">
         {about?.photo ? (
-          <Image
-            src={about.photo}
-            alt={about.photoAlt ?? `${name}'s profile photo`}
-            width={64}
-            height={64}
-            class="h-8 w-8 rounded-full object-cover border border-line"
-          />
+          <button
+            type="button"
+            id="avatar-trigger"
+            class="h-8 w-8 rounded-full overflow-hidden border border-line shrink-0 cursor-zoom-in"
+            aria-label={`View ${name}'s photo`}
+          >
+            <Image
+              src={about.photo}
+              alt={about.photoAlt ?? `${name}'s profile photo`}
+              width={64}
+              height={64}
+              class="h-full w-full object-cover"
+            />
+          </button>
         ) : (
-          <span
-            class="h-8 w-8 rounded-full bg-paper-raised border border-line flex items-center justify-center font-mono text-[0.6rem] text-ink-soft"
-            aria-hidden="true"
+          <a
+            href="/"
+            class="h-8 w-8 rounded-full bg-paper-raised border border-line flex items-center justify-center font-mono text-[0.6rem] text-ink-soft shrink-0"
+            aria-label="Home"
           >
             {initials}
-          </span>
+          </a>
         )}
-        <span class="hidden sm:inline font-display italic text-base text-ink group-hover:text-pen transition-colors">
+        <a href="/" class="hidden sm:inline font-display italic text-base text-ink hover:text-pen transition-colors">
           {name}
-        </span>
-      </a>
+        </a>
+      </div>
 
       <div class="flex items-center gap-0.5 sm:gap-2 min-w-0">
         <ul class="flex items-center gap-0.5 sm:gap-2 font-mono text-[0.65rem] sm:text-[0.7rem] uppercase tracking-[0.08em] sm:tracking-[0.1em] overflow-x-auto flex-nowrap min-w-0">
@@ -86,13 +103,13 @@ const linkedinHandle = about?.social?.linkedin
           }
         </ul>
 
-        {(about?.email || linkedinHandle) && (
+        {hasConnectLinks && (
           <div class="relative shrink-0">
             <details class="contact-dropdown group">
               <summary
                 class="list-none [&::-webkit-details-marker]:hidden cursor-pointer inline-block px-2 sm:px-3 py-2 rounded-[3px] font-mono text-[0.65rem] sm:text-[0.7rem] uppercase tracking-[0.08em] sm:tracking-[0.1em] transition-colors text-ink-soft hover:text-ink hover:bg-paper-raised/40 group-open:text-ink group-open:bg-paper-raised/70"
               >
-                Contact
+                Connect
               </summary>
               <div class="glass absolute right-0 mt-2 w-60 rounded-2xl p-4 flex flex-col gap-2.5 z-50">
                 {about?.email && (
@@ -113,6 +130,16 @@ const linkedinHandle = about?.social?.linkedin
                     {linkedinHandle}
                   </a>
                 )}
+                {githubHandle && about?.social?.github && (
+                  <a
+                    href={about.social.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="font-mono text-xs normal-case text-ink-soft hover:text-pen transition-colors"
+                  >
+                    {githubHandle}
+                  </a>
+                )}
               </div>
             </details>
           </div>
@@ -122,18 +149,76 @@ const linkedinHandle = about?.social?.linkedin
   </div>
 </header>
 
+{about?.photo && (
+  <div
+    id="avatar-lightbox"
+    class="hidden fixed inset-0 z-[100] items-center justify-center p-6"
+    role="dialog"
+    aria-modal="true"
+    aria-label={`${name}'s photo`}
+  >
+    <div id="avatar-lightbox-backdrop" class="absolute inset-0 bg-ink/70 backdrop-blur-sm"></div>
+    <button
+      type="button"
+      id="avatar-lightbox-close"
+      class="absolute top-4 right-4 sm:top-6 sm:right-6 h-9 w-9 rounded-full glass flex items-center justify-center text-ink hover:text-pen transition-colors z-10"
+      aria-label="Close"
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M2 2L14 14M14 2L2 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+      </svg>
+    </button>
+    <Image
+      src={about.photo}
+      alt={about.photoAlt ?? `${name}'s profile photo`}
+      width={800}
+      height={800}
+      class="relative z-0 max-h-[85vh] max-w-[90vw] w-auto h-auto rounded-2xl border border-line shadow-2xl object-contain"
+    />
+  </div>
+)}
+
 <script>
-  // Close the Contact popover when clicking outside it, or on Escape —
-  // <details>/<summary> has no built-in outside-click dismissal.
+  // Connect popover: close on outside-click or Escape — <details>/<summary>
+  // has no built-in dismissal.
   document.addEventListener("click", (e) => {
     document.querySelectorAll<HTMLDetailsElement>(".contact-dropdown[open]").forEach((el) => {
       if (!el.contains(e.target as Node)) el.removeAttribute("open");
     });
   });
+
+  // Avatar lightbox: click the avatar to enlarge the photo, click the
+  // backdrop/close button or press Escape to dismiss.
+  const trigger = document.getElementById("avatar-trigger");
+  const lightbox = document.getElementById("avatar-lightbox");
+  const backdrop = document.getElementById("avatar-lightbox-backdrop");
+  const closeBtn = document.getElementById("avatar-lightbox-close");
+
+  function openLightbox() {
+    if (!lightbox) return;
+    lightbox.classList.remove("hidden");
+    lightbox.classList.add("flex");
+    document.body.style.overflow = "hidden";
+    closeBtn?.focus();
+  }
+
+  function closeLightbox() {
+    if (!lightbox) return;
+    lightbox.classList.add("hidden");
+    lightbox.classList.remove("flex");
+    document.body.style.overflow = "";
+    trigger?.focus();
+  }
+
+  trigger?.addEventListener("click", openLightbox);
+  backdrop?.addEventListener("click", closeLightbox);
+  closeBtn?.addEventListener("click", closeLightbox);
+
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
     document.querySelectorAll<HTMLDetailsElement>(".contact-dropdown[open]").forEach((el) => {
       el.removeAttribute("open");
     });
+    if (lightbox && !lightbox.classList.contains("hidden")) closeLightbox();
   });
 </script>

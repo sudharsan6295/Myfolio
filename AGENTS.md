@@ -69,20 +69,30 @@ background, in the burgundy + brass palette. Tokens live in
   tag/chip UI should follow `rounded-[3px]`, not reach for a pill.
 - Nav avatar: `about.photo` (optional, `src/content.config.ts`) shows a
   small circular image next to the name in the top nav
-  (`src/components/Nav.astro`), linked to `/`. Circular is correct here
-  — the "no circular edges" preference above is specifically about the
-  tag/chip components, not avatars. Without a photo, the nav falls back
-  to a circular initials badge computed from `about.name`. The name
-  itself is hidden below the `sm` breakpoint (avatar only) — with a
-  Contact item added to the nav, there isn't room for the full name on
-  a narrow screen too.
-- Nav Contact: a `<details>`/`<summary>` dropdown (no client framework
-  needed) showing email + LinkedIn, rendered as a sibling of the page
-  links' `<ul>`, not inside it — that `<ul>` is `overflow-x-auto` (a
-  mobile-width safety net for the 3 page links), and an overflow-auto
-  ancestor clips an absolutely-positioned popover, so Contact has to
-  sit outside it. A small inline `<script>` in Nav.astro closes it on
-  outside-click/Escape, since `<details>` has no built-in dismissal.
+  (`src/components/Nav.astro`). Circular is correct here — the "no
+  circular edges" preference above is specifically about the tag/chip
+  components, not avatars. Without a photo, the avatar is a plain link
+  home showing initials computed from `about.name`; **with** a photo, the
+  avatar becomes a `<button>` (not a link) that opens the photo full-size
+  in a lightbox (click backdrop/✕/Escape to close) — the name text next
+  to it is a separate `<a href="/">` and still goes home either way. The
+  name itself is hidden below the `sm` breakpoint (avatar only) — with
+  Connect added to the nav, there isn't room for the full name on a
+  narrow screen too.
+- Nav Connect (renamed from "Contact"): a `<details>`/`<summary>`
+  dropdown (no client framework needed) showing email, LinkedIn, and
+  GitHub (whichever of `about.email`/`about.social.*` are set),
+  rendered as a sibling of the page links' `<ul>`, not inside it — that
+  `<ul>` is `overflow-x-auto` (a mobile-width safety net for the 3 page
+  links), and an overflow-auto ancestor clips an absolutely-positioned
+  popover, so Connect has to sit outside it. A small inline `<script>`
+  in Nav.astro closes it on outside-click/Escape, since `<details>` has
+  no built-in dismissal.
+- GitHub (`about.social.github`) is read in four places — Nav's Connect
+  panel, `Footer.astro`, `/about`'s "At a glance" aside, and a "More on
+  GitHub →" link on `/projects` — all gated on the same field, so
+  setting it once in `about.md` turns all four on together. It's
+  currently unset (no fabricated URL was put in place of a real one).
 - Blog category checkboxes (the subscribe form's per-category opt-in,
   `src/pages/blog/index.astro`) toggle their checked-state chip style
   via JS `classList`, not a CSS `peer-checked:` variant — a
