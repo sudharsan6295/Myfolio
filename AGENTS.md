@@ -24,7 +24,7 @@ is for working on the *content*.
 ## Design system
 
 Warm editorial "field notebook" identity, in full Glassmorphic Studio
-layout: type is the original field-notebook system (Fraunces/Work
+layout: type is the original field-notebook system (Newsreader/Work
 Sans/IBM Plex Mono) and the signature motif is `<Stamp>` (not `<Seal>`),
 but every surface — nav, footer, hero, section wrappers, and every card —
 is a frosted `.glass` panel floating over a fixed gradient-mesh
@@ -52,7 +52,7 @@ background, in the burgundy + brass palette. Tokens live in
   section, wrap it in `.glass`, not a plain bordered box** — an opaque
   flat background on a new section would look like a mistake against
   everything else on the page.
-- Fonts: `font-display` = Fraunces (headings, used italic for the voice-y
+- Fonts: `font-display` = Newsreader (headings, used italic for the voice-y
   moments), `font-body` = Work Sans, `font-mono` = IBM Plex Mono (dates,
   tags, status labels — never body text).
 - Signature motif: `<Stamp>` (`src/components/Stamp.astro`) — a small

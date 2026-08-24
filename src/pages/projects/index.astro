@@ -24,7 +24,7 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft)).so
       </p>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="grid sm:grid-cols-2 gap-4">
       {projects.length === 0 ? (
         <p class="text-ink-soft text-sm py-10 col-span-full">
           No projects yet — add a Markdown file to <code class="font-mono text-xs bg-paper-raised px-1.5 py-0.5 rounded">src/content/projects/</code> and redeploy.

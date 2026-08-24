@@ -13,7 +13,7 @@ hardcoded into it.
 - **Content:** Markdown files with frontmatter, read via Astro Content
   Collections (`src/content.config.ts`)
 - **Hosting:** Netlify, auto-deploy on push to the connected Git branch
-- **Fonts:** Fraunces (display), Work Sans (body), IBM Plex Mono (dates/tags/
+- **Fonts:** Newsreader (display), Work Sans (body), IBM Plex Mono (dates/tags/
   status labels)
 
 ---

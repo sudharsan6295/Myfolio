@@ -12,7 +12,7 @@ interface Props {
 const { title, description = "Personal site — field notes and project write-ups." } = Astro.props;
 
 const [aboutEntry] = await getCollection("about");
-const siteTitle = aboutEntry?.data.name ?? "Jordan Rao";
+const siteTitle = aboutEntry?.data.name ?? "Sudharsan Balaji";
 const pageTitle = title === siteTitle ? title : `${title} · ${siteTitle}`;
 ---
 
@@ -30,9 +30,9 @@ const pageTitle = title === siteTitle ? title : `${title} · ${siteTitle}`;
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary" />
   </head>
-  <body class="text-ink font-body antialiased min-h-screen flex flex-col">
+  <body class="text-ink font-body antialiased">
     <Nav />
-    <main class="flex-1">
+    <main>
       <slot />
     </main>
     <Footer />

@@ -20,7 +20,7 @@ const allProjects = (await getCollection("projects", ({ data }) => !data.draft))
 const previewProjects = allProjects.slice(0, 3);
 ---
 
-<BaseLayout title={about?.name ?? "Jordan Rao"} description={about?.tagline}>
+<BaseLayout title={about?.name ?? "Sudharsan Balaji"} description={about?.tagline}>
   <!-- Hero -->
   <section class="mx-auto max-w-5xl px-6 pt-14 sm:pt-20 pb-16">
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8 lg:gap-10 items-start">
@@ -86,7 +86,7 @@ const previewProjects = allProjects.slice(0, 3);
       </a>
     </div>
     <p class="text-ink-soft text-sm mb-6">MVPs and prototypes built outside the day job.</p>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="grid sm:grid-cols-2 gap-4">
       {previewProjects.map((project) => <ProjectCard project={project} />)}
     </div>
   </section>
