@@ -131,55 +131,6 @@ background, in the burgundy + brass palette. Tokens live in
   `height` from the image's own intrinsic ratio for local/content-
   collection images) — do the same for any new `<Image>` usage where the
   source's exact aspect ratio isn't known/guaranteed up front.
-- **Tactile/motion polish pass** (in response to "I don't feel good yet"
-  UX feedback — direction chosen: lean into the tactile/textured
-  "notebook" feel plus small motion/interaction polish, not a
-  minimal/editorial rewrite):
-  - `body`'s gradient-mesh background now carries a faint fractal-noise
-    layer (`background-image`, an inline SVG `feTurbulence` data URI,
-    blended in via `background-blend-mode: overlay` — not a separate
-    `::before` element, which would risk a z-index/stacking fight with
-    the sticky nav and every glass panel's own `backdrop-filter`). It
-    reads through the blur of every `.glass` panel for free.
-  - `.glass`'s box-shadow got a bit more depth plus a faint `inset 0 1px
-    0 rgba(255,255,255,.35)` top highlight (a soft bevel, reads as
-    "raised paper" rather than a flat translucent rectangle).
-  - Section-header dividers (the `border-b border-line pb-2` pattern
-    under "At a glance," "Written by," "Recent entries," etc.) are now
-    `border-dashed` — a small stitched/notebook detail instead of a
-    plain solid rule.
-  - `PostCard`/`ProjectCard` lift slightly on hover
-    (`hover:-translate-y-0.5`) and their `<Stamp>` un-rotates from its
-    default `-rotate-2` to flat (`group-hover:rotate-0`) — the filter
-    buttons on `/blog` (same visual family as `<Stamp>`) do the same on
-    their own `:hover`. Primary buttons (Subscribe, "Read About Me")
-    get a small `active:scale-[0.97]` press effect.
-  - **`.glass`'s `transition` is one shared shorthand
-    (`box-shadow, background-color, transform, color`, all 200ms),
-    not a per-component `transition-*` utility.** A CSS shorthand
-    `transition` property resets every sub-property it doesn't
-    mention, so a component-level `transition-[...]` utility and
-    `.glass`'s own `transition` rule fight over the cascade (whichever
-    is later in the generated stylesheet wins outright and silently
-    drops the other's properties) — a real bug hit once already, caught
-    by checking `getComputedStyle(el).transitionProperty` and seeing
-    only `box-shadow` instead of all four. If a new `.glass` surface
-    needs to animate a property not in that list, add it to `.glass`'s
-    one shared rule, don't add a competing `transition-*` utility on
-    the component.
-  - **Gotcha for this Chromium build specifically**: `getComputedStyle
-    (el).rotate` does not reliably reflect the true applied value in
-    this environment's Browser pane — confirmed by forcing
-    `el.style.setProperty("rotate", "15deg", "important")` directly
-    (the highest-priority declaration possible in CSS) and still
-    reading back the old value via `getComputedStyle`. `translate` read
-    back correctly under the same test, so this is narrow to `rotate`,
-    not a general computed-style problem. Don't trust a
-    `getComputedStyle(...).rotate` mismatch alone as proof a
-    rotate-based hover/group-hover rule is broken — verify the
-    generated CSS rule directly instead (selector, specificity,
-    `!important`) and treat a real browser as the actual source of
-    truth for this one property.
 - Blog category checkboxes (the subscribe form's per-category opt-in,
   `src/pages/blog/index.astro`) toggle their checked-state chip style
   via JS `classList`, not a CSS `peer-checked:` variant — a

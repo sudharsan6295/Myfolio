@@ -119,22 +119,13 @@ html {
 
 /* Glassmorphic Studio background — a fixed, soft gradient mesh behind the
    whole page. Surfaces above it (nav's bg-paper/90 backdrop-blur, cards'
-   semi-transparent bg-paper-raised/50, etc.) read as glass over this.
-   A faint fractal-noise layer is blended on top (background-blend-mode,
-   not a separate element — avoids any stacking-context/z-index risk with
-   the sticky nav or the glass panels' own backdrop-filter) so the page
-   reads as textured paper rather than a flat digital gradient — it shows
-   through the blur of every glass panel too, for free. */
+   semi-transparent bg-paper-raised/50, etc.) read as glass over this. */
 body {
   font-family: var(--font-body);
-  background-color: var(--color-paper);
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+  background:
     radial-gradient(ellipse 70% 55% at 12% 8%, var(--color-mesh-c), transparent 60%),
     radial-gradient(ellipse 65% 60% at 88% 18%, var(--color-mesh-b), transparent 60%),
     linear-gradient(165deg, var(--color-mesh-a), var(--color-mesh-b) 55%, var(--color-mesh-c));
-  background-repeat: repeat, no-repeat, no-repeat, no-repeat;
-  background-blend-mode: overlay, normal, normal, normal;
   background-attachment: fixed;
 }
 
@@ -170,22 +161,7 @@ body {
   backdrop-filter: blur(18px) saturate(135%);
   -webkit-backdrop-filter: blur(18px) saturate(135%);
   border: 1px solid color-mix(in srgb, white 55%, var(--color-line));
-  /* A touch more depth than a flat card, plus a faint inset top highlight
-     (a soft bevel) so panels read as raised/crafted rather than a plain
-     translucent rectangle. */
-  box-shadow:
-    0 1px 2px rgba(43, 33, 31, 0.05),
-    0 18px 40px -18px rgba(43, 33, 31, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35);
-  /* Declared as one shorthand (not per-component transition-* utilities) so
-     it doesn't fight Tailwind's own transition utilities for the cascade —
-     a shorthand `transition` resets every sub-property, so whichever rule
-     (this one or a utility class) comes later in the generated CSS wins
-     outright and silently drops the other's properties. Covering
-     everything a .glass surface might animate (shadow, background, a hover
-     lift's transform, text color) here once means every card/panel gets
-     smooth motion without each usage re-declaring it. */
-  transition: box-shadow 200ms ease, background-color 200ms ease, transform 200ms ease, color 200ms ease;
+  box-shadow: 0 1px 2px rgba(43, 33, 31, 0.04), 0 12px 32px -16px rgba(43, 33, 31, 0.16);
 }
 
 /* The sticky top nav is a full-bleed glass bar, not a floating inset
