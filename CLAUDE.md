@@ -25,25 +25,20 @@ is for working on the *content*.
 
 ## Design system
 
-Editorial "field notebook" identity, in full Glassmorphic Studio layout:
-type is the original field-notebook system (Newsreader/Work Sans/IBM Plex
-Mono) and the signature motif is `<Stamp>` (not `<Seal>`), but every
-surface — nav, footer, hero, section wrappers, and every card — is a
-frosted `.glass` panel floating over a fixed gradient-mesh background.
-Ink/accent colors are burgundy + brass; the background/panel ground is
-blue (a later change from the original warm peach/blush/cream — see the
-comment above the `--color-paper`/`--color-mesh-*` tokens in
-`global.css`; burgundy-and-gold-on-blue was a deliberate pairing, not a
-placeholder). Tokens live in `src/styles/global.css`'s `@theme` block:
+Warm editorial "field notebook" identity, in full Glassmorphic Studio
+layout: type is the original field-notebook system (Newsreader/Work
+Sans/IBM Plex Mono) and the signature motif is `<Stamp>` (not `<Seal>`),
+but every surface — nav, footer, hero, section wrappers, and every card —
+is a frosted `.glass` panel floating over a fixed gradient-mesh
+background, in the burgundy + brass palette. Tokens live in
+`src/styles/global.css`'s `@theme` block:
 
-- Colors: `paper` (#EEF4FB, pale ice blue — glass panel base, *not* the
-  page background itself, see below), `paper-raised` (#DFE9F6, denser
-  panel fill), `ink` (#2B211F, text — unchanged, still warm dark),
-  `ink-soft` (#7A655F, muted text), `pen` (#5B1A22, burgundy — the
-  accent: links, active states, unchanged), `pen-soft` (#8A3B45, lighter
-  burgundy for hovers), `highlight` (#B9975B, brass, used sparingly),
-  `line` (#C6D6E8, hairline borders used *inside* glass panels, e.g.
-  under a card's metadata row).
+- Colors: `paper` (#F8ECDD), `paper-raised` (#F2E2CC, denser panel fill),
+  `ink` (#2B211F, text), `ink-soft` (#7A655F, muted text), `pen`
+  (#5B1A22, burgundy — the accent: links, active states), `pen-soft`
+  (#8A3B45, lighter burgundy for hovers), `highlight` (#B9975B, brass,
+  used sparingly), `line` (#E4D2C0, hairline borders used *inside* glass
+  panels, e.g. under a card's metadata row).
 - **Dark mode**: every one of the color tokens above is redefined (same
   names, dark values) rather than the markup using Tailwind `dark:`
   variants anywhere — Tailwind utilities like `bg-paper` compile to
@@ -63,8 +58,8 @@ placeholder). Tokens live in `src/styles/global.css`'s `@theme` block:
 - **Page background**: `body` (not `html`, and *not* a `bg-paper`
   Tailwind class — that would override it, see the comment in
   `global.css`) paints a fixed gradient mesh from `mesh-a`/`mesh-b`/`mesh-c`
-  (#D7E6F6 sky blue / #DFE1F4 periwinkle / #EEF4FB pale ice blue). `html`
-  keeps a flat `--color-paper` background only as a fallback.
+  (#FCE1CE peach / #F1DCE6 blush / #F7ECD8 warm cream). `html` keeps a
+  flat `--color-paper` background only as a fallback.
 - **`.glass` is the standard surface treatment now** (`global.css`):
   `color-mix()` translucent background, `backdrop-filter: blur(18px)
   saturate(135%)`, a soft light border, a soft shadow. Nav, footer,

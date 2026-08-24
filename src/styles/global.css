@@ -12,25 +12,23 @@
  * IBM Plex Mono — utility face: dates, tags, status stamps, entry numbers.
  * ------------------------------------------------------------------------ */
 @theme {
-  /* Burgundy ink + brass highlight stay as the accent identity — a classic
-     navy/burgundy-and-gold pairing reads well against the blue ground
-     below. Only the "paper" (glass panel base) and the gradient-mesh
-     background itself moved from warm peach/blush/cream to blue; ink/
-     pen/highlight are unchanged from the original Glassmorphic Studio
-     palette. */
-  --color-paper: #eef4fb;
-  --color-paper-raised: #dfe9f6;
+  /* Palette carried over from the "Letterpress & Seal" hybrid review —
+     burgundy ink + brass highlight. The page background below is the
+     Glassmorphic Studio concept's gradient mesh, warmed to match this
+     palette (peach/blush/cream instead of that concept's peach/sky). */
+  --color-paper: #f8ecdd;
+  --color-paper-raised: #f2e2cc;
   --color-ink: #2b211f;
   --color-ink-soft: #7a655f;
   --color-pen: #5b1a22;
   --color-pen-soft: #8a3b45;
   --color-highlight: #b9975b;
-  --color-line: #c6d6e8;
+  --color-line: #e4d2c0;
 
-  /* Gradient-mesh background stops — blue variant. */
-  --color-mesh-a: #d7e6f6; /* sky blue */
-  --color-mesh-b: #dfe1f4; /* periwinkle */
-  --color-mesh-c: #eef4fb; /* pale ice blue */
+  /* Gradient-mesh background stops (Glassmorphic Studio). */
+  --color-mesh-a: #fce1ce; /* peach */
+  --color-mesh-b: #f1dce6; /* blush */
+  --color-mesh-c: #f7ecd8; /* warm cream */
 
   --font-display: "Newsreader", ui-serif, Georgia, serif;
   --font-body: "Work Sans", ui-sans-serif, system-ui, sans-serif;
