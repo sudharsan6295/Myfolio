@@ -26,8 +26,8 @@ certifications:
   - "Professional Scrum Master (PSM)"
   - "Google Project Management: Professional Certificate"
 education:
-  - degree: "B.E., Computer Science Engineering"
-    institution: "Sri Ramakrishna Engineering College (SREC), Coimbatore"
+  - degree: "Bachelor of Engineering, Computer Science"
+    institution: "Sri Ramakrishna Engineering College, Coimbatore"
     year: "2016"
 principles:
   - title: "Zero-downtime, no exceptions"

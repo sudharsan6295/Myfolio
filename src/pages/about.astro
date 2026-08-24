@@ -100,11 +100,18 @@ const { Content } = await render(aboutEntry);
         {about.education.length > 0 && (
           <div>
             <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-2">Education</p>
-            <ul class="space-y-2">
+            <ul class="space-y-2.5">
               {about.education.map((edu) => (
-                <li class="text-sm text-ink leading-snug">
-                  {edu.degree}
-                  <span class="block text-xs text-ink-soft mt-0.5">{edu.institution} · {edu.year}</span>
+                <li class="relative rounded-[3px] border border-line bg-paper/40 px-3 py-2.5">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none" class="absolute top-2.5 right-2.5 text-highlight">
+                    <path d="M8 2L14.5 5.2L8 8.4L1.5 5.2L8 2Z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round" />
+                    <path d="M4 6.8V10c0 .9 1.8 1.8 4 1.8s4-.9 4-1.8V6.8" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" />
+                    <path d="M14.5 5.2V10" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" />
+                  </svg>
+                  <p class="font-display text-sm text-ink leading-snug pr-5">{edu.degree}</p>
+                  <p class="mt-1 font-mono text-[0.6rem] uppercase tracking-[0.08em] text-ink-soft">
+                    {edu.institution} <span class="text-highlight">·</span> {edu.year}
+                  </p>
                 </li>
               ))}
             </ul>
