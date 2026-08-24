@@ -18,14 +18,13 @@ focusAreas:
 tools:
   - "Enovia / 3DExperience"
   - "Agile & Scrum Delivery"
-  - "AI / LLMs"
   - "Prompt Engineering"
   - "AI Agents & LLM Tools"
   - "IT Service Management"
   - "Enterprise Collaboration"
 certifications:
   - "Professional Scrum Master (PSM)"
-  - "Google Project Management"
+  - "Google Project Management: Professional Certificate"
 education:
   - degree: "B.E., Computer Science Engineering"
     institution: "Sri Ramakrishna Engineering College (SREC), Coimbatore"

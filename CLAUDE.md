@@ -93,14 +93,26 @@ background, in the burgundy + brass palette. Tokens live in
   GitHub →" link on `/projects` — all gated on the same field, so
   setting it once in `about.md` turns all four on together (now set, to
   `https://github.com/sudharsan6295`).
-- The nav/lightbox photo (`src/content/about/photo.jpg`) was supplied as
-  a full AI-generated portrait with a "Made with AI" watermark badge in
-  one corner; it was cropped (via a one-off `sharp` script, not a
-  standing tool — no image-editing dependency was added to the project)
-  to a tight head-and-shoulders frame that excludes the badge entirely,
-  and converted from ~1.9MB PNG to a ~70KB JPEG. The original upload and
-  the crop test files were deleted after — only the final cropped JPEG
-  is committed.
+- The nav/lightbox photo is `src/content/about/photo.png` — the full,
+  uncropped portrait exactly as supplied (an earlier pass cropped it to
+  a tight head-and-shoulders frame; that was explicitly undone per
+  feedback — "use the photo without editing"). The one edit that's kept
+  is watermark removal: the original had a "Made with AI" badge in one
+  corner, painted over with a solid rectangle matching the uniform
+  background color (a one-off `sharp` script, not a standing tool — no
+  image-editing dependency was added to the project). Kept as a lossless
+  PNG on purpose, not converted to JPEG, per the same "don't edit beyond
+  what was asked" feedback.
+- **Gotcha, already hit once:** `astro:assets`'s `<Image>` crops to fill
+  when given `width` + `height` that don't match the source's aspect
+  ratio (a real server-side crop of the output file, not something CSS
+  `object-contain` can undo afterward). The lightbox `<Image>` in
+  Nav.astro learned this the hard way — `width={800} height={800}` on a
+  1024×1536 portrait source silently cropped off the top of the head in
+  the "enlarged" view. Fixed by passing only `width` (Astro infers
+  `height` from the image's own intrinsic ratio for local/content-
+  collection images) — do the same for any new `<Image>` usage where the
+  source's exact aspect ratio isn't known/guaranteed up front.
 - Blog category checkboxes (the subscribe form's per-category opt-in,
   `src/pages/blog/index.astro`) toggle their checked-state chip style
   via JS `classList`, not a CSS `peer-checked:` variant — a
