@@ -5,7 +5,7 @@ tagline: "Lead Solution Consultant with a decade across program, project, and pr
 location: "Coimbatore, India"
 email: "sudharsan6295@gmail.com"
 resumeUrl: "/resume.pdf"
-photo: "./photo.jpg"
+photo: "./photo.png"
 photoAlt: "Sudharsan Balaji"
 social:
   linkedin: "https://www.linkedin.com/in/sudharsan-balaji-65a06791/"
