@@ -9,8 +9,10 @@ is for working on the *content*.
 ## Stack
 
 - **Astro** (static site generation, TypeScript strict) — no UI framework
-  (React/Vue/etc.) is installed; the site ships zero client-side JS except
-  one small inline script for the blog category filter.
+  (React/Vue/etc.) is installed. Client-side JS is a handful of small
+  inline `<script>` blocks (blog category filter, subscribe form, nav
+  theme toggle/Connect dropdown/photo lightbox) — no bundler-shipped
+  framework runtime.
 - **Tailwind CSS v4**, CSS-first config via `@theme` in `src/styles/global.css`
   (no `tailwind.config.js` — that's the v4 way).
 - **Content**: Astro Content Collections (`src/content.config.ts`) reading
@@ -37,6 +39,22 @@ background, in the burgundy + brass palette. Tokens live in
   (#8A3B45, lighter burgundy for hovers), `highlight` (#B9975B, brass,
   used sparingly), `line` (#E4D2C0, hairline borders used *inside* glass
   panels, e.g. under a card's metadata row).
+- **Dark mode**: every one of the color tokens above is redefined (same
+  names, dark values) rather than the markup using Tailwind `dark:`
+  variants anywhere — Tailwind utilities like `bg-paper` compile to
+  `background: var(--color-paper)`, so redefining the variable is enough
+  to retheme the whole site. **Any new color must go through one of
+  these existing tokens (or a new token added in both places) — a raw
+  hex/rgb value in a class or inline style will not respond to the
+  toggle.** The three-state pattern (see `global.css`): bare `:root` =
+  light (the values above); `@media (prefers-color-scheme: dark)`
+  guarded by `:root:not([data-theme="light"])` = follow the OS unless
+  the user explicitly chose light; `:root[data-theme="dark"]` = explicit
+  dark choice, wins regardless of OS. The toggle button
+  (`#theme-toggle` in `Nav.astro`) just sets/clears `data-theme` on
+  `<html>` and persists it to `localStorage`; a pre-paint `is:inline`
+  script in `BaseLayout.astro`'s `<head>` applies the saved choice
+  before first render, to avoid a flash of the wrong theme.
 - **Page background**: `body` (not `html`, and *not* a `bg-paper`
   Tailwind class — that would override it, see the comment in
   `global.css`) paints a fixed gradient mesh from `mesh-a`/`mesh-b`/`mesh-c`

@@ -35,6 +35,82 @@
   --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
 }
 
+/* ---------------------------------------------------------------------------
+ * Dark mode — same token set, redefined. Every color on the page comes from
+ * these CSS custom properties (Tailwind's generated utilities read them at
+ * paint time, e.g. `bg-paper` is literally `background: var(--color-paper)`),
+ * so redefining them here is enough to retheme the whole site — no `dark:`
+ * utility variants needed anywhere in the markup.
+ *
+ * Three states, not two: an explicit choice sets data-theme="dark" or
+ * "light" on <html> (via the toggle in Nav.astro, persisted to
+ * localStorage and applied pre-paint in BaseLayout.astro to avoid a flash);
+ * with no explicit choice, the un-stamped default follows the OS via
+ * prefers-color-scheme. :root:not([data-theme="light"]) below means "system
+ * says dark, and the user hasn't explicitly overridden to light" — an
+ * explicit light choice always wins over the OS setting.
+ * ------------------------------------------------------------------------ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-paper: #241c1a;
+    --color-paper-raised: #2f2523;
+    --color-ink: #f3e9e2;
+    --color-ink-soft: #b3a099;
+    --color-pen: #e0839a;
+    --color-pen-soft: #c98c9b;
+    --color-highlight: #d9b273;
+    --color-line: #4a3b37;
+
+    --color-mesh-a: #2b1a1d;
+    --color-mesh-b: #221826;
+    --color-mesh-c: #1c1614;
+  }
+}
+:root[data-theme="dark"] {
+  --color-paper: #241c1a;
+  --color-paper-raised: #2f2523;
+  --color-ink: #f3e9e2;
+  --color-ink-soft: #b3a099;
+  --color-pen: #e0839a;
+  --color-pen-soft: #c98c9b;
+  --color-highlight: #d9b273;
+  --color-line: #4a3b37;
+
+  --color-mesh-a: #2b1a1d;
+  --color-mesh-b: #221826;
+  --color-mesh-c: #1c1614;
+}
+
+/* Theme-toggle icon: show whichever icon represents where a click takes
+   you (moon while light = "go dark"; sun while dark = "go light"), purely
+   in CSS so the correct icon is right on first paint, no JS/flash. */
+.theme-icon-sun {
+  display: none;
+}
+.theme-icon-moon {
+  display: inline;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-icon-sun {
+    display: inline;
+  }
+  :root:not([data-theme="light"]) .theme-icon-moon {
+    display: none;
+  }
+}
+:root[data-theme="dark"] .theme-icon-sun {
+  display: inline;
+}
+:root[data-theme="dark"] .theme-icon-moon {
+  display: none;
+}
+:root[data-theme="light"] .theme-icon-sun {
+  display: none;
+}
+:root[data-theme="light"] .theme-icon-moon {
+  display: inline;
+}
+
 html {
   background: var(--color-paper); /* fallback if the gradient can't paint */
   color: var(--color-ink);

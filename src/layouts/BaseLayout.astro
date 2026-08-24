@@ -29,6 +29,22 @@ const pageTitle = title === siteTitle ? title : `${title} · ${siteTitle}`;
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary" />
+    <script is:inline>
+      // Applies a saved theme choice before first paint, so there's no
+      // flash of the wrong theme. Must be is:inline (runs immediately,
+      // synchronously, not deferred/bundled) and must run before <body>
+      // renders — hence living in <head>, not a page-level <script>.
+      // No saved choice = no attribute set = the CSS's own
+      // prefers-color-scheme fallback in global.css handles it.
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          if (stored === "light" || stored === "dark") {
+            document.documentElement.setAttribute("data-theme", stored);
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body class="text-ink font-body antialiased">
     <Nav />
