@@ -254,6 +254,18 @@ background, in the burgundy + brass palette. Tokens live in
   a content pass aimed at making the About page "job ready" — most
   personal sites never say this outright, leaving a hiring manager to
   infer it from the bio.
+- **Homepage hero leads with the person, not just the pitch**: was
+  `Field Notebook — {about.role}` as the eyebrow (redundant with the
+  same info already in the tagline below it, and inconsistent with
+  every other page's short 1-3-word eyebrow) followed straight into
+  `{about.tagline}` as the H1 — no name anywhere near the top, it only
+  showed up in a smaller paragraph beneath. Per direct feedback ("give
+  personal info and what I am"): eyebrow is now just "Field Notebook",
+  H1 is `Hi, I'm {about.name}.`, and the tagline moved to its own
+  subheading right below the H1 (`text-[1.1rem] text-ink`, one step
+  down from the H1, one step up from the body paragraph). The old body
+  paragraph's `I'm {about.name} —` opener was dropped since the name is
+  now already stated in the H1 above it.
 - **Real gap found and fixed in the same pass**: `about.social.linkedin`
   was set in `about.md` and used in Nav's Connect panel and the footer,
   but `/about`'s own "At a glance" list never rendered it — only
