@@ -97,6 +97,12 @@ A few things I'm proud of:
 - Built custom tools to support migration and data import activities
 - Introduced AI into day-to-day workflows to drive business improvements
 
+Beyond the delivery plans and roadmaps, I'm a husband and a father — blessed
+with a daughter who feels like one in a billion, and these days life moves at
+her pace as much as mine. The rest of my spare time splits between personal
+finance (the unglamorous kind of reading that actually matters) and a home
+aquarium that's taught me more patience than any program ever has.
+
 Curious what this looks like in practice? The [Workbench](/projects) has real
 prototypes, and [Field Notes](/blog) has the writing behind the thinking. If
 you're evaluating me for a role or just want to talk shop, the fastest way to
