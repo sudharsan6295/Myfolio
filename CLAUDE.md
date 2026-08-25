@@ -294,6 +294,33 @@ background, in the burgundy + brass palette. Tokens live in
     exact same browser check before/after. Worth remembering: a schema
     enum change specifically, more than a plain content edit, is a
     good reason to restart the dev server rather than trust HMR here.
+- **Two-column layout alignment fixes, both from a screenshot** — the
+  homepage hero row and the `/blog` list+sidebar row had different
+  "which column should be taller/lower" answers, so don't copy one
+  fix's approach onto the other:
+  - Homepage hero (`index.astro`): the hero card and "Recent entries"
+    aside are meant to be the **same height**, ending at the same
+    bottom edge. The row's `items-start` was overriding CSS Grid's own
+    default `align-items: stretch`, which is what actually produces
+    matching heights automatically (no need for `items-stretch`
+    explicitly — just don't override it) — removed `items-start`.
+    Verified via `getBoundingClientRect()`: both cards now share
+    identical top/bottom/height (523px in the tested viewport).
+  - `/blog` list+sidebar: the opposite shape of problem — the sidebar
+    column (`Written by` + `Subscribe`) started at the very top of the
+    row, level with the `Sort` control, while the actual post list
+    starts lower (below the `Sort` row). Wanted: sidebar top aligned
+    with the *first post card*, not the sort control. Grid stretch
+    doesn't solve this one (it's an offset problem, not a height
+    problem) — added `lg:mt-[38px]` to the sidebar wrapper, where 38px
+    is the sort-control row's real measured height
+    (`getBoundingClientRect()` on the first post card minus the
+    wrapper's own top, at 1280px), not a guessed/rounded value. Only
+    at `lg:` since the sort row and sidebar don't sit side-by-side
+    below that breakpoint (single-column stack). If the sort row's
+    own height/margins ever change, re-measure and update this offset
+    — it's a hardcoded pixel match to specific content, not something
+    that stays correct automatically like the homepage's stretch fix.
 - **Gotcha, real, hit in the hero paragraph**: a newline immediately
   after a closing inline tag (`</a>\n          text...`) collapses to
   *nothing* in Astro's compiled output, not to a single space the way
