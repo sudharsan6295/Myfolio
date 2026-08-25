@@ -15,12 +15,16 @@ focusAreas:
   - "PLM & Enterprise Solution Delivery"
   - "AI Solution Implementation"
   - "Business–Tech Translation"
+  - "Program Management"
 tools:
-  - "Enovia / 3DExperience"
-  - "Stakeholder & Roadmap Management"
-  - "Agile & Scrum Delivery"
   - "LLM Tools & AI Agents"
   - "Prompt Engineering"
+  - "Enovia / 3DExperience"
+  - "Technia Integration Framework"
+  - "Agile & Scrum Delivery"
+  - "Programming and Scripting Basics"
+ 
+ 
   - "IT Service Management"
   - "Enterprise Collaboration"
 certifications:
@@ -78,9 +82,7 @@ experience:
 I'm a Lead Solution Consultant with ten years across solution delivery, project, and
 product management — creating solutions, planning delivery, managing risk, and leading the
 teams that ship enterprise PLM programs for global manufacturing and life
-sciences clients. I proposed and am architecting the company's on-premise-to-cloud transition 
-framework for 3DExperience/Enovia — building the migration methodology, framework structure, 
-and rollout roadmap from scratch.
+sciences clients.
 
 I'm currently pursuing a PGP in AI & Business with Scaler, and building
 toward AI product management — the kind of role that translates between

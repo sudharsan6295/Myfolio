@@ -294,6 +294,19 @@ background, in the burgundy + brass palette. Tokens live in
     exact same browser check before/after. Worth remembering: a schema
     enum change specifically, more than a plain content edit, is a
     good reason to restart the dev server rather than trust HMR here.
+- **Detail pages (`blog/[id].astro`, `projects/[id].astro`) are
+  `max-w-4xl` (896px), not `max-w-3xl`** — per direct feedback that
+  clicking into a post/project from the `max-w-5xl` (1024px) list
+  pages "felt smaller." Deliberately not matched all the way to
+  `max-w-5xl`: `.prose` is rendered with `max-w-none` (no inner reading-
+  width cap of its own), so the outer container's width *is* the
+  body-text line length — going all the way to 1024px would push
+  prose lines to ~100+ characters, well past comfortable reading
+  length. `max-w-4xl` measured out to ~85 characters/line (750px prose
+  column at 16px Work Sans) — wider and less cramped, without turning
+  the line length into its own readability problem. If asked to widen
+  these further, re-measure `.prose p`'s rendered width before just
+  bumping the class, for the same reason.
 - **Two-column layout alignment fixes, both from a screenshot** — the
   homepage hero row and the `/blog` list+sidebar row had different
   "which column should be taller/lower" answers, so don't copy one
