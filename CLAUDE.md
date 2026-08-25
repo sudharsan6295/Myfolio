@@ -562,21 +562,16 @@ user picked from directly:
 
 ### Follow-up fixes, same day — two real bugs the user caught by eye
 
-- **Connect dropdown was disturbing the content behind it — fixed.** The
+- **Connect dropdown legibility — tried, reverted by the user.** The
   popover in `Nav.astro` (Email/LinkedIn/GitHub, opened from the desktop
-  "Connect" link) reused the ambient `.glass` class — 62% opacity plus
-  blur, tuned for panels that sit over the empty gradient mesh background.
-  As a floating `absolute` popover, it instead sits over real page
-  content (e.g. About's "At a glance" list), and at that opacity the text
-  underneath stayed legible enough to visually compete with the
-  popover's own contents — read as broken, not intentionally
-  translucent. New `.glass-popover` class in `global.css` (96% opacity,
-  same blur/border/shadow shape) for floating overlays specifically,
-  applied to this one dropdown — every other `.glass` usage in the
-  codebase is an in-flow panel over the mesh background, not a popover
-  over content, so those were deliberately left on the original class.
-  Verified live: computed style on the open popover confirmed 0.96 alpha
-  and the blur filter both applied.
+  "Connect" link) uses the ambient `.glass` class — 62% opacity plus
+  blur, tuned for panels that sit over the empty gradient mesh
+  background. As a floating `absolute` popover it instead sits over real
+  page content (e.g. About's "At a glance" list), so a near-opaque
+  `.glass-popover` variant was tried for this one dropdown — the user
+  reverted it back to the original `.glass`, so the dropdown is
+  deliberately back to the site-wide translucent look; `.glass-popover`
+  was removed from `global.css` again rather than left as dead code.
 - **Blog page's search box and sort dropdown didn't align — fixed.** They
   sat in one `items-center` flex row but relied on each control's own
   padding (`py-1.5` on the search input vs `py-1` on the select) to
