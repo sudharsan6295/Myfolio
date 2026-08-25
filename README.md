@@ -134,6 +134,9 @@ social:
                                               # /projects — all four read from
                                               # this one field, add it once
 currently: "One sentence on what you're focused on right now."
+openTo:
+  - "Target role title, e.g. AI Product Manager"   # shown as chips at the
+                                                     # top of /about's sidebar
 focusAreas:
   - "Short tag, e.g. AI Product Strategy"
 tools:
@@ -158,12 +161,14 @@ experience:
       - "Keep these concrete and specific — numbers help."
 ```
 
-`photo`, `social`, `currently`, `focusAreas`, `tools`, `certifications`,
-`education`, and `principles` are all optional — each section on `/about`
-(and, for `photo`/`social`, the top nav and footer) only renders if its
-field is set/non-empty, so you can leave any of them out. Without a
-`photo`, the nav shows your initials instead; with one, clicking the small
-nav photo opens it full-size in a lightbox.
+`photo`, `social`, `currently`, `openTo`, `focusAreas`, `tools`,
+`certifications`, `education`, and `principles` are all optional — each
+section on `/about` (and, for `social`, the nav's Connect panel and the
+footer) only renders if its field is set/non-empty, so you can leave any
+of them out. `photo` specifically only affects `/about` — the top nav's
+header circle always shows the site's monogram, not your photo; with
+`photo` set, `/about`'s intro panel shows a small thumbnail that opens
+the full photo in a lightbox on click.
 
 ## Adding images
 

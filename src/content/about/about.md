@@ -1,6 +1,6 @@
 ---
 name: "Sudharsan Balaji Vijayakumar"
-role: "Lead Solution Consultant — Project & Product Management"
+role: "Lead Solution Consultant — Applied AI‑driven methodologies in product & project management, ensuring efficient Scrum delivery and innovative solution design on Enovia 3DExperience platforms"
 tagline: "Lead Solution Consultant with a decade across project and product management — now building toward implementing AI solutions for what comes next."
 location: "Coimbatore, India"
 email: "sudharsan6295@gmail.com"
@@ -11,12 +11,17 @@ social:
   linkedin: "https://www.linkedin.com/in/sudharsan-balaji-65a06791/"
   github: "https://github.com/sudharsan6295"
 currently: "Pursuing a PGP in AI & Business with Scaler, building toward AI product management and analytics-translator roles between business and technical teams."
+openTo:
+  - "AI Product Manager"
+  - "Business–AI Translator"
+  - "Senior Technical Program Manager"
 focusAreas:
   - "PLM & Enterprise Solution Delivery"
   - "AI Solution Implementation"
   - "Business–Tech Translation"
 tools:
   - "Enovia / 3DExperience"
+  - "Stakeholder & Roadmap Management"
   - "Agile & Scrum Delivery"
   - "LLM Tools & AI Agents"
   - "Prompt Engineering"
@@ -54,7 +59,10 @@ experience:
     end: "Present"
     location: "India"
     bullets:
-      - "Leading end-to-end delivery across enterprise PLM programs as Solution Architect, Project Manager, Scrum Master, and Product Owner. Currenty Managing different Projects and architecting a on-premise-to-cloud transition framework."
+      - "Leading end-to-end delivery across enterprise PLM programs as Solution Architect, Project Manager, Scrum Master, and Product Owner — currently managing multiple concurrent projects."
+      - "Proposed and am architecting the company's on-premise-to-cloud transition framework for 3DExperience/Enovia — migration methodology, framework structure, and rollout roadmap, built from scratch."
+      - "Delivered cost and timeline improvements across 5+ enterprise PLM engagements while sustaining 100% project transparency and zero unplanned downtime on every go-live."
+      - "Built custom tooling to support data migration and import activities, and introduced AI into day-to-day delivery work to improve team throughput."
   - company: "NTT DATA"
     role: "Software Development Senior Analyst — Solution Delivery & Team Lead"
     start: "2019"
@@ -68,20 +76,29 @@ experience:
     end: "2019"
     location: "India"
     bullets:
-      - "Involved in enterprise PLM upgrade projects, focusing on solution design, defect resolution, customization, and seamless delivery support for global clients."
+      - "Delivered enterprise PLM upgrade projects — solution design, defect resolution, customization, and delivery support — for global clients."
 ---
 
 I'm a Lead Solution Consultant with ten years across solution delivery, project, and
 product management — creating solutions, planning delivery, managing risk, and leading the
 teams that ship enterprise PLM programs for global manufacturing and life
-sciences clients.
+sciences clients. I proposed and am architecting the company's on-premise-to-cloud transition 
+framework for 3DExperience/Enovia — building the migration methodology, framework structure, 
+and rollout roadmap from scratch.
 
 I'm currently pursuing a PGP in AI & Business with Scaler, and building
 toward AI product management — the kind of role that translates between
 what's technically possible and what a business actually needs, or leads
 that translation from the top.
+ 
+A few things I'm proud of:
+- Delivered cost/timeline improvements across 5+ enterprise PLM engagements while sustaining 100% project transparency
+- Directed full 3DExperience upgrades
+- Built custom tools to support migration and data import activities
+- Introduced AI into day-to-day workflows to drive business improvements
 
-This site is where I keep notes on delivery, technology, and whatever I'm
-building on the side. If you're evaluating me for a role or just want to
-talk shop, the fastest way to reach me is the email in the panel alongside
-this.
+Curious what this looks like in practice? The [Workbench](/projects) has real
+prototypes, and [Field Notes](/blog) has the writing behind the thinking. If
+you're evaluating me for a role or just want to talk shop, the fastest way to
+reach me is the email in the panel alongside this.
+

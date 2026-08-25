@@ -46,6 +46,19 @@ const { Content } = await render(aboutEntry);
       </div>
 
       <aside aria-label="At a glance" class="glass rounded-3xl p-6 flex flex-col gap-6">
+        {about.openTo.length > 0 && (
+          <div>
+            <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-2">Open to</p>
+            <ul class="flex flex-wrap gap-1.5">
+              {about.openTo.map((role) => (
+                <li class="font-mono text-[0.65rem] text-pen border border-pen/40 rounded-[3px] px-2 py-0.5 bg-pen/5">
+                  {role}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         <div>
           <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-3 border-b border-line pb-2">
             At a glance
@@ -57,6 +70,13 @@ const { Content } = await render(aboutEntry);
             )}
             {about.resumeUrl && (
               <li><a href={about.resumeUrl} class="hover:text-pen transition-colors underline decoration-line underline-offset-4">Download résumé</a></li>
+            )}
+            {about.social.linkedin && (
+              <li>
+                <a href={about.social.linkedin} class="hover:text-pen transition-colors" target="_blank" rel="noopener noreferrer">
+                  LinkedIn ↗
+                </a>
+              </li>
             )}
             {about.social.github && (
               <li>

@@ -248,6 +248,20 @@ background, in the burgundy + brass palette. Tokens live in
   `BaseLayout.astro` (`.skip-link` in `global.css`, off-screen via
   `top: -100px` until `:focus` brings it to `top: 1rem`), landing on
   `<main id="main-content">`.
+- **`about.openTo`** (`content.config.ts`, `z.array(z.string())`) — the
+  explicit "here's what I'm looking for" signal, rendered as chips at
+  the very top of `/about`'s sidebar, above "At a glance." Added during
+  a content pass aimed at making the About page "job ready" — most
+  personal sites never say this outright, leaving a hiring manager to
+  infer it from the bio.
+- **Real gap found and fixed in the same pass**: `about.social.linkedin`
+  was set in `about.md` and used in Nav's Connect panel and the footer,
+  but `/about`'s own "At a glance" list never rendered it — only
+  location/email/resume/GitHub. Added, right before GitHub in that
+  list. Worth remembering if new `about.*` fields get added later:
+  being in the schema and being populated doesn't mean every page that
+  plausibly should show it actually does — check the actual render,
+  not just the data.
 
 ## Working on this project
 

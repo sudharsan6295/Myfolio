@@ -86,6 +86,11 @@ const about = defineCollection({
         .default({}),
       // What to focus on right now — shown in the "At a glance" panel.
       currently: z.string().optional(),
+      // Target role titles, e.g. "AI Product Manager" — shown as chips at
+      // the top of the About page's sidebar, above "At a glance". The one
+      // explicit "here's what I'm looking for" signal on the site — most
+      // personal sites bury this inside prose, if they say it at all.
+      openTo: z.array(z.string()).default([]),
       // Short tags, e.g. "AI Product Strategy" — shown as chips.
       focusAreas: z.array(z.string()).default([]),
       // Short tags, e.g. "Python" — shown as chips.
