@@ -24,16 +24,22 @@ const formattedDate = pubDate.toLocaleDateString("en-US", {
 const wordCount = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
 const readingMinutes = Math.max(1, Math.round(wordCount / 200));
 
-// Prev/next in the same newest-first order the /blog list uses, so "which
-// one is next" matches what a reader saw there. Labeled by actual title
-// and direction rather than ambiguous "prev/next" — index-1 is newer
-// (listed above this one), index+1 is older (listed below it).
-const allPosts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
-const currentIndex = allPosts.findIndex((p) => p.id === post.id);
-const newerPost = currentIndex > 0 ? allPosts[currentIndex - 1] : undefined;
-const olderPost = currentIndex >= 0 && currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : undefined;
+// "More like this" — suggestions based on the post being read, not just
+// chronological adjacency: same category scores highest, shared tags add
+// a smaller boost, ties broken by recency. Falls back to just "most
+// recent other posts" naturally, since with no matches every score is 0
+// and recency alone decides the order.
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const relatedPosts = allPosts
+  .filter((p) => p.id !== post.id)
+  .map((p) => {
+    const categoryScore = p.data.category === category ? 10 : 0;
+    const tagScore = p.data.tags.filter((t) => tags.includes(t)).length * 3;
+    return { post: p, score: categoryScore + tagScore };
+  })
+  .sort((a, b) => b.score - a.score || b.post.data.pubDate.valueOf() - a.post.data.pubDate.valueOf())
+  .slice(0, 3)
+  .map((s) => s.post);
 ---
 
 <BaseLayout title={title} description={description}>
@@ -83,21 +89,24 @@ const olderPost = currentIndex >= 0 && currentIndex < allPosts.length - 1 ? allP
       )}
     </div>
 
-    {(newerPost || olderPost) && (
-      <nav aria-label="More entries" class="mt-6 grid sm:grid-cols-2 gap-4">
-        {olderPost ? (
-          <a href={`/blog/${olderPost.id}`} class="group glass block rounded-2xl p-5 hover:bg-paper/75 transition-colors">
-            <p class="font-mono text-[0.65rem] uppercase tracking-[0.1em] text-ink-soft mb-1.5">← Older entry</p>
-            <p class="font-display text-base text-ink group-hover:text-pen transition-colors leading-snug">{olderPost.data.title}</p>
-          </a>
-        ) : <div />}
-        {newerPost ? (
-          <a href={`/blog/${newerPost.id}`} class="group glass block rounded-2xl p-5 hover:bg-paper/75 transition-colors sm:text-right">
-            <p class="font-mono text-[0.65rem] uppercase tracking-[0.1em] text-ink-soft mb-1.5">Newer entry →</p>
-            <p class="font-display text-base text-ink group-hover:text-pen transition-colors leading-snug">{newerPost.data.title}</p>
-          </a>
-        ) : <div />}
-      </nav>
+    {relatedPosts.length > 0 && (
+      <div class="mt-6">
+        <p class="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-ink-soft mb-3">More like this</p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {relatedPosts.map((p) => (
+            <a
+              href={`/blog/${p.id}`}
+              class="group glass block rounded-2xl p-5 hover:bg-paper/75 transition-colors"
+            >
+              <Stamp label={p.data.category} tone="pen" class="mb-2" />
+              <p class="font-display text-base text-ink group-hover:text-pen transition-colors leading-snug">
+                {p.data.title}
+              </p>
+              <p class="mt-1.5 text-xs text-ink-soft leading-relaxed line-clamp-2">{p.data.description}</p>
+            </a>
+          ))}
+        </div>
+      </div>
     )}
   </article>
 

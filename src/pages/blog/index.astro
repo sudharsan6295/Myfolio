@@ -7,12 +7,14 @@ const allPosts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 
-// The newest post flagged `featured: true` gets a spotlight card above the
-// filter/list; falls back to the newest post overall if nothing is flagged
-// yet. It still appears again in its normal place in the list below —
-// that's deliberate (a spotlight + a full reverse-chronological archive
-// including that same entry is the common, expected pattern), not a bug.
-const featuredPost = allPosts.find((p) => p.data.featured) ?? allPosts[0];
+// Reading time per post, for the "Quick reads first" sort option — same
+// formula PostCard.astro uses, computed here too since the sort has to
+// run client-side against a data-attribute (this is a static site, no
+// server to sort on).
+function readingMinutesFor(body: string | undefined) {
+  const wordCount = (body ?? "").trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(wordCount / 200));
+}
 
 const [aboutEntry] = await getCollection("about");
 const about = aboutEntry?.data;
@@ -69,15 +71,24 @@ const categoryCounts = categories.map((c) => ({
       </div>
     </div>
 
-    {featuredPost && (
-      <div class="mb-6">
-        <p class="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-ink-soft mb-2">Featured entry</p>
-        <PostCard post={featuredPost} featured={true} />
-      </div>
-    )}
-
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-6 lg:gap-8 items-start">
       <div>
+        {allPosts.length > 1 && (
+          <div class="flex items-center justify-end gap-2 mb-3">
+            <label for="sort-select" class="font-mono text-[0.65rem] uppercase tracking-[0.1em] text-ink-soft">
+              Sort
+            </label>
+            <select
+              id="sort-select"
+              class="font-mono text-[0.65rem] uppercase tracking-[0.08em] text-ink bg-paper/60 border border-line rounded-[3px] px-2 py-1 focus:outline-none focus:border-pen"
+            >
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+              <option value="title">Title A–Z</option>
+              <option value="quick">Quick reads first</option>
+            </select>
+          </div>
+        )}
         <div id="post-list" class={allPosts.length > 0 ? "border-l-2 border-line pl-5 sm:pl-6" : ""}>
           {allPosts.length === 0 ? (
             <p class="text-ink-soft text-sm py-10">
@@ -85,7 +96,12 @@ const categoryCounts = categories.map((c) => ({
             </p>
           ) : (
             allPosts.map((post, i) => (
-              <div data-category={post.data.category}>
+              <div
+                data-category={post.data.category}
+                data-date={post.data.pubDate.valueOf()}
+                data-title={post.data.title.toLowerCase()}
+                data-minutes={readingMinutesFor(post.body)}
+              >
                 <PostCard post={post} entryNumber={allPosts.length - i} />
               </div>
             ))
@@ -183,6 +199,32 @@ const categoryCounts = categories.map((c) => ({
       };
       box.addEventListener("change", sync);
       sync();
+    });
+
+    // Sort: reorders the actual DOM nodes (appendChild on an already-
+    // attached node moves it, doesn't clone it) rather than hide/show like
+    // the category filter does — sorting changes order, filtering changes
+    // visibility, and both can be active at once independently.
+    const sortSelect = document.getElementById("sort-select") as HTMLSelectElement | null;
+    const postList = document.getElementById("post-list");
+
+    sortSelect?.addEventListener("change", () => {
+      if (!postList) return;
+      const nodes = [...postList.children] as HTMLElement[];
+      nodes.sort((a, b) => {
+        switch (sortSelect.value) {
+          case "oldest":
+            return Number(a.dataset.date) - Number(b.dataset.date);
+          case "title":
+            return (a.dataset.title ?? "").localeCompare(b.dataset.title ?? "");
+          case "quick":
+            return Number(a.dataset.minutes) - Number(b.dataset.minutes);
+          case "newest":
+          default:
+            return Number(b.dataset.date) - Number(a.dataset.date);
+        }
+      });
+      nodes.forEach((node) => postList.appendChild(node));
     });
 
     const buttons = document.querySelectorAll<HTMLButtonElement>(".filter-btn");

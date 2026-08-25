@@ -76,35 +76,35 @@ background, in the burgundy + brass palette. Tokens live in
 - Signature motifs: `<Stamp>` (`src/components/Stamp.astro`) — a small
   rotated ink-stamp label, mono/uppercase/bordered, for blog categories
   and project status. `<Seal>` (`src/components/Seal.astro`) — a small
-  circular engraved-monogram SVG ("SB"), added later to finish the
-  site's originally-chosen concept ("Letterpress & Seal" — only the
-  letterpress/Stamp half had been built). Kept deliberately rare, same
-  "don't scatter it" rule Stamp documents for itself: it appears in
-  exactly two places — the About page's intro panel (`hidden sm:block`,
-  the site's signature) and marking the one entry flagged
-  `featured: true` on `/blog` (bigger spotlight card, via `PostCard`'s
-  `featured` prop) and `/projects` (small inline mark next to the date,
-  via `ProjectCard`). It's `aria-hidden` — always pair it with its own
-  visible or `sr-only` label at the call site (e.g. the `sr-only`
-  "Featured" span already next to every usage) rather than relying on
-  the Seal's own accessible name.
+  circular engraved-monogram SVG ("SB"), added to finish the site's
+  originally-chosen concept ("Letterpress & Seal" — only the
+  letterpress/Stamp half had been built). It lives in exactly two
+  places: the **nav header circle** (`Nav.astro` — a plain `<a href="/">`
+  wrapping the Seal, always shown regardless of whether `about.photo` is
+  set; it replaced the old photo/initials avatar entirely, see below)
+  and marking a project flagged `featured: true` on `/projects`
+  (`ProjectCard`, small inline mark next to the date). It's
+  `aria-hidden` — pair it with its own visible or `sr-only` label at
+  the call site (e.g. the `sr-only` "Featured" span next to the
+  Workbench usage) rather than relying on the Seal's own accessible
+  name. **Not** used on the About page or `/blog` any more — see the
+  photo and Featured-entry notes below for why.
 - **Tags/chips use `rounded-[3px]`, not `rounded-full`** — the About
   page's focus-area/tools/certifications chips were originally pill-
   shaped and were deliberately changed to match `<Stamp>`'s square-ish
   corner radius (no circular edges is a stated preference). Any new
   tag/chip UI should follow `rounded-[3px]`, not reach for a pill.
-- Nav avatar: `about.photo` (optional, `src/content.config.ts`) shows a
-  small circular image next to the name in the top nav
-  (`src/components/Nav.astro`). Circular is correct here — the "no
-  circular edges" preference above is specifically about the tag/chip
-  components, not avatars. Without a photo, the avatar is a plain link
-  home showing initials computed from `about.name`; **with** a photo, the
-  avatar becomes a `<button>` (not a link) that opens the photo full-size
-  in a lightbox (click backdrop/✕/Escape to close) — the name text next
-  to it is a separate `<a href="/">` and still goes home either way. The
-  name itself is hidden below the `sm` breakpoint (avatar only) — with
-  Connect added to the nav, there isn't room for the full name on a
-  narrow screen too.
+- **Nav header circle is always `<Seal>` now, never the photo.** Earlier
+  it showed `about.photo` (with a click-to-magnify lightbox) or, absent
+  a photo, initials computed from `about.name`. Per direct feedback,
+  the photo moved to the About page instead (see below) and the nav
+  circle became purely the site's Seal mark — no more conditional
+  photo/initials logic, no more `initials` computation, no more
+  lightbox in `Nav.astro` at all. It's a plain `<a href="/">`, not a
+  `<button>` — nothing to magnify there any more. The name text next to
+  it is still a separate `<a href="/">`, still hidden below the `sm`
+  breakpoint (Seal only on narrow screens — with Connect in the nav,
+  there isn't room for the full name too).
 - Nav Connect (renamed from "Contact"): a `<details>`/`<summary>`
   dropdown (no client framework needed) showing email, LinkedIn, and
   GitHub (whichever of `about.email`/`about.social.*` are set),
@@ -119,7 +119,7 @@ background, in the burgundy + brass palette. Tokens live in
   GitHub →" link on `/projects` — all gated on the same field, so
   setting it once in `about.md` turns all four on together (now set, to
   `https://github.com/sudharsan6295`).
-- The nav/lightbox photo is `src/content/about/photo.png` — the full,
+- The source file is `src/content/about/photo.png` — the full,
   uncropped portrait exactly as supplied (an earlier pass cropped it to
   a tight head-and-shoulders frame; that was explicitly undone per
   feedback — "use the photo without editing"). The one edit that's kept
@@ -128,17 +128,38 @@ background, in the burgundy + brass palette. Tokens live in
   background color (a one-off `sharp` script, not a standing tool — no
   image-editing dependency was added to the project). Kept as a lossless
   PNG on purpose, not converted to JPEG, per the same "don't edit beyond
-  what was asked" feedback.
-- **Gotcha, already hit once:** `astro:assets`'s `<Image>` crops to fill
-  when given `width` + `height` that don't match the source's aspect
-  ratio (a real server-side crop of the output file, not something CSS
-  `object-contain` can undo afterward). The lightbox `<Image>` in
-  Nav.astro learned this the hard way — `width={800} height={800}` on a
-  1024×1536 portrait source silently cropped off the top of the head in
-  the "enlarged" view. Fixed by passing only `width` (Astro infers
-  `height` from the image's own intrinsic ratio for local/content-
-  collection images) — do the same for any new `<Image>` usage where the
-  source's exact aspect ratio isn't known/guaranteed up front.
+  what was asked" feedback. That's about the *source file* — see the
+  next two notes for how it's *displayed*, which is a different
+  question (display-level `object-cover`/crop is fine; editing the file
+  on disk isn't).
+- **The photo lives on the About page now, with two deliberately
+  different crops** — `about.astro`'s intro panel shows a small
+  passport-shaped thumbnail (`<Image width={92} height={120}>`,
+  `object-cover`, `rounded-md border-2`, positioned where `<Seal>` used
+  to sit: `hidden sm:block absolute top-7 right-7 sm:top-9 sm:right-9`)
+  that opens the **full, uncropped** photo in a lightbox on click
+  (`<Image width={900}>`, no `height`, same click-backdrop/✕/Escape
+  mechanics the nav lightbox used to have — moved here wholesale,
+  `about-photo-*` ids instead of `avatar-*`). Two different `<Image>`
+  calls for the same source file, two different intents: the thumbnail
+  *wants* a server-side crop (see the gotcha below — this is the one
+  place in the codebase that deliberately triggers it), the lightbox
+  explicitly avoids one.
+- **Gotcha, already hit once, and now also a deliberate tool:**
+  `astro:assets`'s `<Image>` crops to fill when given `width` + `height`
+  that don't match the source's aspect ratio (a real server-side crop
+  of the output file, not something CSS `object-contain` can undo
+  afterward). This bit the old nav lightbox once — `width={800}
+  height={800}` on the 1024×1536 portrait source silently cropped off
+  the top of the head in the "enlarged" view; fixed there by passing
+  only `width` and letting Astro infer `height`. The About page's new
+  passport thumbnail is the *inverse* case: `width={92} height={120}`
+  is chosen specifically to trigger that same crop-to-fill behavior on
+  purpose (verified the output really is 92×120 via `sharp` metadata on
+  the built file, not just "looks about right"). Know which one you
+  want before touching either `<Image>` call — omit `height` when the
+  full image must survive intact, set a mismatched `height` when a
+  deliberate crop is the point.
 - Blog category checkboxes (the subscribe form's per-category opt-in,
   `src/pages/blog/index.astro`) toggle their checked-state chip style
   via JS `classList`, not a CSS `peer-checked:` variant — a
@@ -161,16 +182,14 @@ background, in the burgundy + brass palette. Tokens live in
   fills, *and* text (certifications chips, the Education card's middot,
   Stamp's `highlight` tone) and a change to one changes all of them.
 - **"Featured" (`featured: true` on `blog`/`projects` content
-  frontmatter) is now surfaced** — the schema already had this field,
-  nothing in the UI read it until this pass. Now: `/blog` shows the newest post flagged
-  featured (falls back to the newest post overall if none is flagged)
-  as a bigger spotlight card above the filter/list — it still appears
-  again in its normal chronological spot in the list below too, that's
-  deliberate, not a duplicate-content bug. `/projects`' `ProjectCard`
-  shows a small `<Seal>` next to the date for any featured project
-  instead of resizing the card (the list is small — 3 entries as of
-  this pass — so a full spotlight card would feel disproportionate;
-  revisit if the list grows).
+  frontmatter) is only surfaced on `/projects` now.** It was briefly
+  also used for a spotlight card at the top of `/blog` (a bigger
+  `PostCard` via a `featured` prop) — removed per direct feedback in
+  favor of the sort control below, and `PostCard.astro` was reverted to
+  its simpler pre-spotlight form (no `featured` prop any more — grep
+  before reintroducing one, it was fully dead code by the time it was
+  removed). `/projects`' `ProjectCard` still shows a small `<Seal>` next
+  to the date for any featured project — that part wasn't touched.
 - **Ledger spine**: the post lists on `/` (Field Notes preview) and
   `/blog` (the full list) get a `border-l-2 border-line pl-5 sm:pl-6`
   on their wrapping `<div>` — a literal connecting rule down the
@@ -193,12 +212,33 @@ background, in the burgundy + brass palette. Tokens live in
   scrollHeight - innerHeight)` on scroll/resize — whole-document scroll
   fraction, not a precise article-bounds measurement, since the
   article fills essentially the whole page on this route anyway.
-- **Prev/next navigation** (`blog/[id].astro`): re-fetches and re-sorts
-  `getCollection("blog")` the same way `/blog` does (newest-first),
-  finds the current post's index, and links the neighbors — labeled
-  "← Older entry" / "Newer entry →" by actual title, not ambiguous
-  "prev"/"next" wording, since "prev" is genuinely ambiguous between
-  reading order and chronological order here.
+- **"More like this"** (`blog/[id].astro`) replaced an earlier
+  chronological "← Older entry / Newer entry →" prev/next nav, per
+  direct feedback asking for suggestions based on the post being read
+  instead of pure adjacency. Scoring: same `category` as the current
+  post is worth 10, each shared `tag` is worth 3, ties broken by
+  recency — so it naturally degrades to "just show recent posts" when
+  nothing scores above 0, without a separate fallback branch. Top 3
+  shown, compact glass cards (not full `PostCard` — a smaller, denser
+  treatment fits better as a footer section than the main list's
+  full-size cards).
+- **Sort control** (`/blog`, next to the post list, above `#post-list`):
+  Newest first / Oldest first / Title A–Z / Quick reads first — added
+  alongside the existing category filter when the "Featured entry"
+  spotlight was removed. Each post's wrapper `<div>` carries
+  `data-date`/`data-title`/`data-minutes` attributes; changing the
+  `<select>` sorts a copied array of `postList.children` and
+  re-`appendChild`s them in the new order (moves the existing nodes,
+  doesn't clone/re-render them — cheap, and doesn't disturb the
+  category filter's own `items` `NodeList`, which holds element
+  references, not positions, so reordering doesn't invalidate it).
+  Sorting and filtering are independent and compose fine — sort changes
+  order, filter changes visibility, and neither needs to know about the
+  other. The `№006`-style entry-number badge (`PostCard`'s
+  `entryNumber`) is deliberately *not* recalculated after a non-date
+  sort — it's each post's permanent ledger reference number, not a
+  "current position in this view" indicator, so it staying fixed while
+  the surrounding order changes is correct, not a bug to fix.
 - **Workbench status filter** (`/projects`): same client-side-only
   `data-filter`/`data-status` pattern as the blog category filter
   (see the note on `blog/index.astro` below) — All/Live/Prototype/

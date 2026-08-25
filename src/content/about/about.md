@@ -18,7 +18,7 @@ focusAreas:
 tools:
   - "Enovia / 3DExperience"
   - "Agile & Scrum Delivery"
-  - "AI Agents & LLM Tools"
+  - "LLM Tools & AI Agents"
   - "Prompt Engineering"
   - "IT Service Management"
   - "Enterprise Collaboration"
@@ -30,12 +30,23 @@ education:
     institution: "Sri Ramakrishna Engineering College, Coimbatore"
     year: "2016"
 principles:
-  - title: "Zero-downtime, no exceptions"
-    description: "Every enterprise upgrade I've led has gone live without downtime for the client — a planning discipline, not luck, and not something I compromise on to hit a date."
-  - title: "Transparency isn't overhead"
-    description: "Structured reporting to stakeholders is what lets a sponsor trust a program enough not to micromanage it. I hold full project transparency on every engagement I own."
+  - title: "Zero-downtime delivery, no exceptions"
+    description: "Every enterprise upgrade I've led has gone live without downtime for the client — a product of disciplined solution design and cutover planning, not luck, and not something I compromise on to hit a date."
+
+  - title: "Risk surfaced early is risk that stays small"
+    description: "I treat risk management as a weekly habit, not a milestone review — surfacing technical, timeline, and dependency risks the moment I see them so sponsors are never blindsided late in a program."
+
+  - title: "Transparency isn't overhead, it's trust infrastructure"
+    description: "Structured, honest reporting is what lets a sponsor trust a program enough not to micromanage it. I hold full transparency on every engagement I own — the good news and the risks, in the same report."
+
+  - title: "Explore before you commit, then commit fully"
+    description: "New tools, platforms, or ways of working earn a real evaluation — a prototype, a pilot, a proof of concept — before I bring them into a delivery plan. Once I commit, I build for adoption, not just for launch."
+
+  - title: "AI belongs in the product, not just the process"
+    description: "I look past using AI to speed up my own work and ask where it changes what the product can actually do for the customer — turning that into a concrete roadmap item, not a slide."
+
   - title: "Delivery includes mentoring the team"
-    description: "I've mentored teams alongside every PM and Scrum Master role I've held — a project isn't done until the people who built it can run the next one without me."
+    description: "I mentor the team alongside every PM and Scrum Master role I hold — a project isn't done until the people who built it can run the next one, or the next initiative, without me."
 experience:
   - company: "TECHNIA (Addnode Group India)"
     role: "Lead Solution Consultant — Solution Delivery, Product Owner, Project Manager & Scrum Master"
@@ -43,7 +54,7 @@ experience:
     end: "Present"
     location: "India"
     bullets:
-      - "Leading end-to-end delivery across enterprise PLM programs as Solution Architect, Project Manager, Scrum Master, and Product Owner — including architecting a on-premise-to-cloud transition framework."
+      - "Leading end-to-end delivery across enterprise PLM programs as Solution Architect, Project Manager, Scrum Master, and Product Owner. Currenty Managing different Projects and architecting a on-premise-to-cloud transition framework."
   - company: "NTT DATA"
     role: "Software Development Senior Analyst — Solution Delivery & Team Lead"
     start: "2019"
