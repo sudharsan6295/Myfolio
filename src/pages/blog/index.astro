@@ -86,7 +86,7 @@ const categoryCounts = [...new Set(allPosts.map((p) => p.data.category))]
              post list) rather than the full hero-panel width — per
              direct request, reverting the earlier full-width version. -->
         {allPosts.length > 1 && (
-          <div class="glass rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2 mb-6">
+          <div class="glass rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2 mb-6 ml-[26px]">
             <div class="relative flex-1 min-w-[160px] max-w-xs ml-2">
               <svg width="13" height="13" viewBox="0 0 16 16" fill="none" class="absolute left-2.5 top-1/2 -translate-y-1/2 text-ink-soft pointer-events-none">
                 <circle cx="7" cy="7" r="5.2" stroke="currentColor" stroke-width="1.3" />

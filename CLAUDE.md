@@ -777,11 +777,18 @@ Two more changes, same session:
     3-column `grid-cols-[1fr_auto_1fr]` from when RSS still lived
     here. Search additionally has a small `ml-2` nudge right, per
     direct request.
+  - **Row's own left edge shrunk in with `ml-[26px]`** so it lines up
+    with the actual post *cards'* left edge (171px) below it, not just
+    `#post-list`'s outer container edge (145px, where the timeline
+    border sits) — the cards themselves are indented past that border
+    by `border-l-2` + `pl-5`. Verified live: row and first post card
+    share the identical left edge (171) and right edge (829).
   - Given how many shapes this one row has cycled through this
     session (dropdown-in-hero → narrow-in-column → full-width-3-up →
-    narrow-3-up → **narrow 2-up, RSS back in hero** — current), **check
-    this note for the current shape before changing it again** rather
-    than assuming an earlier commit's description still applies.
+    narrow-3-up → narrow-2-up-RSS-in-hero → **same, shrunk to align
+    with the post cards** — current), **check this note for the
+    current shape before changing it again** rather than assuming an
+    earlier commit's description still applies.
 - **Sticky table of contents on blog posts** (`blog/[id].astro`) — a
   left-side "On this page" nav, `xl:` breakpoint and up only (that's
   the first width where the max-w-4xl article, centered inside a new
@@ -832,6 +839,29 @@ Two more changes, same session:
     token") — moved outside the `{}` both times it came up. Worth
     remembering as a standing gotcha for this codebase, not just a
     one-off.
+
+### Same sticky table of contents added to Workbench project pages
+
+Direct follow-up ("I also need on this page for opened workbench
+similar to notes"): `projects/[id].astro` got the identical treatment
+`blog/[id].astro` got — same `xl:grid-cols-[200px_1fr]` outer grid (no
+`items-start`, for the same sticky-container-height reason), same
+`headings` destructured from `render(project)` filtered to `depth ===
+2`, same `.toc-link` + `IntersectionObserver` scroll-spy script
+wrapped in `astro:page-load`. Applied correctly on the first pass this
+time (comment placed outside the `{}` expression from the start, no
+repeat of the compiler error above).
+
+Verified live on all 3 real projects: TOC renders with the correct
+heading text and working `#slug` anchors on each
+(`onefolder-family-vault` — 5 headings, `ai-sales-dashboard` — 3,
+`personal-portfolio-site` — 3); `<nav>` height matches `<article>`
+height exactly (1549px both, on the OneFolder project) confirming the
+sticky child has proper room to travel; hidden below `xl:` with no
+horizontal overflow at 1024px. Same known gap as the blog version:
+this environment's Browser pane can't actually scroll
+(`document.hidden: true`), so the live highlight-swap itself isn't
+visually confirmed, only everything structural around it.
 
 ## Working on this project
 
