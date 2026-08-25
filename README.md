@@ -1,6 +1,6 @@
 # Personal Site
 
-A personal blog / portfolio — About Me, Blogs, and Workbench (projects) — built
+A personal blog / portfolio — About Me, Notes, and Workbench (projects) — built
 so that **updating content never means touching code**. Every real word on
 this site (bio, work history, blog posts, project write-ups) lives in a plain
 Markdown file under `src/content/`. Add or edit a file, push, and the live

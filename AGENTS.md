@@ -1,6 +1,6 @@
 # Project: Personal Site
 
-A personal blog / portfolio (About Me, Blogs, Workbench) built so
+A personal blog / portfolio (About Me, Notes, Workbench) built so
 content updates never require touching code — see `README.md` for the full
 content-authoring guide (how to add a post/project, folder structure,
 frontmatter templates). This file is for working on the *code*; `README.md`
@@ -760,8 +760,12 @@ to light and persists to `localStorage` afterward.
 
 ## Working on this project
 
-- Nav labels (About Me / Blogs / Workbench) are defined once in
+- Nav labels (About Me / Notes / Workbench) are defined once in
   `src/components/Nav.astro` — don't hardcode nav links elsewhere.
+  ("Notes" is the nav label and page eyebrow/title; the route is still
+  `/blog` and the page's own H1 is still "Field Notes" — only the
+  visible "Blogs" labels were renamed, not the URL, per direct
+  request to keep this a label change, not a URL restructuring.)
 - Every page goes through `src/layouts/BaseLayout.astro` for `<head>`,
   the nav, and the footer.
 - The blog category filter (`src/pages/blog/index.astro`) is intentionally

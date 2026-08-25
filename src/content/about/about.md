@@ -27,8 +27,6 @@ tools:
   - "Enovia / 3DExperience"
   - "Agile & Scrum Delivery"
   - "Programming and Scripting Basics"
- 
- 
   - "IT Service Management"
   - "Enterprise Collaboration"
 certifications:
