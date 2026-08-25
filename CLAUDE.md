@@ -105,36 +105,32 @@ background, in the burgundy + brass palette. Tokens live in
   it is still a separate `<a href="/">`, still hidden below the `sm`
   breakpoint (Seal only on narrow screens — with Connect in the nav,
   there isn't room for the full name too).
-- **Nav Connect (renamed from "Contact") — a dropdown, icons in a row,
-  no visible box around them.** Desktop shows a "Connect" label
-  (`<details>`/`<summary>`) that opens email/LinkedIn/GitHub as three
-  icon-only buttons side by side in one horizontal row, positioned
-  `absolute` under the trigger — with no background, border, shadow,
-  or blur around them (`background: transparent`, `border-width: 0`,
-  confirmed via computed style). This has gone through four shapes
-  this session (dropdown-with-text-rows → inline-icons-in-the-bar →
-  dropdown-with-icon-row-in-a-`.glass-popover`-box →
-  dropdown-with-icon-row-and-no-box), each per a direct follow-up
-  request. `.glass-popover` (the near-opaque background variant built
-  for the previous shape, needed there because *text* rows underneath
-  translucent glass fought for legibility) was removed from
-  `global.css` again — a bare row of icons doesn't have that
-  legibility problem the way text did, so there's nothing for a
-  background to protect against here; each icon still gets its own
-  `hover:bg-paper-raised/40` for a visible hit target. Outside-click/
-  Escape dismissal (`.contact-dropdown[open]`, since `<details>` has
-  no built-in close) stays, since it's still a `<details>` popover,
-  just visually boxless. Mobile menu has its own separate, always-
-  inline (never a popover, never had a box) Connect section —
-  untouched by any of this. **If Connect changes shape again, check
-  this note first** rather than re-deriving the history from scratch.
-- **Footer has icon-only Connect links, no label.** `Footer.astro`
-  shows the same three icons (Email/LinkedIn/GitHub, `h-7 w-7`,
-  `title` + `aria-label` on each) next to the copyright line — no
-  "Connect" text next to them (that label now lives only in the nav's
-  dropdown trigger, see above). Same `about.email`/`about.social.*`
-  conditionals as everywhere else — the row only renders if at least
-  one of the three is actually set.
+- **Nav Connect — plain inline icon links in the bar, no dropdown.**
+  Desktop shows email/LinkedIn/GitHub as three icon-only buttons
+  directly in the nav bar (`h-7 w-7 rounded-[3px]`, same treatment as
+  the theme toggle next to them), each with a `title` tooltip and
+  `aria-label`. **This is the settled shape after five rounds of churn
+  in one session** — worth reading in full before touching this again:
+  dropdown-with-text-rows (original) → dropdown-with-opaque-background
+  (tried, reverted twice) → plain-inline-icons (a real redesign, per
+  "change the design") → dropdown-with-icon-row-in-a-box (per "have it
+  in header... in dropdown in a row") → dropdown-with-icon-row-and-no-
+  box (per "hide the box") → **back to plain-inline-icons**, explicitly
+  reverting the last two of those per direct request ("revert the last
+  two on connect and keep only interactive icons on header"). No
+  `.glass-popover` class exists in `global.css` any more — removed
+  each time a dropdown shape was undone, since nothing else uses it.
+  Mobile menu has its own separate, always-inline Connect section,
+  unaffected by any of this churn. **If asked to change Connect again,
+  read this note fully first and confirm the specific target shape
+  before implementing** — this component has round-tripped through
+  the same few designs multiple times this session.
+- **Footer Connect — plain text links, no icons, no label.**
+  `Footer.astro` shows "Email"/"LinkedIn"/"GitHub" as plain text links
+  next to the copyright line — the original design, restored after a
+  detour through icon-only links (with and without a "Connect" label)
+  that was explicitly reverted per direct request alongside the nav
+  change above.
 - **Nav has two structurally separate layouts, not one responsive
   one** — `hidden sm:flex` (desktop: inline links + Connect icons +
   theme toggle) and `flex sm:hidden` (mobile: just a theme toggle +
