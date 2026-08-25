@@ -254,23 +254,36 @@ background, in the burgundy + brass palette. Tokens live in
   a content pass aimed at making the About page "job ready" — most
   personal sites never say this outright, leaving a hiring manager to
   infer it from the bio.
-- **A personal paragraph (family, hobbies) lives in the homepage hero,
-  not the About bio** — `index.astro`'s hero card, after the "This is
-  where I keep the writing..." site-description paragraph, before the
-  location/years-experience Stamps. It was tried on `/about` first (a
-  natural fit for a "beyond the resume" bio aside) and moved here per
-  direct feedback. Hardcoded prose in `index.astro`, not an `about.md`
-  field — there's no schema field for it, so it doesn't flow through to
-  `/about` or anywhere else automatically; if it needs to change, edit
-  it in `index.astro` directly.
+- **`/about` is professional-only content; personal content lives on
+  the homepage, by explicit design.** A personal paragraph (family,
+  hobbies) was tried on `/about` first — a natural-seeming fit for a
+  "beyond the resume" bio aside — then moved to the homepage hero per
+  direct feedback ("about me is my professional details"). It's now in
+  `index.astro`'s hero card ("Off the clock: ..."), between the tagline
+  and the site-description paragraph. Hardcoded prose there, not an
+  `about.md` field — no schema field for it, so it doesn't flow through
+  to `/about` or anywhere else automatically. **If new About content is
+  ever proposed, ask whether it's professional (belongs in `about.md`)
+  or personal (belongs in `index.astro`'s hero) before adding it** —
+  this split was deliberate, not incidental, and the rest of the site
+  already respects it: `/blog`'s own intro copy is the one other place
+  personal topics (Personal Finance, Aquariums & Fishkeeping) show up,
+  framed there as writing topics, not biography.
+- **Homepage hero eyebrow is "The Notebook"**, not "Field Notebook" —
+  renamed per direct feedback ("more suitable name"). Chosen to echo
+  the exact phrase the hero's own body copy already uses ("This is
+  *the notebook*, not the portfolio...") rather than introduce a new,
+  unrelated label — keeps the eyebrow and the paragraph below it
+  saying the same thing in two places instead of two different things.
 - **Homepage hero leads with the person, not just the pitch**: was
   `Field Notebook — {about.role}` as the eyebrow (redundant with the
   same info already in the tagline below it, and inconsistent with
   every other page's short 1-3-word eyebrow) followed straight into
   `{about.tagline}` as the H1 — no name anywhere near the top, it only
   showed up in a smaller paragraph beneath. Per direct feedback ("give
-  personal info and what I am"): eyebrow is now just "Field Notebook",
-  H1 is `Hi, I'm {about.name}.`, and the tagline moved to its own
+  personal info and what I am"): eyebrow was "Field Notebook" (later
+  renamed to "The Notebook" — see the note below), H1 is
+  `Hi, I'm {about.name}.`, and the tagline moved to its own
   subheading right below the H1 (`text-[1.1rem] text-ink`, one step
   down from the H1, one step up from the body paragraph). The old body
   paragraph's `I'm {about.name} —` opener was dropped since the name is
