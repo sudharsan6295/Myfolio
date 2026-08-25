@@ -762,14 +762,26 @@ to light and persists to `localStorage` afterward.
 
 Two more changes, same session:
 
-- **Search/sort/RSS row narrowed to match the post-list column only**
+- **Search/sort row narrowed to match the post-list column only**
   (`blog/index.astro`) — reverted the earlier full-hero-width version:
-  the row moved back inside the grid's left column, using its own
-  `grid-cols-[1fr_auto_1fr]` for left/center/right (Search/Sort/RSS)
-  alignment scoped to that narrower width, rather than the shared
-  `[1fr_260px]` template that had made it match the hero panel and
-  the sidebar. Verified live: row's left/right edges (145/829) now
-  match `#post-list`'s exactly; search filtering still works.
+  the row moved back inside the grid's left column. Verified live:
+  row's left/right edges (145/829) match `#post-list`'s exactly;
+  search filtering still works.
+  - **RSS moved back to the hero panel**, its original spot (below
+    the intro paragraph, above the category filter buttons) — no
+    longer lives in this row at all, per direct request ("as
+    earlier"). Same markup as the original placement, just
+    reinstated.
+  - **Row is now just Search (left) / Sort (right)** — a plain
+    `flex justify-between` (search `flex-1`, sort `shrink-0`), not the
+    3-column `grid-cols-[1fr_auto_1fr]` from when RSS still lived
+    here. Search additionally has a small `ml-2` nudge right, per
+    direct request.
+  - Given how many shapes this one row has cycled through this
+    session (dropdown-in-hero → narrow-in-column → full-width-3-up →
+    narrow-3-up → **narrow 2-up, RSS back in hero** — current), **check
+    this note for the current shape before changing it again** rather
+    than assuming an earlier commit's description still applies.
 - **Sticky table of contents on blog posts** (`blog/[id].astro`) — a
   left-side "On this page" nav, `xl:` breakpoint and up only (that's
   the first width where the max-w-4xl article, centered inside a new
