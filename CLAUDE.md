@@ -758,6 +758,69 @@ navigations (Blog → Workbench → About), `data-theme` stayed `"dark"`
 at every stop; the theme-toggle button itself still correctly flips
 to light and persists to `localStorage` afterward.
 
+### Search/sort row narrowed back down; sticky table of contents added to posts
+
+Two more changes, same session:
+
+- **Search/sort/RSS row narrowed to match the post-list column only**
+  (`blog/index.astro`) — reverted the earlier full-hero-width version:
+  the row moved back inside the grid's left column, using its own
+  `grid-cols-[1fr_auto_1fr]` for left/center/right (Search/Sort/RSS)
+  alignment scoped to that narrower width, rather than the shared
+  `[1fr_260px]` template that had made it match the hero panel and
+  the sidebar. Verified live: row's left/right edges (145/829) now
+  match `#post-list`'s exactly; search filtering still works.
+- **Sticky table of contents on blog posts** (`blog/[id].astro`) — a
+  left-side "On this page" nav, `xl:` breakpoint and up only (that's
+  the first width where the max-w-4xl article, centered inside a new
+  max-w-6xl outer grid, reliably leaves room for a 200px column
+  without crowding the prose). Built from `render(post)`'s own
+  `headings` array (Astro's markdown pipeline slugs headings by
+  default via github-slugger and stamps that slug as the `id=` on the
+  rendered heading — no separate id-generation needed, `#slug` links
+  just work), filtered to `depth === 2` since that's every post's
+  actual section-heading level. Only renders at all when a post has
+  more than one H2 — not worth showing for a short, single-section
+  post.
+  - **Real bug caught and fixed before landing**: the outer grid
+    initially had `items-start`, which meant the TOC's `<nav>` grid
+    cell only took the height of its own (short) content instead of
+    stretching to match the (much taller) article column — leaving
+    the inner `sticky top-24` div almost no room to actually stick as
+    the reader scrolls, so it would unstick and scroll away almost
+    immediately instead of following down the page. Removed
+    `items-start` (back to default `stretch`) — verified live via
+    `getBoundingClientRect`: `<nav>`'s height now matches the
+    article's exactly (both 2479px on the LLM post), giving the
+    sticky child room to travel for the whole article length, not
+    just the first screenful.
+  - Active-section highlighting is a scroll-spy
+    (`IntersectionObserver`, `rootMargin: "-96px 0px -70% 0px"` so a
+    heading counts as "active" once it's near the top of the
+    viewport, not just anywhere on screen), wrapped in the same
+    `let`-binding + `astro:page-load` re-init pattern as this file's
+    existing reading-progress script — a soft navigation between two
+    posts swaps in a completely different heading set, so the
+    previous post's observer is explicitly disconnected before a new
+    one is created.
+  - **Known verification gap, not a suspected bug**: this
+    environment's Browser pane reports `document.hidden: true` /
+    `visibilityState: "hidden"` (confirmed directly), and neither
+    `window.scrollTo` nor `scrollIntoView` actually changes
+    `window.scrollY` here — the same underlying compositing
+    limitation that's blocked real screenshots elsewhere in this
+    project's history. Everything *structurally* checked (TOC renders
+    with correct headings/links matching real heading `id`s on every
+    post, hidden correctly below `xl:`, sticky container height fixed
+    and confirmed) — the one thing not verified with an actual scroll
+    is the live highlight-swap itself. Worth a real-browser check.
+  - Hit the same Astro compiler error as an earlier pass in this same
+    session: an HTML comment as the first child inside a
+    `{condition && (...)}` expression is invalid ("Unexpected
+    token") — moved outside the `{}` both times it came up. Worth
+    remembering as a standing gotcha for this codebase, not just a
+    one-off.
+
 ## Working on this project
 
 - Nav labels (About Me / Notes / Workbench) are defined once in
