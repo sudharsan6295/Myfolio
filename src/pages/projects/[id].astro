@@ -35,14 +35,19 @@ const linkLabels: Record<string, string> = {
 ---
 
 <BaseLayout title={title} description={summary}>
-  <div class="mx-auto max-w-6xl px-6 pt-10 sm:pt-14 pb-8 grid grid-cols-1 xl:grid-cols-[200px_1fr] gap-8">
+  <div class="mx-auto max-w-5xl px-6 pt-10 sm:pt-14 pb-8">
+    <article class="max-w-4xl mx-auto relative">
     <!-- Same TOC treatment as blog/[id].astro — see that file's comment
-         for the reasoning behind the xl: breakpoint and the un-stretched
-         items-start pitfall it's deliberately avoiding here too (no
-         items-start on this grid, so the nav's sticky child has the full
-         article height to travel within). -->
+         for the full reasoning: absolute positioning breaks the TOC out
+         into the page margin instead of widening this page's own
+         container past max-w-5xl (an earlier version did that, and left
+         this page's content visibly wider than the nav/footer above and
+         below it). top-0 + bottom-0 with no explicit height stretches
+         this <nav> to the article's full height, giving the sticky
+         child room to travel. 2xl: and up only — the first breakpoint
+         with enough real margin outside max-w-5xl for this. -->
     {tocHeadings.length > 1 && (
-      <nav aria-label="Table of contents" class="hidden xl:block">
+      <nav aria-label="Table of contents" class="hidden 2xl:block absolute top-0 bottom-0 -left-[232px] w-[200px]">
         <div class="sticky top-24">
           <p class="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-ink-soft mb-3">On this page</p>
           <ul id="toc-list" class="space-y-1 border-l border-line">
@@ -62,7 +67,6 @@ const linkLabels: Record<string, string> = {
       </nav>
     )}
 
-    <article class="max-w-4xl">
     <a
       href="/projects"
       class="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.1em] text-ink-soft hover:text-pen transition-colors mb-6"

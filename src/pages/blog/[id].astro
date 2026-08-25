@@ -51,16 +51,22 @@ const relatedPosts = allPosts
 
 <BaseLayout title={title} description={description}>
   <div id="reading-progress" class="fixed top-0 left-0 h-[3px] bg-pen z-[70]" style="width:0%"></div>
-  <div class="mx-auto max-w-6xl px-6 pt-10 sm:pt-14 pb-8 grid grid-cols-1 xl:grid-cols-[200px_1fr] gap-8">
-    <!-- Only at xl: and up — that's the first breakpoint where a
-         max-w-4xl article centered inside this max-w-6xl wrapper
-         reliably leaves enough side margin for a 200px column
-         without crowding the prose. Hidden entirely below that
-         rather than, say, collapsed into a dropdown — a TOC for a
-         4-6 section blog post isn't essential wayfinding the way it
-         would be for a long reference doc. -->
+  <div class="mx-auto max-w-5xl px-6 pt-10 sm:pt-14 pb-8">
+    <article class="max-w-4xl mx-auto relative">
+    <!-- TOC breaks out into the page margin via absolute positioning
+         instead of widening this page's own container past max-w-5xl
+         (which every other page, and the footer, are built to) — an
+         earlier version used a wider max-w-6xl wrapper to make room
+         for the TOC column, which left this page's content visibly
+         wider than the nav/footer above and below it. top-0 + bottom-0
+         with no explicit height stretches this <nav> to the article's
+         full height (same reasoning as avoiding items-start on a
+         grid), giving the sticky child room to travel. Only at 2xl:
+         and up — that's the first breakpoint with enough real page
+         margin outside max-w-5xl for a 200px column positioned this
+         far out (232px total) without ever overlapping the prose. -->
     {tocHeadings.length > 1 && (
-      <nav aria-label="Table of contents" class="hidden xl:block">
+      <nav aria-label="Table of contents" class="hidden 2xl:block absolute top-0 bottom-0 -left-[232px] w-[200px]">
         <div class="sticky top-24">
           <p class="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-ink-soft mb-3">On this page</p>
           <ul id="toc-list" class="space-y-1 border-l border-line">
@@ -80,7 +86,6 @@ const relatedPosts = allPosts
       </nav>
     )}
 
-    <article class="max-w-4xl">
     <a
       href="/blog"
       class="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.1em] text-ink-soft hover:text-pen transition-colors mb-6"

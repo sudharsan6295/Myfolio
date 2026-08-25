@@ -921,6 +921,46 @@ overflow at 375px mobile width.
   table-of-contents sidebars' own left rule) are unrelated, intentional
   UI, not leftovers of this one.
 
+### Real bug: blog post / project pages were wider than the rest of the site
+
+Reported directly ("opened workbench or notes footer is not
+aligned"). Root cause: adding the sticky TOC to `blog/[id].astro` and
+`projects/[id].astro` had widened their outer container from
+`max-w-4xl` to `max-w-6xl` (1152px) to make room for a `[200px_1fr]`
+grid column — wider than the `max-w-5xl` (1024px) every other page,
+the nav, and the footer are built to. Confirmed live before fixing:
+article glass card at 313–1185, footer at 145–1121 — visibly
+different bounds, not just a rounding difference.
+
+Fix, both files: reverted the outer container back to
+`mx-auto max-w-5xl px-6 ...` (matching site-wide standard exactly),
+and the article back to `max-w-4xl mx-auto relative` inside it — the
+*original* pre-TOC relationship (article narrower than the page's
+own standard width, a deliberate reading-width choice, not a bug).
+The TOC no longer widens the container at all — it's positioned with
+`absolute top-0 bottom-0 -left-[232px] w-[200px]` on the article
+(which is `position: relative`), breaking out into the page's own
+margin instead. `top-0` + `bottom-0` with no explicit height still
+stretches the `<nav>` to the article's full height (same fix as the
+`items-start` pitfall found earlier), so the sticky child keeps its
+full room to travel. Breakpoint moved from `xl:` (1280px) to `2xl:`
+(1536px) — reaching 232px into the margin (further out than the old
+max-w-6xl version needed, since it's now breaking out past
+`max-w-5xl` itself rather than just past `max-w-4xl` inside a wider
+container) needs more real margin than `xl:` reliably has.
+
+Verified live at three widths: **2560px** — article glass (825–1721)
+centered on the exact same midpoint (1273) as footer (785–1761), just
+narrower, confirming the *original* intended relationship is restored;
+TOC sits in the margin (593–793) with a clean 32px gap before the
+article, no overlap; `<nav>` height still matches `<article>` height
+exactly (2704px / 1549px, on the two respective pages tested).
+**1280px** (below the new `2xl:` cutoff) — article and footer share
+the identical center point (633) on both a blog post and a project
+page; TOC correctly hidden; no horizontal overflow. **375px mobile** —
+no horizontal overflow. Confirms the fix holds at every scale, not
+just the one width it was diagnosed at.
+
 ## Working on this project
 
 - Nav labels (About Me / Notes / Workbench) are defined once in
