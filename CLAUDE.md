@@ -105,26 +105,29 @@ background, in the burgundy + brass palette. Tokens live in
   it is still a separate `<a href="/">`, still hidden below the `sm`
   breakpoint (Seal only on narrow screens — with Connect in the nav,
   there isn't room for the full name too).
-- **Nav Connect (renamed from "Contact") — a dropdown again, icons in
-  a row.** Desktop shows a "Connect" label (`<details>`/`<summary>`)
-  that opens a small popover holding email/LinkedIn/GitHub as three
-  icon-only buttons side by side in one horizontal row — not the
-  original vertical text-label-per-row layout, and not the brief
-  bare-inline-icons-in-the-bar version either. This is actually the
-  *third* shape this has taken (dropdown-with-text-rows →
-  inline-icons-in-the-bar → dropdown-with-icon-row), per successive
-  direct requests each time. The popover uses `.glass-popover`
-  (`global.css`, ~96% opacity) rather than the ambient translucent
-  `.glass` — carried forward from the earlier round where the
-  translucent version let page content underneath show through
-  distractingly; a small icon-row panel has much less content to go
-  illegible than the old text-row version did, but it's still a
-  floating element, so the same fix still applies. Outside-click/
+- **Nav Connect (renamed from "Contact") — a dropdown, icons in a row,
+  no visible box around them.** Desktop shows a "Connect" label
+  (`<details>`/`<summary>`) that opens email/LinkedIn/GitHub as three
+  icon-only buttons side by side in one horizontal row, positioned
+  `absolute` under the trigger — with no background, border, shadow,
+  or blur around them (`background: transparent`, `border-width: 0`,
+  confirmed via computed style). This has gone through four shapes
+  this session (dropdown-with-text-rows → inline-icons-in-the-bar →
+  dropdown-with-icon-row-in-a-`.glass-popover`-box →
+  dropdown-with-icon-row-and-no-box), each per a direct follow-up
+  request. `.glass-popover` (the near-opaque background variant built
+  for the previous shape, needed there because *text* rows underneath
+  translucent glass fought for legibility) was removed from
+  `global.css` again — a bare row of icons doesn't have that
+  legibility problem the way text did, so there's nothing for a
+  background to protect against here; each icon still gets its own
+  `hover:bg-paper-raised/40` for a visible hit target. Outside-click/
   Escape dismissal (`.contact-dropdown[open]`, since `<details>` has
-  no built-in close) is back too. Mobile menu has its own separate,
-  always-inline (never a popover) Connect section — untouched by any
-  of this. **If Connect changes shape again, check this note first**
-  rather than re-deriving the history from scratch.
+  no built-in close) stays, since it's still a `<details>` popover,
+  just visually boxless. Mobile menu has its own separate, always-
+  inline (never a popover, never had a box) Connect section —
+  untouched by any of this. **If Connect changes shape again, check
+  this note first** rather than re-deriving the history from scratch.
 - **Footer has icon-only Connect links, no label.** `Footer.astro`
   shows the same three icons (Email/LinkedIn/GitHub, `h-7 w-7`,
   `title` + `aria-label` on each) next to the copyright line — no

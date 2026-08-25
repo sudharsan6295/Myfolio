@@ -37,14 +37,14 @@ const hasConnectLinks = about?.email || linkedinHandle || githubHandle;
 
 // Desktop Connect: a "Connect" label opens a small dropdown holding
 // the three icons in a horizontal row (not the old vertical
-// text-label-per-row layout). This is back to a popover after a stint
-// as bare inline icons in the bar — the popover's background is
-// near-opaque (`.glass-popover` in global.css, ~96%) rather than the
-// ambient translucent `.glass`, learned from an earlier round where
-// the translucent version let page content underneath show through
-// distractingly. A small icon-row panel like this has much less
-// content to go illegible than the old text-row version did, but it's
-// still a floating element, so the same fix applies.
+// text-label-per-row layout). No boxed background/border/shadow
+// around the row, per direct request — earlier versions used a
+// near-opaque `.glass-popover` panel (needed when the dropdown held
+// text rows, so page content underneath wouldn't compete with the
+// text), but a bare icon row doesn't have that legibility problem, so
+// the box was dropped entirely rather than just re-tuned again. Each
+// icon button still gets its own hover background
+// (`hover:bg-paper-raised/40`) for a visible hit target/affordance.
 ---
 
 <header class="glass nav-glass sticky top-0 z-40">
@@ -100,7 +100,7 @@ const hasConnectLinks = about?.email || linkedinHandle || githubHandle;
               >
                 Connect
               </summary>
-              <div class="glass-popover absolute right-0 mt-2 rounded-2xl p-2 flex items-center gap-1 z-50">
+              <div class="absolute right-0 mt-2 flex items-center gap-1 z-50">
                 {about?.email && (
                   <a
                     href={`mailto:${about.email}`}
