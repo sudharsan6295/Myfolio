@@ -463,7 +463,21 @@ background, in the burgundy + brass palette. Tokens live in
   less) is fine, the footer's own margin does the real spacing. Page top
   padding is `pt-10 sm:pt-14` (tightened from `pt-14 sm:pt-20` in the
   same pass), and stacked homepage `<section>`s use `pt-6 pb-8` rather
-  than the older `py-14`/`py-16`.
+  than the older `py-14`/`py-16`. **All of it is `pb-8`, no exceptions**
+  — the homepage hero section (`index.astro`'s first `<section>`) had
+  drifted to `pb-8` on top load but `pb-10` was reintroduced at some
+  point, giving it a visibly bigger gap to the next section (64px)
+  than the other three homepage sections had between each other
+  (56px) — caught from a screenshot, fixed back to `pb-8`. Verified via
+  `getBoundingClientRect()` on every page's last content element vs.
+  the footer: all six page templates (`/`, `/about`, `/blog`,
+  `/blog/[id]`, `/projects`, `/projects/[id]`) land on exactly the
+  same 72px gap before the footer, and all three of the homepage's
+  inter-section gaps are exactly 56px each. If a page's bottom padding
+  is ever changed, re-run that same check across every page template,
+  not just the one being edited — this is a shared visual rhythm, and
+  a one-page fix that isn't cross-checked is how it drifted the first
+  time.
 - The Blogs page's subscribe form (`src/pages/blog/index.astro`) is
   wired to Netlify Forms (`data-netlify="true"` + a honeypot field +
   AJAX submit) — it only actually captures emails once deployed to
