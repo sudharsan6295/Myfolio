@@ -1,13 +1,14 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import Stamp from "./Stamp.astro";
+import Seal from "./Seal.astro";
 
 interface Props {
   project: CollectionEntry<"projects">;
 }
 
 const { project } = Astro.props;
-const { title, summary, status, stack } = project.data;
+const { title, summary, status, stack, featured } = project.data;
 
 const statusTone: Record<string, "pen" | "highlight" | "ink"> = {
   live: "pen",
@@ -22,9 +23,13 @@ const statusTone: Record<string, "pen" | "highlight" | "ink"> = {
 >
   <div class="flex items-center justify-between gap-3 mb-4">
     <Stamp label={status} tone={statusTone[status] ?? "ink"} />
-    <span class="font-mono text-[0.65rem] text-ink-soft">
-      {new Date(project.data.startDate).getFullYear()}
-    </span>
+    <div class="flex items-center gap-2">
+      <span class="font-mono text-[0.65rem] text-ink-soft">
+        {new Date(project.data.startDate).getFullYear()}
+      </span>
+      {featured && <Seal size={20} tone="pen" />}
+      {featured && <span class="sr-only">Featured</span>}
+    </div>
   </div>
 
   <h3 class="font-display text-xl leading-snug text-ink group-hover:text-pen transition-colors">

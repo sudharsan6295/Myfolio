@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Seal from "../components/Seal.astro";
 import { getCollection, render } from "astro:content";
 
 const [aboutEntry] = await getCollection("about");
@@ -16,7 +17,8 @@ const { Content } = await render(aboutEntry);
   <article class="mx-auto max-w-5xl px-6 pt-10 sm:pt-14 pb-8">
     <!-- Intro + at-a-glance -->
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6 lg:gap-8 items-start">
-      <div class="glass rounded-3xl p-8 sm:p-12">
+      <div class="glass rounded-3xl p-8 sm:p-12 relative">
+        <Seal size={44} tone="pen" class="hidden sm:block absolute top-7 right-7 sm:top-9 sm:right-9" />
         <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-4">About Me</p>
         <h1 class="font-display font-normal text-4xl sm:text-[3.25rem] leading-[1.1] tracking-[-0.01em] text-ink text-balance">
           {about.name}

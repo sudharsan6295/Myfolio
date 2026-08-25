@@ -22,7 +22,13 @@
   --color-ink-soft: #7a655f;
   --color-pen: #5b1a22;
   --color-pen-soft: #8a3b45;
-  --color-highlight: #b9975b;
+  /* Deepened from the original #b9975b — that read at only 2.2–2.4:1
+     against paper/paper-raised (fails WCAG AA even for large text),
+     measured while auditing text-highlight usage (About page's
+     certifications chips). This darker antique-brass clears 4.5:1+ on
+     both surfaces while staying in the same warm-brass family. Dark
+     mode's highlight was already fine (7.5–8.4:1) and is untouched. */
+  --color-highlight: #7d6230;
   --color-line: #e4d2c0;
 
   /* Gradient-mesh background stops (Glassmorphic Studio). */
@@ -150,6 +156,28 @@ body {
   border-radius: 2px;
 }
 
+/* Skip-to-content link — first focusable element in BaseLayout, off-screen
+   until a keyboard user tabs to it. Lets someone skip the nav (and, on
+   pages with one, the Connect dropdown) straight to <main id="main-content">. */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 1rem;
+  z-index: 100;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.65rem 1rem;
+  border-radius: 4px;
+  transition: top 150ms ease;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
 /* ---------------------------------------------------------------------------
  * Glass panel — full Glassmorphic Studio layout: every surface (nav,
  * footer, hero, section wrappers, cards) is a frosted panel floating over
@@ -183,6 +211,22 @@ body {
 .prose p {
   margin-top: 1.4em;
   margin-bottom: 0;
+}
+
+/* Opt-in drop cap — used on blog post bodies only (blog/[id].astro adds
+   the modifier class), not the About bio or project write-ups, since an
+   oversized first letter reads odd on shorter text. A float-based drop
+   cap, not CSS `initial-letter` (still inconsistently supported), for the
+   same "don't rely on a bleeding-edge property alone" reasoning already
+   applied elsewhere in this file. */
+.prose--dropcap > p:first-of-type::first-letter {
+  font-family: var(--font-display);
+  font-size: 3.6em;
+  font-weight: 600;
+  float: left;
+  line-height: 0.82;
+  margin: 0.03em 0.1em 0 0;
+  color: var(--color-pen);
 }
 .prose h2 {
   font-family: var(--font-display);

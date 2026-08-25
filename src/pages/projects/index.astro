@@ -9,6 +9,14 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft)).so
 
 const [aboutEntry] = await getCollection("about");
 const github = aboutEntry?.data.social.github;
+
+const statusLabels: Record<string, string> = { live: "Live", prototype: "Prototype", archived: "Archived" };
+const statuses = ["live", "prototype", "archived"] as const;
+const statusCounts = statuses.map((s) => ({
+  value: s,
+  label: statusLabels[s],
+  count: projects.filter((p) => p.data.status === s).length,
+}));
 ---
 
 <BaseLayout
@@ -35,16 +43,79 @@ const github = aboutEntry?.data.social.github;
           More on GitHub →
         </a>
       )}
+
+      {projects.length > 0 && (
+        <div id="status-filter" class="mt-8 flex flex-wrap gap-2">
+          <button
+            type="button"
+            data-filter="all"
+            aria-pressed="true"
+            class="filter-btn inline-flex items-center font-mono text-[0.65rem] uppercase tracking-[0.14em] border rounded-[3px] px-2 py-1 -rotate-2 transition-colors border-pen/50 text-pen"
+          >
+            All ({projects.length})
+          </button>
+          {statusCounts.map(({ value, label, count }) => (
+            <button
+              type="button"
+              data-filter={value}
+              aria-pressed="false"
+              class="filter-btn inline-flex items-center font-mono text-[0.65rem] uppercase tracking-[0.14em] border rounded-[3px] px-2 py-1 -rotate-2 transition-colors border-ink/40 text-ink opacity-60 hover:opacity-100"
+            >
+              {label} ({count})
+            </button>
+          ))}
+        </div>
+      )}
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div id="project-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {projects.length === 0 ? (
         <p class="text-ink-soft text-sm py-10 col-span-full">
           No projects yet — add a Markdown file to <code class="font-mono text-xs bg-paper-raised px-1.5 py-0.5 rounded">src/content/projects/</code> and redeploy.
         </p>
       ) : (
-        projects.map((project) => <ProjectCard project={project} />)
+        projects.map((project) => (
+          <div data-status={project.data.status}>
+            <ProjectCard project={project} />
+          </div>
+        ))
       )}
     </div>
+    <p id="empty-state" class="hidden text-ink-soft text-sm py-10">Nothing filed under this status yet.</p>
   </div>
+
+  <script>
+    // Same client-side-only filter pattern as /blog — see that page's
+    // script comment for why this can't be a query-string route on a
+    // fully static site.
+    const buttons = document.querySelectorAll<HTMLButtonElement>(".filter-btn");
+    const items = document.querySelectorAll<HTMLElement>("#project-list > [data-status]");
+    const emptyState = document.getElementById("empty-state");
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const filter = btn.dataset.filter;
+        let visibleCount = 0;
+
+        buttons.forEach((b) => {
+          const active = b === btn;
+          b.setAttribute("aria-pressed", String(active));
+          b.classList.toggle("border-pen/50", active);
+          b.classList.toggle("text-pen", active);
+          b.classList.toggle("opacity-100", active);
+          b.classList.toggle("border-ink/40", !active);
+          b.classList.toggle("text-ink", !active);
+          b.classList.toggle("opacity-60", !active);
+        });
+
+        items.forEach((item) => {
+          const show = filter === "all" || item.dataset.status === filter;
+          item.style.display = show ? "" : "none";
+          if (show) visibleCount++;
+        });
+
+        emptyState?.classList.toggle("hidden", visibleCount !== 0);
+      });
+    });
+  </script>
 </BaseLayout>

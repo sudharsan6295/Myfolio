@@ -73,13 +73,21 @@ background, in the burgundy + brass palette. Tokens live in
 - Fonts: `font-display` = Newsreader (headings, used italic for the voice-y
   moments), `font-body` = Work Sans, `font-mono` = IBM Plex Mono (dates,
   tags, status labels — never body text).
-- Signature motif: `<Stamp>` (`src/components/Stamp.astro`) — a small
-  rotated ink-stamp label, mono/uppercase/bordered. Used for blog
-  categories, project status (live/prototype/archived), and nowhere
-  else. There is no `Seal.astro`/circular-medallion variant in this
-  build — that belonged to a different reviewed-but-unused direction
-  (Playfair Display/Lora/Courier Prime type, a Markdown drop-cap); don't
-  reintroduce those unless asked.
+- Signature motifs: `<Stamp>` (`src/components/Stamp.astro`) — a small
+  rotated ink-stamp label, mono/uppercase/bordered, for blog categories
+  and project status. `<Seal>` (`src/components/Seal.astro`) — a small
+  circular engraved-monogram SVG ("SB"), added later to finish the
+  site's originally-chosen concept ("Letterpress & Seal" — only the
+  letterpress/Stamp half had been built). Kept deliberately rare, same
+  "don't scatter it" rule Stamp documents for itself: it appears in
+  exactly two places — the About page's intro panel (`hidden sm:block`,
+  the site's signature) and marking the one entry flagged
+  `featured: true` on `/blog` (bigger spotlight card, via `PostCard`'s
+  `featured` prop) and `/projects` (small inline mark next to the date,
+  via `ProjectCard`). It's `aria-hidden` — always pair it with its own
+  visible or `sr-only` label at the call site (e.g. the `sr-only`
+  "Featured" span already next to every usage) rather than relying on
+  the Seal's own accessible name.
 - **Tags/chips use `rounded-[3px]`, not `rounded-full`** — the About
   page's focus-area/tools/certifications chips were originally pill-
   shaped and were deliberately changed to match `<Stamp>`'s square-ish
@@ -141,6 +149,65 @@ background, in the burgundy + brass palette. Tokens live in
   Don't reintroduce a `peer`/`peer-checked` pattern for this without
   re-verifying it actually paints correctly, not just that the selector
   matches.
+- **`--color-highlight` (light mode) was fixed for contrast** — the
+  original `#b9975b` measured only 2.2–2.4:1 against `paper`/
+  `paper-raised` (fails WCAG AA even for large text), found while
+  auditing the About page's certifications chips (`text-highlight` at
+  0.65rem). Deepened to `#7d6230` (4.5–4.9:1 on both surfaces), same
+  brass family, dark mode untouched (it was already 7.5–8.4:1). If this
+  token is ever adjusted again, check contrast against both `paper` and
+  `paper-raised` first — computed via the standard WCAG relative-
+  luminance formula, not eyeballed — since it's shared by borders,
+  fills, *and* text (certifications chips, the Education card's middot,
+  Stamp's `highlight` tone) and a change to one changes all of them.
+- **"Featured" (`featured: true` on `blog`/`projects` content
+  frontmatter) is now surfaced** — the schema already had this field,
+  nothing in the UI read it until this pass. Now: `/blog` shows the newest post flagged
+  featured (falls back to the newest post overall if none is flagged)
+  as a bigger spotlight card above the filter/list — it still appears
+  again in its normal chronological spot in the list below too, that's
+  deliberate, not a duplicate-content bug. `/projects`' `ProjectCard`
+  shows a small `<Seal>` next to the date for any featured project
+  instead of resizing the card (the list is small — 3 entries as of
+  this pass — so a full spotlight card would feel disproportionate;
+  revisit if the list grows).
+- **Ledger spine**: the post lists on `/` (Field Notes preview) and
+  `/blog` (the full list) get a `border-l-2 border-line pl-5 sm:pl-6`
+  on their wrapping `<div>` — a literal connecting rule down the
+  margin, reinforcing the "ledger/notebook" identity for what's
+  already a vertical list of numbered entries. Deliberately *not*
+  applied to the Workbench grids (`/projects`, and the homepage's
+  Workbench preview) — a multi-column card grid doesn't read as a
+  single sequential ledger the way a stacked list does, so forcing the
+  same motif there would look like a mistake, not a fit.
+- **Blog posts get a drop cap**; About/project write-ups don't. The
+  `.prose--dropcap` modifier class (only added in `blog/[id].astro`'s
+  Content wrapper) styles `> p:first-of-type::first-letter` — scoped
+  this way rather than putting it on bare `.prose` because an oversized
+  first letter looked wrong on the About bio's much shorter paragraphs
+  when tried there. A float-based drop cap, not CSS `initial-letter`
+  (inconsistent browser support), consistent with this file's existing
+  "don't lean on a single bleeding-edge CSS property alone" stance.
+- **Reading-progress bar** (`blog/[id].astro` only): a 3px fixed bar,
+  width driven by `window.scrollY / (document.documentElement.
+  scrollHeight - innerHeight)` on scroll/resize — whole-document scroll
+  fraction, not a precise article-bounds measurement, since the
+  article fills essentially the whole page on this route anyway.
+- **Prev/next navigation** (`blog/[id].astro`): re-fetches and re-sorts
+  `getCollection("blog")` the same way `/blog` does (newest-first),
+  finds the current post's index, and links the neighbors — labeled
+  "← Older entry" / "Newer entry →" by actual title, not ambiguous
+  "prev"/"next" wording, since "prev" is genuinely ambiguous between
+  reading order and chronological order here.
+- **Workbench status filter** (`/projects`): same client-side-only
+  `data-filter`/`data-status` pattern as the blog category filter
+  (see the note on `blog/index.astro` below) — All/Live/Prototype/
+  Archived, counts shown even at zero for consistency with how the
+  blog filter already does it.
+- **Skip-to-content link**: first focusable element in
+  `BaseLayout.astro` (`.skip-link` in `global.css`, off-screen via
+  `top: -100px` until `:focus` brings it to `top: 1rem`), landing on
+  `<main id="main-content">`.
 
 ## Working on this project
 

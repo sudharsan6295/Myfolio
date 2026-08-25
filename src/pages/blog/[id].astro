@@ -23,9 +23,21 @@ const formattedDate = pubDate.toLocaleDateString("en-US", {
 
 const wordCount = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
 const readingMinutes = Math.max(1, Math.round(wordCount / 200));
+
+// Prev/next in the same newest-first order the /blog list uses, so "which
+// one is next" matches what a reader saw there. Labeled by actual title
+// and direction rather than ambiguous "prev/next" — index-1 is newer
+// (listed above this one), index+1 is older (listed below it).
+const allPosts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const currentIndex = allPosts.findIndex((p) => p.id === post.id);
+const newerPost = currentIndex > 0 ? allPosts[currentIndex - 1] : undefined;
+const olderPost = currentIndex >= 0 && currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : undefined;
 ---
 
 <BaseLayout title={title} description={description}>
+  <div id="reading-progress" class="fixed top-0 left-0 h-[3px] bg-pen z-[70]" style="width:0%"></div>
   <article class="mx-auto max-w-3xl px-6 pt-10 sm:pt-14 pb-8">
     <a
       href="/blog"
@@ -56,7 +68,7 @@ const readingMinutes = Math.max(1, Math.round(wordCount / 200));
         />
       )}
 
-      <div class="prose mt-10 max-w-none">
+      <div class="prose prose--dropcap mt-10 max-w-none">
         <Content />
       </div>
 
@@ -70,5 +82,39 @@ const readingMinutes = Math.max(1, Math.round(wordCount / 200));
         </div>
       )}
     </div>
+
+    {(newerPost || olderPost) && (
+      <nav aria-label="More entries" class="mt-6 grid sm:grid-cols-2 gap-4">
+        {olderPost ? (
+          <a href={`/blog/${olderPost.id}`} class="group glass block rounded-2xl p-5 hover:bg-paper/75 transition-colors">
+            <p class="font-mono text-[0.65rem] uppercase tracking-[0.1em] text-ink-soft mb-1.5">← Older entry</p>
+            <p class="font-display text-base text-ink group-hover:text-pen transition-colors leading-snug">{olderPost.data.title}</p>
+          </a>
+        ) : <div />}
+        {newerPost ? (
+          <a href={`/blog/${newerPost.id}`} class="group glass block rounded-2xl p-5 hover:bg-paper/75 transition-colors sm:text-right">
+            <p class="font-mono text-[0.65rem] uppercase tracking-[0.1em] text-ink-soft mb-1.5">Newer entry →</p>
+            <p class="font-display text-base text-ink group-hover:text-pen transition-colors leading-snug">{newerPost.data.title}</p>
+          </a>
+        ) : <div />}
+      </nav>
+    )}
   </article>
+
+  <script>
+    // Reading-progress bar: whole-document scroll fraction, not a precise
+    // article-bounds calculation — the article fills essentially the whole
+    // page on this route, so this is an accurate enough approximation
+    // without needing to track the article's own offset/height separately.
+    const bar = document.getElementById("reading-progress");
+    function updateProgress() {
+      if (!bar) return;
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = scrollable > 0 ? Math.min(100, Math.max(0, (window.scrollY / scrollable) * 100)) : 0;
+      bar.style.width = pct + "%";
+    }
+    updateProgress();
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress);
+  </script>
 </BaseLayout>

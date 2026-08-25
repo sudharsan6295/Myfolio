@@ -7,6 +7,13 @@ const allPosts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 
+// The newest post flagged `featured: true` gets a spotlight card above the
+// filter/list; falls back to the newest post overall if nothing is flagged
+// yet. It still appears again in its normal place in the list below —
+// that's deliberate (a spotlight + a full reverse-chronological archive
+// including that same entry is the common, expected pattern), not a bug.
+const featuredPost = allPosts.find((p) => p.data.featured) ?? allPosts[0];
+
 const [aboutEntry] = await getCollection("about");
 const about = aboutEntry?.data;
 
@@ -62,9 +69,16 @@ const categoryCounts = categories.map((c) => ({
       </div>
     </div>
 
+    {featuredPost && (
+      <div class="mb-6">
+        <p class="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-ink-soft mb-2">Featured entry</p>
+        <PostCard post={featuredPost} featured={true} />
+      </div>
+    )}
+
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-6 lg:gap-8 items-start">
       <div>
-        <div id="post-list">
+        <div id="post-list" class={allPosts.length > 0 ? "border-l-2 border-line pl-5 sm:pl-6" : ""}>
           {allPosts.length === 0 ? (
             <p class="text-ink-soft text-sm py-10">
               No entries yet — add a Markdown file to <code class="font-mono text-xs bg-paper-raised px-1.5 py-0.5 rounded">src/content/blog/</code> and redeploy.
