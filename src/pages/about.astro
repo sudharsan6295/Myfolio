@@ -267,13 +267,20 @@ const { Content } = await render(aboutEntry);
     // now shows the <Seal> monogram instead of the photo, so this is the
     // photo's only home now). Same open/close mechanics as before: click
     // the thumbnail to enlarge, click backdrop/✕/Escape to dismiss.
-    const trigger = document.getElementById("about-photo-trigger");
-    const lightbox = document.getElementById("about-photo-lightbox");
-    const backdrop = document.getElementById("about-photo-lightbox-backdrop");
-    const closeBtn = document.getElementById("about-photo-lightbox-close");
+    //
+    // `let` bindings re-queried inside astro:page-load (this page's own
+    // DOM, replaced on every navigation with View Transitions) rather
+    // than `const`s captured once — the Escape-key listener on `document`
+    // below is attached exactly once (document itself is never replaced)
+    // and closes over these bindings, so it always needs to see whichever
+    // lightbox is currently in the DOM, not a stale one from a previous
+    // visit to this page.
+    let trigger: HTMLElement | null;
+    let lightbox: HTMLElement | null;
 
     function openLightbox() {
       if (!lightbox) return;
+      const closeBtn = document.getElementById("about-photo-lightbox-close");
       lightbox.classList.remove("hidden");
       lightbox.classList.add("flex");
       document.body.style.overflow = "hidden";
@@ -288,9 +295,18 @@ const { Content } = await render(aboutEntry);
       trigger?.focus();
     }
 
-    trigger?.addEventListener("click", openLightbox);
-    backdrop?.addEventListener("click", closeLightbox);
-    closeBtn?.addEventListener("click", closeLightbox);
+    function initAboutPhoto() {
+      trigger = document.getElementById("about-photo-trigger");
+      lightbox = document.getElementById("about-photo-lightbox");
+      const backdrop = document.getElementById("about-photo-lightbox-backdrop");
+      const closeBtn = document.getElementById("about-photo-lightbox-close");
+
+      trigger?.addEventListener("click", openLightbox);
+      backdrop?.addEventListener("click", closeLightbox);
+      closeBtn?.addEventListener("click", closeLightbox);
+    }
+
+    document.addEventListener("astro:page-load", initAboutPhoto);
 
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && lightbox && !lightbox.classList.contains("hidden")) closeLightbox();

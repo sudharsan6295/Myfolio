@@ -1,0 +1,46 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Seal from "../components/Seal.astro";
+---
+
+<BaseLayout title="Page Not Found" description="This page doesn't exist — here's how to find your way back.">
+  <div class="mx-auto max-w-5xl px-6 pt-10 sm:pt-14 pb-8">
+    <div class="glass rounded-3xl p-8 sm:p-12 text-center flex flex-col items-center">
+      <Seal size={48} tone="pen" class="mb-6" />
+      <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-4">404</p>
+      <h1 class="font-display font-normal text-3xl sm:text-4xl leading-[1.15] tracking-[-0.01em] text-ink text-balance">
+        This page isn't in the notebook.
+      </h1>
+      <p class="mt-4 text-ink-soft leading-relaxed max-w-md">
+        Whatever you were looking for doesn't exist at this address, or it moved.
+        Here's where you can pick up instead:
+      </p>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <a
+          href="/"
+          class="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.1em] text-paper bg-ink hover:bg-pen transition-colors rounded-full px-5 py-2.5"
+        >
+          Home
+        </a>
+        <a
+          href="/about"
+          class="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.1em] text-ink-soft hover:text-pen border border-line rounded-full px-5 py-2.5 transition-colors"
+        >
+          About Me
+        </a>
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.1em] text-ink-soft hover:text-pen border border-line rounded-full px-5 py-2.5 transition-colors"
+        >
+          Blogs
+        </a>
+        <a
+          href="/projects"
+          class="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.1em] text-ink-soft hover:text-pen border border-line rounded-full px-5 py-2.5 transition-colors"
+        >
+          Workbench
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

@@ -87,35 +87,42 @@ const statusCounts = statuses.map((s) => ({
   <script>
     // Same client-side-only filter pattern as /blog — see that page's
     // script comment for why this can't be a query-string route on a
-    // fully static site.
-    const buttons = document.querySelectorAll<HTMLButtonElement>(".filter-btn");
-    const items = document.querySelectorAll<HTMLElement>("#project-list > [data-status]");
-    const emptyState = document.getElementById("empty-state");
+    // fully static site. Wrapped in astro:page-load for the same reason
+    // as every other page-specific script here — this page's DOM isn't
+    // guaranteed to only ever load once per session with View Transitions
+    // in play; astro:page-load fires again on every return visit.
+    function initProjectsPage() {
+      const buttons = document.querySelectorAll<HTMLButtonElement>(".filter-btn");
+      const items = document.querySelectorAll<HTMLElement>("#project-list > [data-status]");
+      const emptyState = document.getElementById("empty-state");
 
-    buttons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const filter = btn.dataset.filter;
-        let visibleCount = 0;
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const filter = btn.dataset.filter;
+          let visibleCount = 0;
 
-        buttons.forEach((b) => {
-          const active = b === btn;
-          b.setAttribute("aria-pressed", String(active));
-          b.classList.toggle("border-pen/50", active);
-          b.classList.toggle("text-pen", active);
-          b.classList.toggle("opacity-100", active);
-          b.classList.toggle("border-ink/40", !active);
-          b.classList.toggle("text-ink", !active);
-          b.classList.toggle("opacity-60", !active);
+          buttons.forEach((b) => {
+            const active = b === btn;
+            b.setAttribute("aria-pressed", String(active));
+            b.classList.toggle("border-pen/50", active);
+            b.classList.toggle("text-pen", active);
+            b.classList.toggle("opacity-100", active);
+            b.classList.toggle("border-ink/40", !active);
+            b.classList.toggle("text-ink", !active);
+            b.classList.toggle("opacity-60", !active);
+          });
+
+          items.forEach((item) => {
+            const show = filter === "all" || item.dataset.status === filter;
+            item.style.display = show ? "" : "none";
+            if (show) visibleCount++;
+          });
+
+          emptyState?.classList.toggle("hidden", visibleCount !== 0);
         });
-
-        items.forEach((item) => {
-          const show = filter === "all" || item.dataset.status === filter;
-          item.style.display = show ? "" : "none";
-          if (show) visibleCount++;
-        });
-
-        emptyState?.classList.toggle("hidden", visibleCount !== 0);
       });
-    });
+    }
+
+    document.addEventListener("astro:page-load", initProjectsPage);
   </script>
 </BaseLayout>

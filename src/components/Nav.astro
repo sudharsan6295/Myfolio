@@ -97,7 +97,7 @@ const hasConnectLinks = about?.email || linkedinHandle || githubHandle;
               >
                 Connect
               </summary>
-              <div class="glass absolute right-0 mt-2 w-52 rounded-2xl p-4 flex flex-col gap-2.5 z-50">
+              <div class="glass-popover absolute right-0 mt-2 w-52 rounded-2xl p-4 flex flex-col gap-2.5 z-50">
                 {about?.email && (
                   <a
                     href={`mailto:${about.email}`}
@@ -260,45 +260,31 @@ const hasConnectLinks = about?.email || linkedinHandle || githubHandle;
 </header>
 
 <script>
-  // Theme toggle: two buttons (desktop-row and mobile-row copies, only one
-  // visible at a time via sm: breakpoint classes) both flip the same
-  // explicit light/dark state, persisted so it survives a reload (applied
-  // pre-paint by the inline script in BaseLayout.astro's <head>, to avoid
-  // a flash of the previous theme).
-  const themeToggles = document.querySelectorAll<HTMLButtonElement>("#theme-toggle, #theme-toggle-mobile");
+  // Nav's own DOM (this whole <header>) is replaced on every page
+  // navigation — it isn't marked transition:persist, on purpose, since
+  // the active-link underline/highlight needs to reflect whichever page
+  // just loaded. That means anything scoped to elements *inside* the
+  // header (theme toggles, the mobile-menu toggle/panel) has to be
+  // re-queried and re-bound after every transition, not just once at
+  // initial load — done here via `astro:page-load`, which fires on both
+  // the real first load and every subsequent client-side navigation.
+  // Listeners on `document` itself (outside-click, Escape, the resize
+  // breakpoint watcher) are attached exactly once, further down, outside
+  // this function — `document` is never replaced by the router, so
+  // re-attaching them on every page-load would just stack up duplicates.
+  // They close over these `let` bindings so they always see whichever
+  // header is currently in the DOM.
+  let themeToggles: NodeListOf<HTMLButtonElement>;
+  let menuToggle: HTMLElement | null;
+  let menu: HTMLElement | null;
+  let menuIconOpen: HTMLElement | null;
+  let menuIconClose: HTMLElement | null;
 
   function currentTheme(): "light" | "dark" {
     const attr = document.documentElement.getAttribute("data-theme");
     if (attr === "light" || attr === "dark") return attr;
     return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   }
-
-  themeToggles.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const next = currentTheme() === "dark" ? "light" : "dark";
-      document.documentElement.setAttribute("data-theme", next);
-      try {
-        localStorage.setItem("theme", next);
-      } catch (e) {}
-    });
-  });
-
-  // Connect popover: close on outside-click or Escape — <details>/<summary>
-  // has no built-in dismissal.
-  document.addEventListener("click", (e) => {
-    document.querySelectorAll<HTMLDetailsElement>(".contact-dropdown[open]").forEach((el) => {
-      if (!el.contains(e.target as Node)) el.removeAttribute("open");
-    });
-  });
-
-  // Mobile menu: hamburger toggles a stacked panel (links + Connect) below
-  // the header — replaces the old horizontal-scroll nav row on narrow
-  // screens. Closes on: toggle click, outside click, Escape, or picking a
-  // link (so it doesn't stay open across a navigation).
-  const menuToggle = document.getElementById("mobile-menu-toggle");
-  const menu = document.getElementById("mobile-menu");
-  const menuIconOpen = document.getElementById("menu-icon-open");
-  const menuIconClose = document.getElementById("menu-icon-close");
 
   function openMenu() {
     if (!menu) return;
@@ -318,12 +304,43 @@ const hasConnectLinks = about?.email || linkedinHandle || githubHandle;
     menuIconClose?.classList.add("hidden");
   }
 
-  menuToggle?.addEventListener("click", () => {
-    const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
-    isOpen ? closeMenu() : openMenu();
-  });
+  function initNav() {
+    themeToggles = document.querySelectorAll<HTMLButtonElement>("#theme-toggle, #theme-toggle-mobile");
+    menuToggle = document.getElementById("mobile-menu-toggle");
+    menu = document.getElementById("mobile-menu");
+    menuIconOpen = document.getElementById("menu-icon-open");
+    menuIconClose = document.getElementById("menu-icon-close");
 
-  menu?.querySelectorAll("a").forEach((a) => a.addEventListener("click", closeMenu));
+    themeToggles.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const next = currentTheme() === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        try {
+          localStorage.setItem("theme", next);
+        } catch (e) {}
+      });
+    });
+
+    menuToggle?.addEventListener("click", () => {
+      const isOpen = menuToggle?.getAttribute("aria-expanded") === "true";
+      isOpen ? closeMenu() : openMenu();
+    });
+
+    // Picking a link closes the menu — mostly cosmetic (the header is
+    // about to be replaced by the transition anyway) but avoids a flash
+    // of the open menu if the transition itself takes a moment.
+    menu?.querySelectorAll("a").forEach((a) => a.addEventListener("click", closeMenu));
+  }
+
+  document.addEventListener("astro:page-load", initNav);
+
+  // Connect popover: close on outside-click or Escape — <details>/<summary>
+  // has no built-in dismissal.
+  document.addEventListener("click", (e) => {
+    document.querySelectorAll<HTMLDetailsElement>(".contact-dropdown[open]").forEach((el) => {
+      if (!el.contains(e.target as Node)) el.removeAttribute("open");
+    });
+  });
 
   document.addEventListener("click", (e) => {
     if (!menu || menu.classList.contains("hidden")) return;

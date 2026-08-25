@@ -48,6 +48,18 @@ const categoryCounts = categories.map((c) => ({
         blog post.
       </p>
 
+      <a
+        href="/rss.xml"
+        class="mt-3 inline-flex items-center gap-1.5 font-mono text-[0.7rem] uppercase tracking-[0.1em] text-ink-soft hover:text-pen transition-colors"
+      >
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+          <path d="M2 2C8.6 2 14 7.4 14 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          <path d="M2 6.5C6.14 6.5 9.5 9.86 9.5 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          <circle cx="3" cy="13" r="1.6" fill="currentColor" />
+        </svg>
+        Subscribe via RSS
+      </a>
+
       <!-- Category filter — client-side only, no navigation, keeps this a plain static page. -->
       <div id="category-filter" class="mt-8 flex flex-wrap gap-2">
         <button
@@ -74,19 +86,34 @@ const categoryCounts = categories.map((c) => ({
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-6 lg:gap-8 items-start">
       <div>
         {allPosts.length > 1 && (
-          <div class="flex items-center justify-end gap-2 mb-3">
-            <label for="sort-select" class="font-mono text-[0.65rem] uppercase tracking-[0.1em] text-ink-soft">
-              Sort
-            </label>
-            <select
-              id="sort-select"
-              class="font-mono text-[0.65rem] uppercase tracking-[0.08em] text-ink bg-paper/60 border border-line rounded-[3px] px-2 py-1 focus:outline-none focus:border-pen"
-            >
-              <option value="newest">Newest first</option>
-              <option value="oldest">Oldest first</option>
-              <option value="title">Title A–Z</option>
-              <option value="quick">Quick reads first</option>
-            </select>
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <div class="relative flex-1 min-w-[160px] max-w-xs">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" class="absolute left-2.5 top-1/2 -translate-y-1/2 text-ink-soft pointer-events-none">
+                <circle cx="7" cy="7" r="5.2" stroke="currentColor" stroke-width="1.3" />
+                <path d="M11 11L14.5 14.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+              </svg>
+              <input
+                type="search"
+                id="post-search"
+                placeholder="Search entries…"
+                aria-label="Search entries"
+                class="w-full h-8 font-mono text-[0.7rem] text-ink placeholder:text-ink-soft/70 bg-paper/60 border border-line rounded-[3px] pl-8 pr-3 focus:outline-none focus:border-pen"
+              />
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <label for="sort-select" class="font-mono text-[0.65rem] uppercase tracking-[0.1em] text-ink-soft">
+                Sort
+              </label>
+              <select
+                id="sort-select"
+                class="h-8 font-mono text-[0.65rem] uppercase tracking-[0.08em] text-ink bg-paper/60 border border-line rounded-[3px] px-2 focus:outline-none focus:border-pen"
+              >
+                <option value="newest">Newest first</option>
+                <option value="oldest">Oldest first</option>
+                <option value="title">Title A–Z</option>
+                <option value="quick">Quick reads first</option>
+              </select>
+            </div>
           </div>
         )}
         <div id="post-list" class={allPosts.length > 0 ? "border-l-2 border-line pl-5 sm:pl-6" : ""}>
@@ -101,6 +128,9 @@ const categoryCounts = categories.map((c) => ({
                 data-date={post.data.pubDate.valueOf()}
                 data-title={post.data.title.toLowerCase()}
                 data-minutes={readingMinutesFor(post.body)}
+                data-search={[post.data.title, post.data.description, ...post.data.tags]
+                  .join(" ")
+                  .toLowerCase()}
               >
                 <PostCard post={post} entryNumber={allPosts.length - i} />
               </div>
@@ -108,7 +138,7 @@ const categoryCounts = categories.map((c) => ({
           )}
         </div>
         <p id="empty-state" class="hidden text-ink-soft text-sm py-10">
-          Nothing filed under this category yet.
+          Nothing matches here — try a different search or filter.
         </p>
       </div>
 
@@ -180,6 +210,15 @@ const categoryCounts = categories.map((c) => ({
   </div>
 
   <script>
+    // Everything below is scoped to elements on this one page (no
+    // document/window-level listeners here), so it's all wrapped in one
+    // astro:page-load handler — with View Transitions, this page's own
+    // DOM (and this script) isn't guaranteed to only ever run once per
+    // session; astro:page-load fires on the real first load and again
+    // after every client-side navigation back to this page, which is
+    // what actually needs to happen here (a fresh #post-list, a reset
+    // #sort-select, etc. each time this page is (re)entered).
+    function initBlogPage() {
     // Subscribe form's category checkboxes: toggle the visible chip style
     // via JS classList rather than a CSS peer-checked selector — the
     // peer-checked variant matched (confirmed via .matches()) but didn't
@@ -229,11 +268,30 @@ const categoryCounts = categories.map((c) => ({
     const buttons = document.querySelectorAll<HTMLButtonElement>(".filter-btn");
     const items = document.querySelectorAll<HTMLElement>("#post-list > [data-category]");
     const emptyState = document.getElementById("empty-state");
+    const searchInput = document.getElementById("post-search") as HTMLInputElement | null;
+
+    // Category filter and search both narrow the same list independently —
+    // combined here into one shared visibility pass (a card must pass BOTH
+    // the active category and the current search text) rather than two
+    // separate handlers that could each clobber the other's hide/show state.
+    let activeCategory = "all";
+
+    function applyVisibility() {
+      const query = (searchInput?.value ?? "").trim().toLowerCase();
+      let visibleCount = 0;
+      items.forEach((item) => {
+        const matchesCategory = activeCategory === "all" || item.dataset.category === activeCategory;
+        const matchesSearch = query === "" || (item.dataset.search ?? "").includes(query);
+        const show = matchesCategory && matchesSearch;
+        item.style.display = show ? "" : "none";
+        if (show) visibleCount++;
+      });
+      emptyState?.classList.toggle("hidden", visibleCount !== 0);
+    }
 
     buttons.forEach((btn) => {
       btn.addEventListener("click", () => {
-        const filter = btn.dataset.filter;
-        let visibleCount = 0;
+        activeCategory = btn.dataset.filter ?? "all";
 
         buttons.forEach((b) => {
           const active = b === btn;
@@ -246,15 +304,11 @@ const categoryCounts = categories.map((c) => ({
           b.classList.toggle("opacity-60", !active);
         });
 
-        items.forEach((item) => {
-          const show = filter === "all" || item.dataset.category === filter;
-          item.style.display = show ? "" : "none";
-          if (show) visibleCount++;
-        });
-
-        emptyState?.classList.toggle("hidden", visibleCount !== 0);
+        applyVisibility();
       });
     });
+
+    searchInput?.addEventListener("input", applyVisibility);
 
     // Netlify Forms: submit via fetch so the page doesn't reload. Only
     // actually captures anything once this site is deployed to Netlify —
@@ -289,5 +343,8 @@ const categoryCounts = categories.map((c) => ({
         subscribeError?.classList.remove("hidden");
       }
     });
+    }
+
+    document.addEventListener("astro:page-load", initBlogPage);
   </script>
 </BaseLayout>

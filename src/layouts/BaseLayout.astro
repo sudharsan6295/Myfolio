@@ -2,6 +2,7 @@
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import { getCollection } from "astro:content";
+import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 
 interface Props {
@@ -12,8 +13,40 @@ interface Props {
 const { title, description = "Personal site — field notes and project write-ups." } = Astro.props;
 
 const [aboutEntry] = await getCollection("about");
-const siteTitle = aboutEntry?.data.name ?? "Sudharsan Balaji";
+const about = aboutEntry?.data;
+const siteTitle = about?.name ?? "Sudharsan Balaji";
 const pageTitle = title === siteTitle ? title : `${title} · ${siteTitle}`;
+
+// Falls back to Astro.url.origin (the actual request origin) whenever
+// Astro.site isn't set — it's still the https://example.com placeholder
+// (see astro.config.mjs) until this site has a real domain, so absolute
+// URLs built from it would be wrong until then; the origin fallback keeps
+// these at least self-consistent with wherever the page is actually
+// being served in the meantime.
+const ogImagePath = "/og-image.png";
+const ogImageUrl = new URL(ogImagePath, Astro.site ?? Astro.url.origin).toString();
+
+// Person structured data (JSON-LD) — helps search engines associate this
+// site with the actual person, a step toward richer search results
+// (knowledge-panel-style info) over time. Site-wide, not just /about,
+// since the person is the subject of the whole site, not one page.
+const sameAs = [about?.social?.linkedin, about?.social?.github, about?.social?.twitter].filter(
+  (url): url is string => Boolean(url),
+);
+const personSchema = about
+  ? {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: about.name,
+      jobTitle: about.role,
+      description: about.tagline,
+      url: Astro.site ? new URL("/", Astro.site).toString() : undefined,
+      image: about.photo ? ogImageUrl : undefined,
+      email: about.email,
+      address: about.location ? { "@type": "PostalAddress", addressLocality: about.location } : undefined,
+      sameAs: sameAs.length > 0 ? sameAs : undefined,
+    }
+  : null;
 ---
 
 <!doctype html>
@@ -22,13 +55,34 @@ const pageTitle = title === siteTitle ? title : `${title} · ${siteTitle}`;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <ClientRouter />
+    <!-- Every page-level <script> in this project (Nav's theme/menu/
+         Connect logic, the blog filter/sort/search, the reading-progress
+         bar, the About photo lightbox, the Workbench status filter) is
+         wrapped in an `astro:page-load` listener specifically because of
+         this — Astro's client-side router swaps the DOM on internal-link
+         navigation instead of a full reload, so a script that only runs
+         once at initial module-evaluation time would go silent after the
+         first click to another page. `astro:page-load` fires on both the
+         real first load and every subsequent transition, so wrapping init
+         logic in it (rather than running it at the script's top level)
+         keeps every interactive piece working after navigating around,
+         not just on a fresh visit. -->
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <link rel="alternate" type="application/rss+xml" title={`${siteTitle} — Field Notes`} href="/rss.xml" />
+    {personSchema && (
+      <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+    )}
     <script is:inline>
       // Applies a saved theme choice before first paint, so there's no
       // flash of the wrong theme. Must be is:inline (runs immediately,

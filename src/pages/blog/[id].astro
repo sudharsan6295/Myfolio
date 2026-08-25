@@ -115,14 +115,23 @@ const relatedPosts = allPosts
     // article-bounds calculation — the article fills essentially the whole
     // page on this route, so this is an accurate enough approximation
     // without needing to track the article's own offset/height separately.
-    const bar = document.getElementById("reading-progress");
+    // Re-queries the bar element fresh on every call rather than caching
+    // it once — with View Transitions, navigating between two different
+    // blog posts swaps in a *different* #reading-progress element (a new
+    // post's DOM), and a cached reference from the previous post would go
+    // stale. Fully stateless/idempotent on purpose: safe to call more
+    // than once per actual scroll/page-load without any visible effect,
+    // which matters because it isn't guaranteed this script's top level
+    // only ever runs once across client-side navigations between two
+    // pages sharing this same template.
     function updateProgress() {
+      const bar = document.getElementById("reading-progress");
       if (!bar) return;
       const scrollable = document.documentElement.scrollHeight - window.innerHeight;
       const pct = scrollable > 0 ? Math.min(100, Math.max(0, (window.scrollY / scrollable) * 100)) : 0;
       bar.style.width = pct + "%";
     }
-    updateProgress();
+    document.addEventListener("astro:page-load", updateProgress);
     window.addEventListener("scroll", updateProgress, { passive: true });
     window.addEventListener("resize", updateProgress);
   </script>

@@ -1,5 +1,5 @@
 ---
-title: "AI Sales Dashboard"
+title: "Field-Brief Intelligence Dashboard"
 summary: "A prototype dashboard where AI agents do the first pass on sales pipeline data — pulling it together, summarizing what changed, and surfacing which accounts actually need attention today, instead of a rep piecing that together by hand."
 status: "prototype"
 startDate: 2026-08-01

@@ -1,6 +1,6 @@
 ---
-title: "Personal Portfolio & Blog"
-summary: "This site — a personal portfolio and blog built so that publishing something new is just adding a Markdown file, not touching code. You're looking at the current build."
+title: "Professional Portfolio & Blog"
+summary: "This site — a professional portfolio and blog built so that publishing something new is just adding a Markdown file, not touching code. You're looking at the current build."
 status: "prototype"
 startDate: 2026-08-23
 stack: ["Astro", "TypeScript", "Tailwind CSS", "Netlify Forms"]
