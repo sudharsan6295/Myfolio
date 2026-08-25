@@ -269,12 +269,15 @@ background, in the burgundy + brass palette. Tokens live in
   already respects it: `/blog`'s own intro copy is the one other place
   personal topics (Personal Finance, Aquariums & Fishkeeping) show up,
   framed there as writing topics, not biography.
-- **Homepage hero eyebrow is "The Notebook"**, not "Field Notebook" —
-  renamed per direct feedback ("more suitable name"). Chosen to echo
-  the exact phrase the hero's own body copy already uses ("This is
-  *the notebook*, not the portfolio...") rather than introduce a new,
-  unrelated label — keeps the eyebrow and the paragraph below it
-  saying the same thing in two places instead of two different things.
+- **Homepage hero eyebrow is "Professional Notebook"** — was "Field
+  Notebook", briefly "The Notebook" (chosen then to echo the hero body
+  copy's "This is *the notebook*, not the portfolio..."), renamed again
+  per direct follow-up feedback to its current text. Worth knowing if
+  touching this again: the eyebrow now says "Professional" while the
+  paragraph directly below it in the same hero card is the personal
+  "Off the clock: ..." aside — a small tension between the label and
+  the content it sits above, not resolved, just noted here since it
+  wasn't asked to be fixed.
 - **Homepage hero leads with the person, not just the pitch**: was
   `Field Notebook — {about.role}` as the eyebrow (redundant with the
   same info already in the tagline below it, and inconsistent with
