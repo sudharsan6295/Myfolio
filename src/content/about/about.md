@@ -1,7 +1,7 @@
 ---
 name: "Sudharsan Balaji Vijayakumar"
 role: "Lead Solution Consultant — Applied AI‑driven methodologies in product & project management, ensuring efficient Scrum delivery and innovative solution design on Enovia 3DExperience platforms"
-tagline: "Lead Solution Consultant with a decade across project and product management — now building toward implementing AI solutions for what comes next."
+tagline: "Lead Solution Consultant with a decade across project, product, and solution delivery — now pointed at AI implementation, figuring out what that looks like in practice rather than in theory."
 location: "Coimbatore, India"
 email: "sudharsan6295@gmail.com"
 resumeUrl: "/resume.pdf"
