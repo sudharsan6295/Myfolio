@@ -9,8 +9,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "generate:og": "node scripts/generate-og-image.mjs"
+    "astro": "astro"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
