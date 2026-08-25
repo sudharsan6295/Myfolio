@@ -50,21 +50,18 @@ const hasConnectLinks = about?.email || linkedinHandle || githubHandle;
 <header class="glass nav-glass sticky top-0 z-40">
   <div class="mx-auto max-w-5xl px-6">
     <nav class="flex items-center justify-between h-16" aria-label="Primary">
-      <div class="flex items-center gap-2.5">
-        <!-- Header circle is the site's <Seal> monogram, not the person's
-             photo — the photo now lives (with its own magnify/lightbox)
-             on the About page instead. This is just a home link. -->
-        <a
-          href="/"
-          class="h-8 w-8 rounded-full flex items-center justify-center shrink-0"
-          aria-label="Home"
-        >
-          <Seal size={28} tone="pen" />
-        </a>
-        <a href="/" class="hidden sm:inline font-display italic text-base text-ink hover:text-pen transition-colors">
+      <!-- Header circle is the site's <Seal> monogram, not the person's
+           photo — the photo now lives (with its own magnify/lightbox)
+           on the About page instead. One link for the Seal + name
+           together (not two separate overlapping-purpose "Home" links)
+           — Template A from the header-template comparison, picked
+           directly. -->
+      <a href="/" class="flex items-center gap-2.5 group" aria-label={`Home — ${name}`}>
+        <Seal size={28} tone="pen" />
+        <span class="hidden sm:inline font-display italic text-base text-ink group-hover:text-pen transition-colors">
           {name}
-        </a>
-      </div>
+        </span>
+      </a>
 
       <!-- Desktop nav: sm and up. Active state is a slim underline, not a
            filled background block — reads lighter/more contemporary, and

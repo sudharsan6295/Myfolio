@@ -979,6 +979,37 @@ footer glass panels now match exactly (145/1121 both, confirmed via
 the TOC still clears the (now-wider) article with a clean 32px gap,
 no overlap; no horizontal overflow at 375px mobile.
 
+### Header redesign — compared 4 real templates, picked "closest to current"
+
+Built a temporary, unlinked preview page
+(`header-templates-preview.astro`, deleted once a choice was made —
+not committed) showing four full, real header templates side by side,
+since the generic visualize tool's own design constraints (flat, no
+custom fonts/blur) can't reproduce this site's actual glass/serif
+look: **A** — a refined version of the existing full-width sticky
+glass bar; **B** — a floating rounded-full pill with centered links
+and a solid "Connect" button; **C** — a centered masthead (Seal/name
+in the middle, links split left and right); **D** — flat, no glass at
+all, just a hairline bottom border with wide-spaced mono links.
+
+**Template A picked** — closest to the nav that already existed, so
+the only real change was cosmetic: the Seal icon and the name used to
+be two separate `<a href="/">` links sitting side by side (an old
+pattern from when the Seal alone was `aria-label="Home"` and the name
+was a second, independent link) — merged into one link wrapping both,
+`aria-label="Home — {name}"` on the link itself so it still has a
+correct accessible name on mobile (where the name text is
+`hidden sm:inline`, so without the aria-label the link would have no
+accessible name at all below `sm:` since the Seal is itself
+`aria-hidden`). The aria-label containing the full visible name as a
+substring keeps this compliant with WCAG 2.5.3 (Label in Name) at
+desktop widths where the name is visible too.
+
+Verified live: exactly one `header a[href="/"]` now (was two),
+correct `aria-label`; theme toggle still flips `data-theme` correctly
+both directions; Connect icons unaffected; mobile hamburger still
+opens the menu with no horizontal overflow at 375px.
+
 ## Working on this project
 
 - Nav labels (About Me / Notes / Workbench) are defined once in
