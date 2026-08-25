@@ -118,7 +118,12 @@ const categoryCounts = [...new Set(allPosts.map((p) => p.data.category))]
           </div>
         )}
 
-        <div id="post-list" class={allPosts.length > 0 ? "border-l-2 border-line pl-5 sm:pl-6" : ""}>
+        <div
+          id="post-list"
+          class={allPosts.length > 0
+            ? "relative border-l-2 border-line pl-5 sm:pl-6 before:content-[''] before:absolute before:-left-[2px] before:-top-[82px] before:h-[82px] before:border-l-2 before:border-line"
+            : ""}
+        >
           {allPosts.length === 0 ? (
             <p class="text-ink-soft text-sm py-10">
               No entries yet — add a Markdown file to <code class="font-mono text-xs bg-paper-raised px-1.5 py-0.5 rounded">src/content/blog/</code> and redeploy.
