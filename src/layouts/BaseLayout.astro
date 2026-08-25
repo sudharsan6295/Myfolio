@@ -83,13 +83,26 @@ const personSchema = about
     {personSchema && (
       <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
     )}
-    <script is:inline>
+    <script is:inline data-astro-rerun>
       // Applies a saved theme choice before first paint, so there's no
       // flash of the wrong theme. Must be is:inline (runs immediately,
       // synchronously, not deferred/bundled) and must run before <body>
       // renders — hence living in <head>, not a page-level <script>.
       // No saved choice = no attribute set = the CSS's own
       // prefers-color-scheme fallback in global.css handles it.
+      //
+      // data-astro-rerun is required, not optional, once ClientRouter is
+      // in play: this script is byte-identical on every page, so without
+      // it Astro's transition diffing treats the <head> script as
+      // "unchanged" and skips re-executing it after a soft navigation —
+      // meanwhile the incoming page's own server-rendered <html> tag has
+      // no data-theme attribute at all (it's set by this very script,
+      // client-side only), so the router's morph wipes it on the swap.
+      // Net effect without this attribute: dark mode silently reverts to
+      // light on every client-side navigation, even though localStorage
+      // still has "dark" saved correctly — confirmed live (data-theme
+      // read back as null on the new page while localStorage.theme was
+      // still "dark") before this fix.
       (function () {
         try {
           var stored = localStorage.getItem("theme");

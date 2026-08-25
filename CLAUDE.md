@@ -730,6 +730,34 @@ Two smaller follow-ups, same session:
 - README.md's project-authoring template updated to match (no longer
   lists status as a fixed 3-value choice).
 
+### Real bug: dark mode silently reverting to light on client-side navigation
+
+Reported directly ("if I change blog to workbench the mode auto
+changes"). Root cause, confirmed live before fixing: the theme
+pre-paint script in `BaseLayout.astro`'s `<head>` is `is:inline` and
+byte-identical on every page — with `ClientRouter` (View Transitions)
+in play, Astro's transition diffing treats an unchanged `<head>`
+script as nothing-to-do and skips re-executing it after a soft
+navigation, while the *incoming* page's server-rendered `<html>` tag
+never had `data-theme` in the first place (it only ever gets set by
+this script running client-side). Net effect: the router's DOM swap
+wipes `data-theme` off `<html>`, and nothing re-applies it — confirmed
+by setting dark mode, clicking a nav link, and reading `data-theme`
+back as `null` while `localStorage.theme` still correctly said
+`"dark"`.
+
+Fix: added `data-astro-rerun` to that `<script is:inline>` tag —
+Astro's documented escape hatch for "run this script again on every
+transition, not just the first load." One attribute, no logic
+changes. **Any future `is:inline` `<head>` script whose job is to set
+DOM state before paint needs this same attribute**, for the same
+reason — worth remembering if another one gets added later.
+
+Verified live: set dark mode, clicked through two chained soft
+navigations (Blog → Workbench → About), `data-theme` stayed `"dark"`
+at every stop; the theme-toggle button itself still correctly flips
+to light and persists to `localStorage` afterward.
+
 ## Working on this project
 
 - Nav labels (About Me / Blogs / Workbench) are defined once in
