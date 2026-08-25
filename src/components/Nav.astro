@@ -36,9 +36,12 @@ const githubHandle = about?.social?.github
 const hasConnectLinks = about?.email || linkedinHandle || githubHandle;
 
 // The Connect <details> below is rendered as a sibling of the <ul>, not
-// inside it — an overflow-x-auto ancestor (the <ul>, a mobile-width safety
-// net for the 3 page links) clips an absolutely-positioned popover, so
-// Connect has to live outside that scroll container to render unclipped.
+// inside it — an overflow-auto ancestor clips an absolutely-positioned
+// popover, so Connect has to live outside that scroll container to render
+// unclipped. (The <ul> no longer scrolls on mobile now that the mobile
+// menu replaced the old horizontal-scroll nav — kept the two siblings
+// structurally separate anyway, since Connect's popover positioning
+// depends on it.)
 ---
 
 <header class="glass nav-glass sticky top-0 z-40">
@@ -60,22 +63,26 @@ const hasConnectLinks = about?.email || linkedinHandle || githubHandle;
         </a>
       </div>
 
-      <div class="flex items-center gap-0.5 sm:gap-2 min-w-0">
-        <ul class="flex items-center gap-0.5 sm:gap-2 font-mono text-[0.65rem] sm:text-[0.7rem] uppercase tracking-[0.08em] sm:tracking-[0.1em] overflow-x-auto flex-nowrap min-w-0">
+      <!-- Desktop nav: sm and up. Active state is a slim underline, not a
+           filled background block — reads lighter/more contemporary, and
+           doesn't shift surrounding spacing the way a background pill can. -->
+      <div class="hidden sm:flex items-center gap-2 min-w-0">
+        <ul class="flex items-center gap-1 font-mono text-[0.7rem] uppercase tracking-[0.1em]">
           {
             links.map((link) => (
-              <li class="shrink-0">
+              <li>
                 <a
                   href={link.href}
                   aria-current={isActive(link.href) ? "page" : undefined}
                   class:list={[
-                    "inline-block px-2 sm:px-3 py-2 rounded-[3px] transition-colors",
-                    isActive(link.href)
-                      ? "text-ink bg-paper-raised/70"
-                      : "text-ink-soft hover:text-ink hover:bg-paper-raised/40",
+                    "relative inline-block px-3 py-2 transition-colors",
+                    isActive(link.href) ? "text-ink" : "text-ink-soft hover:text-ink",
                   ]}
                 >
                   {link.label}
+                  {isActive(link.href) && (
+                    <span class="absolute left-3 right-3 -bottom-px h-[2px] bg-pen rounded-full" />
+                  )}
                 </a>
               </li>
             ))
@@ -86,7 +93,7 @@ const hasConnectLinks = about?.email || linkedinHandle || githubHandle;
           <div class="relative shrink-0">
             <details class="contact-dropdown group">
               <summary
-                class="list-none [&::-webkit-details-marker]:hidden cursor-pointer inline-block px-2 sm:px-3 py-2 rounded-[3px] font-mono text-[0.65rem] sm:text-[0.7rem] uppercase tracking-[0.08em] sm:tracking-[0.1em] transition-colors text-ink-soft hover:text-ink hover:bg-paper-raised/40 group-open:text-ink group-open:bg-paper-raised/70"
+                class="list-none [&::-webkit-details-marker]:hidden cursor-pointer inline-block px-3 py-2 rounded-[3px] font-mono text-[0.7rem] uppercase tracking-[0.1em] transition-colors text-ink-soft hover:text-ink hover:bg-paper-raised/40 group-open:text-ink group-open:bg-paper-raised/70"
               >
                 Connect
               </summary>
@@ -154,15 +161,111 @@ const hasConnectLinks = about?.email || linkedinHandle || githubHandle;
           </svg>
         </button>
       </div>
+
+      <!-- Mobile controls: theme toggle stays visible (small, useful even
+           with the menu closed), everything else (page links + Connect)
+           moved behind a hamburger — replaces the old horizontal-scrolling
+           <ul>, a cramped pattern for 3 links + Connect on a narrow screen. -->
+      <div class="flex sm:hidden items-center gap-1">
+        <button
+          type="button"
+          id="theme-toggle-mobile"
+          class="shrink-0 inline-flex items-center justify-center h-8 w-8 rounded-[3px] text-ink-soft hover:text-ink hover:bg-paper-raised/40 transition-colors"
+          aria-label="Toggle dark mode"
+        >
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" class="theme-icon-sun">
+            <circle cx="8" cy="8" r="3.2" stroke="currentColor" stroke-width="1.3" />
+            <path
+              d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.13 1.13M4.23 11.77L3.1 12.9M12.9 12.9l-1.13-1.13M4.23 4.23L3.1 3.1"
+              stroke="currentColor"
+              stroke-width="1.3"
+              stroke-linecap="round"
+            />
+          </svg>
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" class="theme-icon-moon">
+            <path d="M14 8.5A6.5 6.5 0 117.5 2a5.2 5.2 0 006.5 6.5z" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          id="mobile-menu-toggle"
+          class="shrink-0 inline-flex items-center justify-center h-8 w-8 rounded-[3px] text-ink-soft hover:text-ink hover:bg-paper-raised/40 transition-colors"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          aria-label="Open menu"
+        >
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" id="menu-icon-open">
+            <path d="M2.5 5h13M2.5 9h13M2.5 13h13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+          </svg>
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" id="menu-icon-close" class="hidden">
+            <path d="M4 4L14 14M14 4L4 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
     </nav>
+
+    <!-- Mobile menu panel: hidden by default, toggled by the hamburger. -->
+    <div id="mobile-menu" class="sm:hidden hidden flex-col pb-4 pt-1 border-t border-line">
+      <ul class="flex flex-col font-mono text-xs uppercase tracking-[0.1em]">
+        {
+          links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                aria-current={isActive(link.href) ? "page" : undefined}
+                class:list={[
+                  "block px-2 py-3 rounded-[3px] transition-colors",
+                  isActive(link.href) ? "text-ink bg-paper-raised/60" : "text-ink-soft hover:text-ink hover:bg-paper-raised/40",
+                ]}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      {hasConnectLinks && (
+        <div class="mt-2 pt-3 border-t border-line flex flex-col gap-3 px-2">
+          <p class="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-ink-soft">Connect</p>
+          {about?.email && (
+            <a href={`mailto:${about.email}`} class="flex items-center gap-2.5 font-mono text-xs uppercase tracking-[0.08em] normal-case text-ink-soft hover:text-pen transition-colors">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" class="shrink-0">
+                <rect x="1.5" y="3.5" width="13" height="9" rx="1.3" stroke="currentColor" stroke-width="1.2" />
+                <path d="M2 4.2L8 8.8L14 4.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              Email
+            </a>
+          )}
+          {linkedinHandle && about?.social?.linkedin && (
+            <a href={about.social.linkedin} target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 font-mono text-xs uppercase tracking-[0.08em] normal-case text-ink-soft hover:text-pen transition-colors">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" class="shrink-0">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+              </svg>
+              LinkedIn
+            </a>
+          )}
+          {githubHandle && about?.social?.github && (
+            <a href={about.social.github} target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 font-mono text-xs uppercase tracking-[0.08em] normal-case text-ink-soft hover:text-pen transition-colors">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" class="shrink-0">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+              </svg>
+              GitHub
+            </a>
+          )}
+        </div>
+      )}
+    </div>
   </div>
 </header>
 
 <script>
-  // Theme toggle: flips between explicit light/dark, persisted so it
-  // survives a reload (applied pre-paint by the inline script in
-  // BaseLayout.astro's <head>, to avoid a flash of the previous theme).
-  const themeToggle = document.getElementById("theme-toggle");
+  // Theme toggle: two buttons (desktop-row and mobile-row copies, only one
+  // visible at a time via sm: breakpoint classes) both flip the same
+  // explicit light/dark state, persisted so it survives a reload (applied
+  // pre-paint by the inline script in BaseLayout.astro's <head>, to avoid
+  // a flash of the previous theme).
+  const themeToggles = document.querySelectorAll<HTMLButtonElement>("#theme-toggle, #theme-toggle-mobile");
 
   function currentTheme(): "light" | "dark" {
     const attr = document.documentElement.getAttribute("data-theme");
@@ -170,12 +273,14 @@ const hasConnectLinks = about?.email || linkedinHandle || githubHandle;
     return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   }
 
-  themeToggle?.addEventListener("click", () => {
-    const next = currentTheme() === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", next);
-    try {
-      localStorage.setItem("theme", next);
-    } catch (e) {}
+  themeToggles.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const next = currentTheme() === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      try {
+        localStorage.setItem("theme", next);
+      } catch (e) {}
+    });
   });
 
   // Connect popover: close on outside-click or Escape — <details>/<summary>
@@ -186,10 +291,60 @@ const hasConnectLinks = about?.email || linkedinHandle || githubHandle;
     });
   });
 
+  // Mobile menu: hamburger toggles a stacked panel (links + Connect) below
+  // the header — replaces the old horizontal-scroll nav row on narrow
+  // screens. Closes on: toggle click, outside click, Escape, or picking a
+  // link (so it doesn't stay open across a navigation).
+  const menuToggle = document.getElementById("mobile-menu-toggle");
+  const menu = document.getElementById("mobile-menu");
+  const menuIconOpen = document.getElementById("menu-icon-open");
+  const menuIconClose = document.getElementById("menu-icon-close");
+
+  function openMenu() {
+    if (!menu) return;
+    menu.classList.remove("hidden");
+    menu.classList.add("flex");
+    menuToggle?.setAttribute("aria-expanded", "true");
+    menuIconOpen?.classList.add("hidden");
+    menuIconClose?.classList.remove("hidden");
+  }
+
+  function closeMenu() {
+    if (!menu) return;
+    menu.classList.add("hidden");
+    menu.classList.remove("flex");
+    menuToggle?.setAttribute("aria-expanded", "false");
+    menuIconOpen?.classList.remove("hidden");
+    menuIconClose?.classList.add("hidden");
+  }
+
+  menuToggle?.addEventListener("click", () => {
+    const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+    isOpen ? closeMenu() : openMenu();
+  });
+
+  menu?.querySelectorAll("a").forEach((a) => a.addEventListener("click", closeMenu));
+
+  document.addEventListener("click", (e) => {
+    if (!menu || menu.classList.contains("hidden")) return;
+    const target = e.target as Node;
+    if (!menu.contains(target) && !menuToggle?.contains(target)) closeMenu();
+  });
+
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
     document.querySelectorAll<HTMLDetailsElement>(".contact-dropdown[open]").forEach((el) => {
       el.removeAttribute("open");
     });
+    closeMenu();
+  });
+
+  // Collapse the mobile menu automatically if the viewport grows past the
+  // sm: breakpoint while it's open (e.g. rotating a tablet, or a resize
+  // during dev) — otherwise it could stay open behind the now-visible
+  // desktop nav.
+  const mobileBreakpoint = window.matchMedia("(min-width: 640px)");
+  mobileBreakpoint.addEventListener("change", (e) => {
+    if (e.matches) closeMenu();
   });
 </script>

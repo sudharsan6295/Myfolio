@@ -108,12 +108,44 @@ background, in the burgundy + brass palette. Tokens live in
 - Nav Connect (renamed from "Contact"): a `<details>`/`<summary>`
   dropdown (no client framework needed) showing email, LinkedIn, and
   GitHub (whichever of `about.email`/`about.social.*` are set),
-  rendered as a sibling of the page links' `<ul>`, not inside it — that
-  `<ul>` is `overflow-x-auto` (a mobile-width safety net for the 3 page
-  links), and an overflow-auto ancestor clips an absolutely-positioned
-  popover, so Connect has to sit outside it. A small inline `<script>`
-  in Nav.astro closes it on outside-click/Escape, since `<details>` has
-  no built-in dismissal.
+  rendered as a sibling of the page links' `<ul>`, not inside it — an
+  overflow-auto ancestor would clip an absolutely-positioned popover,
+  so Connect has to sit outside any such container. A small inline
+  `<script>` in Nav.astro closes it on outside-click/Escape, since
+  `<details>` has no built-in dismissal. Desktop-only (`hidden
+  sm:flex` wrapper) — the mobile menu has its own separate, plain-link
+  (non-popover) Connect section, see below.
+- **Nav has two structurally separate layouts, not one responsive
+  one** — `hidden sm:flex` (desktop: inline links + Connect dropdown +
+  theme toggle) and `flex sm:hidden` (mobile: just a theme toggle +
+  hamburger button), each with duplicate content rather than one
+  markup block reflowing. Replaced an earlier mobile approach that
+  crammed all of nav-links + Connect into one `overflow-x-auto` row —
+  a cramped, dated pattern — with a real hamburger menu per direct
+  "more modern UX" feedback. The hamburger toggles `#mobile-menu` (a
+  panel below the header, `sm:hidden`, hidden by default) containing
+  stacked page links and a stacked Connect section (plain links, no
+  popover — a popover doesn't make sense once Connect isn't squeezed
+  for horizontal space any more). Two consequences worth knowing:
+  - **Duplicate theme-toggle buttons** (`#theme-toggle` desktop,
+    `#theme-toggle-mobile` mobile-row) — only one is ever visible at a
+    time (CSS `sm:` breakpoint), but the toggle script binds to both
+    via one `querySelectorAll`, so either always works regardless of
+    viewport. If a third copy is ever added (e.g. inside the mobile
+    menu panel itself), it needs to join that same selector.
+  - **Two `links.map()` blocks** (desktop `<ul>`, mobile `<ul>`) render
+    the same `links` array with different styling (underline-on-active
+    for desktop, filled-background-on-active for mobile — a filled
+    background reads better for a full-width stacked mobile link than
+    a thin underline would). Verified there's no double-render overlap
+    right at the `sm` breakpoint boundary (640px): exactly one of the
+    two layouts has nonzero `offsetWidth` at a time, checked directly,
+    not assumed from the class names alone.
+  - Active desktop nav-link indicator changed from a filled
+    `bg-paper-raised/70` block to a slim 2px underline (`absolute
+    ...-bottom-px h-[2px] bg-pen`) — also part of the "more modern"
+    ask; a filled pill/block behind nav text is a heavier, more dated
+    look than a thin active-state underline.
 - GitHub (`about.social.github`) is read in four places — Nav's Connect
   panel, `Footer.astro`, `/about`'s "At a glance" aside, and a "More on
   GitHub →" link on `/projects` — all gated on the same field, so
@@ -455,10 +487,14 @@ background, in the burgundy + brass palette. Tokens live in
   — update it once there's a real domain (used for canonical URLs / any
   future RSS feed).
 - **Bottom spacing before the footer comes from `Footer.astro`'s own
-  `mt-10` only.** Page-level containers use `pb-8`, not `pb-24` — an
+  `mt-6` only.** Page-level containers use `pb-8`, not `pb-24` — an
   earlier version had both, which stacked into a large empty gap above
-  the footer (later tightened further from `mt-24` to `mt-10` after
-  feedback that pages still felt too spaced out). Don't add a large
+  the footer (tightened `mt-24` → `mt-10` → `mt-6` across two later
+  passes, each time after feedback that pages still felt too spaced
+  out — if asked again, the next step is probably questioning whether
+  `pb-8` itself should shrink too, since `mt-6` is getting close to as
+  tight as a single-file lever can go without also touching every
+  page's own bottom padding). Don't add a large
   `pb-*` to a page's outer container; a little breathing room (`pb-8` or
   less) is fine, the footer's own margin does the real spacing. Page top
   padding is `pt-10 sm:pt-14` (tightened from `pt-14 sm:pt-20` in the
@@ -472,7 +508,7 @@ background, in the burgundy + brass palette. Tokens live in
   `getBoundingClientRect()` on every page's last content element vs.
   the footer: all six page templates (`/`, `/about`, `/blog`,
   `/blog/[id]`, `/projects`, `/projects/[id]`) land on exactly the
-  same 72px gap before the footer, and all three of the homepage's
+  same gap before the footer (72px when measured, now 56px after the `mt-10`→`mt-6` reduction below), and all three of the homepage's
   inter-section gaps are exactly 56px each. If a page's bottom padding
   is ever changed, re-run that same check across every page template,
   not just the one being edited — this is a shared visual rhythm, and
