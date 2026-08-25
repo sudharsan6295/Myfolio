@@ -101,7 +101,13 @@ To pull a post down temporarily without deleting it, set `draft: true`.
    ---
    title: "Project name"
    summary: "One sentence — what it is and why it exists. Shown on the listing card."
-   status: "prototype"   # one of: "live" | "prototype" | "archived"
+   status: "prototype"   # any short label — not a fixed list; the Workbench page's
+                          # filter buttons are generated automatically from whatever
+                          # statuses your projects actually use. "live"/"prototype"/
+                          # "archived" are the conventional values and the only ones
+                          # with a specific accent color (see `statusTone` in
+                          # ProjectCard.astro and projects/[id].astro) — anything
+                          # else still works, just with the default accent.
    startDate: 2026-01-01
    stack: ["Next.js", "Postgres"]   # shown as tags on the card
    links:

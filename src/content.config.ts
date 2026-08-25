@@ -36,7 +36,16 @@ const projects = defineCollection({
     z.object({
       title: z.string(),
       summary: z.string(),
-      status: z.enum(['live', 'prototype', 'archived']),
+      // Free-form, not a fixed enum — same reasoning as blog's `category`
+      // (see the blog collection above): any number of statuses, the
+      // Workbench page's filter buttons derive their list from the
+      // projects themselves rather than a hardcoded array. `live` /
+      // `prototype` / `archived` are still the conventional values (and
+      // are the only ones ProjectCard/[id].astro have a specific accent
+      // color for — see `statusTone` in those files), but nothing
+      // enforces that any more; an unrecognized status just falls back
+      // to the default tone.
+      status: z.string().min(1),
       startDate: z.coerce.date(),
       stack: z.array(z.string()).default([]),
       coverImage: image().optional(),

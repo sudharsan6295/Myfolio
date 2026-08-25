@@ -120,6 +120,15 @@ background, in the burgundy + brass palette. Tokens live in
   trade-off left to make. Mobile menu has its own separate, always-
   inline (never a popover, so never had this problem) Connect section,
   see below — unchanged by this redesign.
+- **Footer also has a Connect row now** (`Footer.astro`) — a "Connect"
+  label plus the same three icon-only links (Email/LinkedIn/GitHub,
+  same `h-7 w-7` treatment, `title` + `aria-label` on each) sitting
+  next to the copyright line. Previously the footer had text links
+  ("Email"/"LinkedIn"/"GitHub"); replaced with icons to match the nav's
+  icon-button pattern once that existed, per direct request. Same
+  `about.email`/`about.social.*` conditionals as everywhere else — the
+  whole row (including the "Connect" label) only renders if at least
+  one of the three is actually set.
 - **Nav has two structurally separate layouts, not one responsive
   one** — `hidden sm:flex` (desktop: inline links + Connect icons +
   theme toggle) and `flex sm:hidden` (mobile: just a theme toggle +
@@ -684,6 +693,36 @@ manual sync.
   with zero code changes, clicked it and confirmed it correctly
   filtered to just that one post, then deleted the test post and
   rebuilt back to 12 pages clean.
+
+### Footer got a Connect row; Workbench status got the same open-ended treatment
+
+Two smaller follow-ups, same session:
+
+- **Footer** (`Footer.astro`): added a "Connect" label + the same
+  icon-only Email/LinkedIn/GitHub links used in the nav (identical
+  `h-7 w-7` treatment, `title`/`aria-label` on each), replacing the
+  old plain text links ("Email"/"LinkedIn"/"GitHub"). Same
+  `about.email`/`about.social.*` conditionals — the whole row only
+  renders if at least one is set. Verified live (correct hrefs on all
+  three, no horizontal overflow on a 375px mobile viewport).
+- **Workbench status filter** (`projects/index.astro`) — same pattern
+  as blog categories, per direct request to apply it there too:
+  `status` in `content.config.ts` is now `z.string().min(1)` instead
+  of `z.enum(['live', 'prototype', 'archived'])`, and the filter
+  buttons are derived from the projects themselves (most-used first,
+  alphabetical tie-break, title-cased for display since there's no
+  fixed label map any more) instead of a hardcoded 3-value list.
+  `live`/`prototype`/`archived` remain the *conventional* values and
+  the only ones with a specific accent color (`statusTone` in
+  `ProjectCard.astro` and `projects/[id].astro`, both of which already
+  had a `?? "ink"` fallback for an unrecognized value before this
+  change — nothing needed to change there). Verified the same way as
+  blog: added a real temporary project with a brand-new status
+  ("shelved"), confirmed `npm run build` succeeded and a "Shelved (1)"
+  filter button appeared and correctly filtered with zero further code
+  changes, then deleted it and rebuilt clean.
+- README.md's project-authoring template updated to match (no longer
+  lists status as a fixed 3-value choice).
 
 ## Working on this project
 

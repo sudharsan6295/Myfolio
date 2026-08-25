@@ -10,13 +10,18 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft)).so
 const [aboutEntry] = await getCollection("about");
 const github = aboutEntry?.data.social.github;
 
-const statusLabels: Record<string, string> = { live: "Live", prototype: "Prototype", archived: "Archived" };
-const statuses = ["live", "prototype", "archived"] as const;
-const statusCounts = statuses.map((s) => ({
-  value: s,
-  label: statusLabels[s],
-  count: projects.filter((p) => p.data.status === s).length,
-}));
+// Statuses are open-ended (see content.config.ts), same pattern as the
+// blog's categories — derived from whatever's actually used across the
+// projects, most-used first with an alphabetical tie-break, instead of
+// a hardcoded three-value list. `label` title-cases the raw value for
+// display (`"live"` -> `"Live"`) since there's no longer a fixed label
+// map to look it up in.
+function titleCase(value: string) {
+  return value.replace(/\b\w/g, (c) => c.toUpperCase());
+}
+const statusCounts = [...new Set(projects.map((p) => p.data.status))]
+  .map((value) => ({ value, label: titleCase(value), count: projects.filter((p) => p.data.status === value).length }))
+  .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
 ---
 
 <BaseLayout
