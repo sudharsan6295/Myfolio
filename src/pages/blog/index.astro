@@ -86,7 +86,7 @@ const categoryCounts = [...new Set(allPosts.map((p) => p.data.category))]
              post list) rather than the full hero-panel width — per
              direct request, reverting the earlier full-width version. -->
         {allPosts.length > 1 && (
-          <div class="glass rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2 mb-6 ml-[26px]">
+          <div class="glass rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2 mb-6">
             <div class="relative flex-1 min-w-[160px] max-w-xs ml-2">
               <svg width="13" height="13" viewBox="0 0 16 16" fill="none" class="absolute left-2.5 top-1/2 -translate-y-1/2 text-ink-soft pointer-events-none">
                 <circle cx="7" cy="7" r="5.2" stroke="currentColor" stroke-width="1.3" />
@@ -118,12 +118,7 @@ const categoryCounts = [...new Set(allPosts.map((p) => p.data.category))]
           </div>
         )}
 
-        <div
-          id="post-list"
-          class={allPosts.length > 0
-            ? "relative border-l-2 border-line pl-5 sm:pl-6 before:content-[''] before:absolute before:-left-[2px] before:-top-[82px] before:h-[82px] before:border-l-2 before:border-line"
-            : ""}
-        >
+        <div id="post-list">
           {allPosts.length === 0 ? (
             <p class="text-ink-soft text-sm py-10">
               No entries yet — add a Markdown file to <code class="font-mono text-xs bg-paper-raised px-1.5 py-0.5 rounded">src/content/blog/</code> and redeploy.

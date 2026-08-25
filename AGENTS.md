@@ -863,6 +863,64 @@ this environment's Browser pane can't actually scroll
 (`document.hidden: true`), so the live highlight-swap itself isn't
 visually confirmed, only everything structural around it.
 
+### Timeline line removed entirely; footer alignment actually fixed
+
+Two more direct fixes, closing out this session's longest-running
+thread (the post-list timeline line had been added, reverted, added
+back recalibrated, and patched for a 2px kink — five separate attempts
+across this conversation) and a real structural bug in the footer:
+
+- **The vertical line is gone, for good this time** — not reverted
+  back to the original `border-l-2` design either; removed outright,
+  per direct request ("remove the vertical line ... and align the
+  glass boxes"). `#post-list` no longer has `border-l-2` or the
+  `pl-5 sm:pl-6` indent that used to make room for it, and the
+  search/sort row's matching `ml-[26px]` nudge (added specifically to
+  line the row up with where the indented cards used to start) is
+  gone too — keeping either of those without the line would have left
+  an unexplained empty gutter with nothing marking it. Post cards and
+  the search/sort row now both start at the same flush left edge
+  (145px, matching the hero panel), no line, no indent.
+- **Footer's actual misalignment root cause, found and fixed**:
+  `Footer.astro` used `<footer class="px-4 pb-4 mt-6">` wrapping
+  `<div class="mx-auto max-w-5xl">` — padding *outside* the
+  `max-w-5xl` box. Every other page container on the site instead
+  puts padding *inside* the `max-w-5xl` box on the same element
+  (`mx-auto max-w-5xl px-6 ...`, e.g. `blog/index.astro`'s outer div).
+  Since footer's `max-w-5xl` div had no padding of its own, its glass
+  panel filled that box edge-to-edge — a full 24px wider on each side
+  than every other page's glass panels, which sit *inset* by their
+  container's own `px-6`. This had been wrong the whole time, not a
+  regression from anything else changed this session; it just hadn't
+  been directly reported until now. Fixed by matching the exact same
+  `mx-auto max-w-5xl px-6` pattern (footer's own `pb-4` moved onto
+  that same div, `px-4` dropped). Verified live: footer's glass panel
+  and the hero panel now share the identical left/right edges (145 /
+  1121) — previously 121 / 1145, a consistent 24px overshoot on both
+  sides, confirming the diagnosis was the padding location, not a
+  rounding or breakpoint issue.
+
+Both verified together: search filtering still works, no horizontal
+overflow at 375px mobile width.
+
+- **Same timeline line also removed from the homepage** ("there is
+  one more vertical line on Notebook page" — the homepage's own
+  eyebrow calls it "Professional Notebook"). `index.astro`'s "Field
+  Notes preview" section had the identical `border-l-2 border-line
+  pl-5 sm:pl-6` wrapper around its `PostCard` previews — same design
+  pattern, same removal. `PostCard` already carries its own `mb-4
+  last:mb-0` spacing, so the wrapper div was only ever there for the
+  line/indent; removed the classes and left a plain unstyled `<div>`
+  around the map. Verified live: zero `.border-l-2` elements left on
+  the homepage, first preview card now flush at the same 145px left
+  edge as the hero panel. A full-codebase grep for
+  `border-l-2 border-line` afterward confirmed no other instance of
+  this specific timeline pattern remains anywhere on the site — the
+  three remaining plain `border-l border-line` hits elsewhere (a nav
+  divider between page links and the Connect icons, and the two new
+  table-of-contents sidebars' own left rule) are unrelated, intentional
+  UI, not leftovers of this one.
+
 ## Working on this project
 
 - Nav labels (About Me / Notes / Workbench) are defined once in
