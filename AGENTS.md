@@ -294,6 +294,26 @@ background, in the burgundy + brass palette. Tokens live in
     exact same browser check before/after. Worth remembering: a schema
     enum change specifically, more than a plain content edit, is a
     good reason to restart the dev server rather than trust HMR here.
+- **`ProjectCard`'s tag row is pinned to the card's bottom, not just
+  stacked under the description** — the root `<a>` is `flex flex-col
+  h-full` and the `stack` `<ul>` uses `mt-auto pt-4` instead of `mt-4`.
+  Without this, three cards in the same grid row with different-length
+  descriptions (different line-wrap counts) had their tech-stack chips
+  land at three different heights — grid's default `align-items:
+  stretch` already equalizes each card's outer height, but nothing
+  pinned the *content inside* to the bottom, so the tags just sat
+  wherever the description above them happened to end. Verified via
+  `getBoundingClientRect()` on all three cards at a real 3-column
+  width (1280px — the `lg:` grid breakpoint needs an explicit wide
+  `resize_window` call in this environment, the desktop *preset*
+  didn't reliably apply `window.innerWidth` here): all three cards'
+  height and their tag row's top/bottom now match exactly. Apply the
+  same `flex flex-col h-full` + `mt-auto` pattern to any future
+  grid-of-cards component where content length varies per card.
+- **Blogs sidebar "Written by" card dropped `about.role`** — was
+  name → role → tagline → link; role was the long resume-style
+  sentence (`about.role`, distinct from the shorter `about.tagline`)
+  and made the card feel dense. Now just name → tagline → link.
 - **Homepage hero leads with the person, not just the pitch**: was
   `Field Notebook — {about.role}` as the eyebrow (redundant with the
   same info already in the tagline below it, and inconsistent with
