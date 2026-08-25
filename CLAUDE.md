@@ -562,21 +562,19 @@ user picked from directly:
 
 ### Follow-up fixes, same day — two real bugs the user caught by eye
 
-- **Connect dropdown was disturbing the content behind it — fixed.** The
-  popover in `Nav.astro` (Email/LinkedIn/GitHub, opened from the desktop
-  "Connect" link) reused the ambient `.glass` class — 62% opacity plus
-  blur, tuned for panels that sit over the empty gradient mesh background.
-  As a floating `absolute` popover, it instead sits over real page
-  content (e.g. About's "At a glance" list), and at that opacity the text
-  underneath stayed legible enough to visually compete with the
-  popover's own contents — read as broken, not intentionally
-  translucent. New `.glass-popover` class in `global.css` (96% opacity,
-  same blur/border/shadow shape) for floating overlays specifically,
-  applied to this one dropdown — every other `.glass` usage in the
-  codebase is an in-flow panel over the mesh background, not a popover
-  over content, so those were deliberately left on the original class.
-  Verified live: computed style on the open popover confirmed 0.96 alpha
-  and the blur filter both applied.
+- **Connect dropdown legibility — tried, settled back on the original.**
+  The popover in `Nav.astro` (Email/LinkedIn/GitHub, opened from the
+  desktop "Connect" link) reuses the ambient `.glass` class — 62%
+  opacity plus blur, same as every other panel on the site — even
+  though as a floating `absolute` popover it sits over real page
+  content (e.g. About's "At a glance" list) rather than the empty mesh
+  background. A near-opaque `.glass-popover` variant was tried for this
+  one dropdown, then explicitly reverted twice more back to plain
+  `.glass` per direct feedback (most recently: "connect like in
+  f4f74ca" — the commit right before any of this styling churn
+  started). **Current, settled state: plain `.glass`, translucent, same
+  as f4f74ca and every other `.glass` usage in the codebase** — do not
+  reintroduce `.glass-popover` without being asked again.
 - **Blog page's search box and sort dropdown didn't align — fixed.** They
   sat in one `items-center` flex row but relied on each control's own
   padding (`py-1.5` on the search input vs `py-1` on the select) to
