@@ -139,8 +139,9 @@ openTo:
                                                      # top of /about's sidebar
 highlights:
   - "A short achievement sentence, ideally with a real number in it"
-                                                     # shown as a card grid
-                                                     # on /about, below the bio
+                                                     # shown as a simple
+                                                     # checkmark list on
+                                                     # /about, below the bio
 focusAreas:
   - "Short tag, e.g. AI Product Strategy"
 tools:

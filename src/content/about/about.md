@@ -25,7 +25,6 @@ tools:
   - "LLM Tools & AI Agents"
   - "Prompt Engineering"
   - "Enovia / 3DExperience"
-  - "Technia Integration Framework"
   - "Agile & Scrum Delivery"
   - "Programming and Scripting Basics"
  

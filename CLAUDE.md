@@ -296,28 +296,31 @@ background, in the burgundy + brass palette. Tokens live in
     good reason to restart the dev server rather than trust HMR here.
 - **About page's "proud of" list and closing CTA moved out of Markdown
   into structured data + template code**, per direct "redesign this
-  content in a modern way" feedback on that exact block. Two separate
-  changes, both in `about.astro`, right after the `.prose` `<Content
-  />`:
-  - `about.highlights` (new field, `content.config.ts`, plain string
-    array — same 4 sentences that were a `.prose` bullet list) now
-    renders as a `sm:grid-cols-2` card grid, each card a bordered
-    `rounded-xl` tile with a small checkmark SVG (`text-pen`) instead
-    of a plain `—` bullet. Moved out of Markdown specifically so it
-    could get this bespoke treatment without changing `.prose ul`
-    globally (blog posts and project write-ups share that same class).
+  content in a modern way" feedback on that exact block — then
+  simplified further through several quick follow-ups ("I don't want
+  boxes", revert, "keep tick mark"). Current state, both in
+  `about.astro` right after the `.prose` `<Content />`:
+  - `about.highlights` (`content.config.ts`, plain string array — same
+    4 sentences that used to be a `.prose` bullet list) renders as a
+    plain `flex flex-col` stacked list, each item a small checkmark SVG
+    (`text-pen`) + text, no border/background/grid — tried a
+    `sm:grid-cols-2` bordered card-tile treatment first, explicitly
+    rejected as "boxes." Moved out of Markdown so it could keep its own
+    treatment (the checkmark) independent of `.prose ul`'s plain `—`
+    bullet style, which every blog post and project write-up also uses.
   - The closing CTA paragraph ("Curious what this looks like in
-    practice?...") is no longer Markdown at all — it's hardcoded in
-    `about.astro` as its own `bg-pen/[0.06] border-pen/20` callout
-    block, visually separated from the bio prose above it instead of
-    just being the last paragraph in the flow. It doesn't reference
-    `about.name` or anything else instance-specific, same as other
-    hardcoded teaser copy elsewhere in the site (e.g. the homepage's
-    About teaser section), so hardcoding it here is consistent with
-    that existing pattern, not a one-off exception.
+    practice?...") is hardcoded in `about.astro`, not Markdown — but
+    also not a tinted callout box any more (also rejected as "boxes");
+    it's a plain paragraph with a `border-t border-line` divider above
+    it, same divider style used elsewhere on this page. Doesn't
+    reference `about.name` or anything instance-specific, consistent
+    with other hardcoded teaser copy on the site (e.g. the homepage's
+    About teaser section).
   - **If new "achievement" content is ever added, use `highlights`,
-    not a Markdown bullet list in the bio body** — that's now the
-    established place for it, and it gets real card styling for free.
+    not a Markdown bullet list in the bio body** — that's the
+    established place for it now. Don't reach for a bordered card/box
+    treatment for it without checking first — that was tried and
+    explicitly turned down here.
 - **`.prose h2`/`h3` top margins tightened** (`global.css`) — `2.6em`
   → `1.7em` for `h2`, `2em` → `1.5em` for `h3` (bottom margins only
   trimmed slightly, `0.7em`→`0.6em`/`0.6em`→`0.5em`). Per direct
