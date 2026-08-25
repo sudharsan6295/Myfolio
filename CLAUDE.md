@@ -567,19 +567,26 @@ built and then explicitly reverted, see below):
 
 ### Follow-up fixes, same day — two real bugs the user caught by eye
 
-- **Connect dropdown legibility — tried, settled back on the original.**
-  The popover in `Nav.astro` (Email/LinkedIn/GitHub, opened from the
-  desktop "Connect" link) reuses the ambient `.glass` class — 62%
-  opacity plus blur, same as every other panel on the site — even
-  though as a floating `absolute` popover it sits over real page
-  content (e.g. About's "At a glance" list) rather than the empty mesh
-  background. A near-opaque `.glass-popover` variant was tried for this
-  one dropdown, then explicitly reverted twice more back to plain
-  `.glass` per direct feedback (most recently: "connect like in
-  f4f74ca" — the commit right before any of this styling churn
-  started). **Current, settled state: plain `.glass`, translucent, same
-  as f4f74ca and every other `.glass` usage in the codebase** — do not
-  reintroduce `.glass-popover` without being asked again.
+- **Connect dropdown legibility — went back and forth, now settled on
+  `.glass-popover`.** The popover in `Nav.astro` (Email/LinkedIn/GitHub,
+  opened from the desktop "Connect" link) is a floating `absolute`
+  element that sits over real page content (About's "At a glance" list,
+  the homepage's "Recent entries" list), not the empty gradient mesh
+  every other `.glass` panel sits over — at the ambient `.glass` class's
+  62% opacity, whatever's underneath stays legible enough to visually
+  fight with the popover's own contents. This went through several
+  rounds: `.glass-popover` (96% opacity, same blur/border/shadow shape)
+  was built, reverted twice back to plain `.glass` per direct feedback
+  (once generically, once specifically "connect like in f4f74ca"), then
+  reinstated a third time after a screenshot showed the actual
+  bleed-through against "Recent entries" and the user confirmed they
+  wanted the opaque treatment specifically (not a scrim/backdrop, not a
+  repositioned dropdown — asked and confirmed directly). **Current,
+  settled state: `.glass-popover`, ~96% opaque, applied to this one
+  floating popover only** — every in-flow `.glass` panel elsewhere in
+  the codebase is untouched. If this comes up again, don't re-litigate
+  from scratch — check this note and ask which specific direction
+  before changing it.
 - **Blog page's search box and sort dropdown didn't align — fixed.** They
   sat in one `items-center` flex row but relied on each control's own
   padding (`py-1.5` on the search input vs `py-1` on the select) to
