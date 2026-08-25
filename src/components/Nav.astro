@@ -35,16 +35,16 @@ const githubHandle = about?.social?.github
 
 const hasConnectLinks = about?.email || linkedinHandle || githubHandle;
 
-// Desktop Connect used to be a <details>/<summary> dropdown popover —
-// replaced with plain inline icon buttons (email/LinkedIn/GitHub,
-// right in the nav bar, same treatment as the theme toggle next to
-// them) after repeated back-and-forth on the popover's background
-// legibility (translucent let page content show through; opaque looked
-// heavier than the rest of the nav). Icon buttons in the bar sidestep
-// the whole problem — nothing ever floats over page content, so
-// there's no legibility trade-off to make. Each link has both a
-// visible `title` tooltip and an `aria-label`, since there's no text
-// label next to the icon the way the old dropdown's rows had.
+// Desktop Connect: a "Connect" label opens a small dropdown holding
+// the three icons in a horizontal row (not the old vertical
+// text-label-per-row layout). This is back to a popover after a stint
+// as bare inline icons in the bar — the popover's background is
+// near-opaque (`.glass-popover` in global.css, ~96%) rather than the
+// ambient translucent `.glass`, learned from an earlier round where
+// the translucent version let page content underneath show through
+// distractingly. A small icon-row panel like this has much less
+// content to go illegible than the old text-row version did, but it's
+// still a floating element, so the same fix applies.
 ---
 
 <header class="glass nav-glass sticky top-0 z-40">
@@ -93,48 +93,57 @@ const hasConnectLinks = about?.email || linkedinHandle || githubHandle;
         </ul>
 
         {hasConnectLinks && (
-          <div class="flex items-center gap-0.5 pl-1 ml-1 border-l border-line">
-            {about?.email && (
-              <a
-                href={`mailto:${about.email}`}
-                title="Email"
-                aria-label="Email"
-                class="shrink-0 inline-flex items-center justify-center h-7 w-7 rounded-[3px] text-ink-soft hover:text-pen hover:bg-paper-raised/40 transition-colors"
+          <div class="relative shrink-0">
+            <details class="contact-dropdown group">
+              <summary
+                class="list-none [&::-webkit-details-marker]:hidden cursor-pointer inline-block px-3 py-2 rounded-[3px] font-mono text-[0.7rem] uppercase tracking-[0.1em] transition-colors text-ink-soft hover:text-ink hover:bg-paper-raised/40 group-open:text-ink group-open:bg-paper-raised/70"
               >
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                  <rect x="1.5" y="3.5" width="13" height="9" rx="1.3" stroke="currentColor" stroke-width="1.2" />
-                  <path d="M2 4.2L8 8.8L14 4.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </a>
-            )}
-            {linkedinHandle && about?.social?.linkedin && (
-              <a
-                href={about.social.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="LinkedIn"
-                aria-label="LinkedIn"
-                class="shrink-0 inline-flex items-center justify-center h-7 w-7 rounded-[3px] text-ink-soft hover:text-pen hover:bg-paper-raised/40 transition-colors"
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                </svg>
-              </a>
-            )}
-            {githubHandle && about?.social?.github && (
-              <a
-                href={about.social.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="GitHub"
-                aria-label="GitHub"
-                class="shrink-0 inline-flex items-center justify-center h-7 w-7 rounded-[3px] text-ink-soft hover:text-pen hover:bg-paper-raised/40 transition-colors"
-              >
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
-                </svg>
-              </a>
-            )}
+                Connect
+              </summary>
+              <div class="glass-popover absolute right-0 mt-2 rounded-2xl p-2 flex items-center gap-1 z-50">
+                {about?.email && (
+                  <a
+                    href={`mailto:${about.email}`}
+                    title="Email"
+                    aria-label="Email"
+                    class="shrink-0 inline-flex items-center justify-center h-8 w-8 rounded-[3px] text-ink-soft hover:text-pen hover:bg-paper-raised/40 transition-colors"
+                  >
+                    <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+                      <rect x="1.5" y="3.5" width="13" height="9" rx="1.3" stroke="currentColor" stroke-width="1.2" />
+                      <path d="M2 4.2L8 8.8L14 4.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </a>
+                )}
+                {linkedinHandle && about?.social?.linkedin && (
+                  <a
+                    href={about.social.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="LinkedIn"
+                    aria-label="LinkedIn"
+                    class="shrink-0 inline-flex items-center justify-center h-8 w-8 rounded-[3px] text-ink-soft hover:text-pen hover:bg-paper-raised/40 transition-colors"
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                    </svg>
+                  </a>
+                )}
+                {githubHandle && about?.social?.github && (
+                  <a
+                    href={about.social.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="GitHub"
+                    aria-label="GitHub"
+                    class="shrink-0 inline-flex items-center justify-center h-8 w-8 rounded-[3px] text-ink-soft hover:text-pen hover:bg-paper-raised/40 transition-colors"
+                  >
+                    <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor">
+                      <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </details>
           </div>
         )}
 
@@ -331,8 +340,15 @@ const hasConnectLinks = about?.email || linkedinHandle || githubHandle;
 
   document.addEventListener("astro:page-load", initNav);
 
-  // Mobile menu: close on outside-click or Escape. (Desktop Connect is
-  // now plain inline icon links — no popover, nothing to dismiss.)
+  // Connect popover: close on outside-click or Escape — <details>/<summary>
+  // has no built-in dismissal.
+  document.addEventListener("click", (e) => {
+    document.querySelectorAll<HTMLDetailsElement>(".contact-dropdown[open]").forEach((el) => {
+      if (!el.contains(e.target as Node)) el.removeAttribute("open");
+    });
+  });
+
+  // Mobile menu: close on outside-click or Escape.
   document.addEventListener("click", (e) => {
     if (!menu || menu.classList.contains("hidden")) return;
     const target = e.target as Node;
@@ -341,6 +357,9 @@ const hasConnectLinks = about?.email || linkedinHandle || githubHandle;
 
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
+    document.querySelectorAll<HTMLDetailsElement>(".contact-dropdown[open]").forEach((el) => {
+      el.removeAttribute("open");
+    });
     closeMenu();
   });
 

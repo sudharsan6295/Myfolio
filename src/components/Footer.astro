@@ -15,8 +15,6 @@ const year = new Date().getFullYear();
         }
       </p>
       {(about?.email || about?.social?.linkedin || about?.social?.github) && (
-        <div class="flex items-center gap-3">
-          <span class="font-mono text-xs uppercase tracking-[0.08em] text-ink-soft">Connect</span>
           <ul class="flex items-center gap-1">
             {about?.email && (
               <li>
@@ -66,7 +64,6 @@ const year = new Date().getFullYear();
               </li>
             )}
           </ul>
-        </div>
       )}
     </div>
   </div>

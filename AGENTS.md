@@ -105,29 +105,32 @@ background, in the burgundy + brass palette. Tokens live in
   it is still a separate `<a href="/">`, still hidden below the `sm`
   breakpoint (Seal only on narrow screens — with Connect in the nav,
   there isn't room for the full name too).
-- **Nav Connect (renamed from "Contact") — no longer a dropdown.**
-  Desktop shows email/LinkedIn/GitHub (whichever of
-  `about.email`/`about.social.*` are set) as plain inline icon-only
-  links directly in the nav bar, same treatment as the theme-toggle
-  button next to them (`h-7 w-7 rounded-[3px]`, hover background) —
-  each has a `title` tooltip and `aria-label` since there's no text
-  label. This replaced a `<details>`/`<summary>` popover after several
-  rounds of fighting its background legibility (translucent let page
-  content underneath show through — a screenshot caught this directly
-  against a "Recent entries" list; opaque worked but visually didn't
-  fit). Icon buttons in the bar sidestep the problem entirely — nothing
-  floats over page content any more, so there's no legibility
-  trade-off left to make. Mobile menu has its own separate, always-
-  inline (never a popover, so never had this problem) Connect section,
-  see below — unchanged by this redesign.
-- **Footer also has a Connect row now** (`Footer.astro`) — a "Connect"
-  label plus the same three icon-only links (Email/LinkedIn/GitHub,
-  same `h-7 w-7` treatment, `title` + `aria-label` on each) sitting
-  next to the copyright line. Previously the footer had text links
-  ("Email"/"LinkedIn"/"GitHub"); replaced with icons to match the nav's
-  icon-button pattern once that existed, per direct request. Same
-  `about.email`/`about.social.*` conditionals as everywhere else — the
-  whole row (including the "Connect" label) only renders if at least
+- **Nav Connect (renamed from "Contact") — a dropdown again, icons in
+  a row.** Desktop shows a "Connect" label (`<details>`/`<summary>`)
+  that opens a small popover holding email/LinkedIn/GitHub as three
+  icon-only buttons side by side in one horizontal row — not the
+  original vertical text-label-per-row layout, and not the brief
+  bare-inline-icons-in-the-bar version either. This is actually the
+  *third* shape this has taken (dropdown-with-text-rows →
+  inline-icons-in-the-bar → dropdown-with-icon-row), per successive
+  direct requests each time. The popover uses `.glass-popover`
+  (`global.css`, ~96% opacity) rather than the ambient translucent
+  `.glass` — carried forward from the earlier round where the
+  translucent version let page content underneath show through
+  distractingly; a small icon-row panel has much less content to go
+  illegible than the old text-row version did, but it's still a
+  floating element, so the same fix still applies. Outside-click/
+  Escape dismissal (`.contact-dropdown[open]`, since `<details>` has
+  no built-in close) is back too. Mobile menu has its own separate,
+  always-inline (never a popover) Connect section — untouched by any
+  of this. **If Connect changes shape again, check this note first**
+  rather than re-deriving the history from scratch.
+- **Footer has icon-only Connect links, no label.** `Footer.astro`
+  shows the same three icons (Email/LinkedIn/GitHub, `h-7 w-7`,
+  `title` + `aria-label` on each) next to the copyright line — no
+  "Connect" text next to them (that label now lives only in the nav's
+  dropdown trigger, see above). Same `about.email`/`about.social.*`
+  conditionals as everywhere else — the row only renders if at least
   one of the three is actually set.
 - **Nav has two structurally separate layouts, not one responsive
   one** — `hidden sm:flex` (desktop: inline links + Connect icons +
@@ -698,13 +701,17 @@ manual sync.
 
 Two smaller follow-ups, same session:
 
-- **Footer** (`Footer.astro`): added a "Connect" label + the same
-  icon-only Email/LinkedIn/GitHub links used in the nav (identical
-  `h-7 w-7` treatment, `title`/`aria-label` on each), replacing the
-  old plain text links ("Email"/"LinkedIn"/"GitHub"). Same
-  `about.email`/`about.social.*` conditionals — the whole row only
-  renders if at least one is set. Verified live (correct hrefs on all
-  three, no horizontal overflow on a 375px mobile viewport).
+- **Footer** (`Footer.astro`): added the same icon-only Email/LinkedIn/
+  GitHub links used in the nav (identical `h-7 w-7` treatment,
+  `title`/`aria-label` on each), replacing the old plain text links
+  ("Email"/"LinkedIn"/"GitHub"). Initially shipped with a "Connect"
+  text label next to the icons — removed again shortly after per
+  direct request, once "Connect" moved to being the nav dropdown's
+  trigger label instead (see the Design system section above for the
+  current shape of both). Same `about.email`/`about.social.*`
+  conditionals — the row only renders if at least one is set. Verified
+  live (correct hrefs on all three, no horizontal overflow on a 375px
+  mobile viewport).
 - **Workbench status filter** (`projects/index.astro`) — same pattern
   as blog categories, per direct request to apply it there too:
   `status` in `content.config.ts` is now `z.string().min(1)` instead
