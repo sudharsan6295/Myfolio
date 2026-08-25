@@ -17,6 +17,15 @@ const about = aboutEntry?.data;
 const siteTitle = about?.name ?? "Sudharsan Balaji";
 const pageTitle = title === siteTitle ? title : `${title} · ${siteTitle}`;
 
+// Falls back to Astro.url.origin (the actual request origin) whenever
+// Astro.site isn't set — it's still the https://example.com placeholder
+// (see astro.config.mjs) until this site has a real domain, so absolute
+// URLs built from it would be wrong until then; the origin fallback keeps
+// these at least self-consistent with wherever the page is actually
+// being served in the meantime.
+const ogImagePath = "/og-image.png";
+const ogImageUrl = new URL(ogImagePath, Astro.site ?? Astro.url.origin).toString();
+
 // Person structured data (JSON-LD) — helps search engines associate this
 // site with the actual person, a step toward richer search results
 // (knowledge-panel-style info) over time. Site-wide, not just /about,
@@ -32,6 +41,7 @@ const personSchema = about
       jobTitle: about.role,
       description: about.tagline,
       url: Astro.site ? new URL("/", Astro.site).toString() : undefined,
+      image: about.photo ? ogImageUrl : undefined,
       email: about.email,
       address: about.location ? { "@type": "PostalAddress", addressLocality: about.location } : undefined,
       sameAs: sameAs.length > 0 ? sameAs : undefined,
@@ -64,7 +74,11 @@ const personSchema = about
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImageUrl} />
     <link rel="alternate" type="application/rss+xml" title={`${siteTitle} — Field Notes`} href="/rss.xml" />
     {personSchema && (
       <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
