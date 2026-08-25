@@ -11,10 +11,6 @@ social:
   linkedin: "https://www.linkedin.com/in/sudharsan-balaji-65a06791/"
   github: "https://github.com/sudharsan6295"
 currently: "Pursuing a PGP in AI & Business with Scaler, building toward AI product management and analytics-translator roles between business and technical teams."
-openTo:
-  - "AI Product Manager"
-  - "Business–AI Translator"
-  - "Senior Technical Program Manager"
 focusAreas:
   - "PLM & Enterprise Solution Delivery"
   - "AI Solution Implementation"
@@ -96,12 +92,6 @@ A few things I'm proud of:
 - Directed full 3DExperience upgrades
 - Built custom tools to support migration and data import activities
 - Introduced AI into day-to-day workflows to drive business improvements
-
-Beyond the delivery plans and roadmaps, I'm a husband and a father — blessed
-with a daughter who feels like one in a billion, and these days life moves at
-her pace as much as mine. The rest of my spare time splits between personal
-finance (the unglamorous kind of reading that actually matters) and a home
-aquarium that's taught me more patience than any program ever has.
 
 Curious what this looks like in practice? The [Workbench](/projects) has real
 prototypes, and [Field Notes](/blog) has the writing behind the thinking. If

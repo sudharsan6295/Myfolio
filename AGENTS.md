@@ -254,6 +254,15 @@ background, in the burgundy + brass palette. Tokens live in
   a content pass aimed at making the About page "job ready" — most
   personal sites never say this outright, leaving a hiring manager to
   infer it from the bio.
+- **A personal paragraph (family, hobbies) lives in the homepage hero,
+  not the About bio** — `index.astro`'s hero card, after the "This is
+  where I keep the writing..." site-description paragraph, before the
+  location/years-experience Stamps. It was tried on `/about` first (a
+  natural fit for a "beyond the resume" bio aside) and moved here per
+  direct feedback. Hardcoded prose in `index.astro`, not an `about.md`
+  field — there's no schema field for it, so it doesn't flow through to
+  `/about` or anywhere else automatically; if it needs to change, edit
+  it in `index.astro` directly.
 - **Homepage hero leads with the person, not just the pitch**: was
   `Field Notebook — {about.role}` as the eyebrow (redundant with the
   same info already in the tagline below it, and inconsistent with
