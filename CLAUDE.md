@@ -294,6 +294,21 @@ background, in the burgundy + brass palette. Tokens live in
     exact same browser check before/after. Worth remembering: a schema
     enum change specifically, more than a plain content edit, is a
     good reason to restart the dev server rather than trust HMR here.
+- **`.prose h2`/`h3` top margins tightened** (`global.css`) — `2.6em`
+  → `1.7em` for `h2`, `2em` → `1.5em` for `h3` (bottom margins only
+  trimmed slightly, `0.7em`→`0.6em`/`0.6em`→`0.5em`). Per direct
+  feedback with a screenshot: a post with several short sections (each
+  only a paragraph or two under its heading) had a *lot* of visible
+  blank space before every heading — the em value is relative to the
+  heading's own font-size (`h2` is `1.6rem`), so `2.6em` was really
+  ~67px, not obviously excessive as a bare number but adding up
+  visibly across several section breaks in a row. Measured before and
+  after via each prose child's `getBoundingClientRect()`: gap before
+  every `h2` went from 66px to 44px (~33% less), gap after a heading
+  (to the next paragraph) stayed close to unchanged since only the
+  bottom-margin number moved slightly. Applies everywhere `.prose` is
+  used (blog posts and project write-ups both), not just the post that
+  prompted it.
 - **Detail pages (`blog/[id].astro`, `projects/[id].astro`) are
   `max-w-4xl` (896px), not `max-w-3xl`** — per direct feedback that
   clicking into a post/project from the `max-w-5xl` (1024px) list
