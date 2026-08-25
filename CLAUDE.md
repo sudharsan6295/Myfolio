@@ -294,6 +294,18 @@ background, in the burgundy + brass palette. Tokens live in
     exact same browser check before/after. Worth remembering: a schema
     enum change specifically, more than a plain content edit, is a
     good reason to restart the dev server rather than trust HMR here.
+- **Gotcha, real, hit in the hero paragraph**: a newline immediately
+  after a closing inline tag (`</a>\n          text...`) collapses to
+  *nothing* in Astro's compiled output, not to a single space the way
+  plain text-to-text whitespace does — produced "Workbenchfor" and
+  "Notesfor" glued together with no space, caught via `get_page_text`,
+  not visible in the source. A newline between two plain-text words
+  collapses to a space fine; a newline right after `</a>` (or presumably
+  any closing tag) does not. Fix: keep the word immediately following a
+  closing tag on the *same source line* as that tag (e.g. `</a> for`),
+  and only line-break in the middle of a plain-text run after that.
+  Worth checking `get_page_text` (not just the source) after editing
+  any multi-line paragraph with inline links in it.
 - **`ProjectCard`'s tag row is pinned to the card's bottom, not just
   stacked under the description** — the root `<a>` is `flex flex-col
   h-full` and the `stack` `<ul>` uses `mt-auto pt-4` instead of `mt-4`.
