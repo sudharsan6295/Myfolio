@@ -294,6 +294,30 @@ background, in the burgundy + brass palette. Tokens live in
     exact same browser check before/after. Worth remembering: a schema
     enum change specifically, more than a plain content edit, is a
     good reason to restart the dev server rather than trust HMR here.
+- **About page's "proud of" list and closing CTA moved out of Markdown
+  into structured data + template code**, per direct "redesign this
+  content in a modern way" feedback on that exact block. Two separate
+  changes, both in `about.astro`, right after the `.prose` `<Content
+  />`:
+  - `about.highlights` (new field, `content.config.ts`, plain string
+    array — same 4 sentences that were a `.prose` bullet list) now
+    renders as a `sm:grid-cols-2` card grid, each card a bordered
+    `rounded-xl` tile with a small checkmark SVG (`text-pen`) instead
+    of a plain `—` bullet. Moved out of Markdown specifically so it
+    could get this bespoke treatment without changing `.prose ul`
+    globally (blog posts and project write-ups share that same class).
+  - The closing CTA paragraph ("Curious what this looks like in
+    practice?...") is no longer Markdown at all — it's hardcoded in
+    `about.astro` as its own `bg-pen/[0.06] border-pen/20` callout
+    block, visually separated from the bio prose above it instead of
+    just being the last paragraph in the flow. It doesn't reference
+    `about.name` or anything else instance-specific, same as other
+    hardcoded teaser copy elsewhere in the site (e.g. the homepage's
+    About teaser section), so hardcoding it here is consistent with
+    that existing pattern, not a one-off exception.
+  - **If new "achievement" content is ever added, use `highlights`,
+    not a Markdown bullet list in the bio body** — that's now the
+    established place for it, and it gets real card styling for free.
 - **`.prose h2`/`h3` top margins tightened** (`global.css`) — `2.6em`
   → `1.7em` for `h2`, `2em` → `1.5em` for `h3` (bottom margins only
   trimmed slightly, `0.7em`→`0.6em`/`0.6em`→`0.5em`). Per direct

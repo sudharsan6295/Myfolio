@@ -137,6 +137,10 @@ currently: "One sentence on what you're focused on right now."
 openTo:
   - "Target role title, e.g. AI Product Manager"   # shown as chips at the
                                                      # top of /about's sidebar
+highlights:
+  - "A short achievement sentence, ideally with a real number in it"
+                                                     # shown as a card grid
+                                                     # on /about, below the bio
 focusAreas:
   - "Short tag, e.g. AI Product Strategy"
 tools:
@@ -161,7 +165,7 @@ experience:
       - "Keep these concrete and specific — numbers help."
 ```
 
-`photo`, `social`, `currently`, `openTo`, `focusAreas`, `tools`,
+`photo`, `social`, `currently`, `openTo`, `highlights`, `focusAreas`, `tools`,
 `certifications`, `education`, and `principles` are all optional — each
 section on `/about` (and, for `social`, the nav's Connect panel and the
 footer) only renders if its field is set/non-empty, so you can leave any

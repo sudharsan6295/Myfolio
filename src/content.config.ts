@@ -90,6 +90,12 @@ const about = defineCollection({
       // explicit "here's what I'm looking for" signal on the site — most
       // personal sites bury this inside prose, if they say it at all.
       openTo: z.array(z.string()).default([]),
+      // Short achievement statements — shown as an accented card grid
+      // on the About page (a "few things I'm proud of" list, restyled
+      // out of a plain Markdown bullet list into structured data so it
+      // can get its own modern card treatment instead of sharing
+      // .prose's generic <ul> styling).
+      highlights: z.array(z.string()).default([]),
       // Short tags, e.g. "AI Product Strategy" — shown as chips.
       focusAreas: z.array(z.string()).default([]),
       // Short tags, e.g. "Python" — shown as chips.

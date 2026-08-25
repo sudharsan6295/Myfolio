@@ -11,6 +11,11 @@ social:
   linkedin: "https://www.linkedin.com/in/sudharsan-balaji-65a06791/"
   github: "https://github.com/sudharsan6295"
 currently: "Pursuing a PGP in AI & Business with Scaler, building toward AI product management and analytics-translator roles between business and technical teams."
+highlights:
+  - "Delivered cost/timeline improvements across 5+ enterprise PLM engagements while sustaining 100% project transparency"
+  - "Directed full 3DExperience upgrades"
+  - "Built custom tools to support migration and data import activities"
+  - "Introduced AI into day-to-day workflows to drive business improvements"
 focusAreas:
   - "PLM & Enterprise Solution Delivery"
   - "AI Solution Implementation"
@@ -88,15 +93,4 @@ I'm currently pursuing a PGP in AI & Business with Scaler, and building
 toward AI product management — the kind of role that translates between
 what's technically possible and what a business actually needs, or leads
 that translation from the top.
- 
-A few things I'm proud of:
-- Delivered cost/timeline improvements across 5+ enterprise PLM engagements while sustaining 100% project transparency
-- Directed full 3DExperience upgrades
-- Built custom tools to support migration and data import activities
-- Introduced AI into day-to-day workflows to drive business improvements
-
-Curious what this looks like in practice? The [Workbench](/projects) has real
-prototypes, and [Field Notes](/blog) has the writing behind the thinking. If
-you're evaluating me for a role or just want to talk shop, the fastest way to
-reach me is the email in the panel alongside this.
 

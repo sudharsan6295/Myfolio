@@ -43,6 +43,36 @@ const { Content } = await render(aboutEntry);
         <div class="prose mt-8 max-w-none">
           <Content />
         </div>
+
+        {about.highlights.length > 0 && (
+          <div class="mt-8 pt-7 border-t border-line">
+            <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-4">
+              A few things I'm proud of
+            </p>
+            <div class="grid sm:grid-cols-2 gap-3">
+              {about.highlights.map((item) => (
+                <div class="flex items-start gap-3 rounded-xl border border-line bg-paper/40 p-3.5">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="shrink-0 mt-0.5 text-pen">
+                    <circle cx="8" cy="8" r="7.25" stroke="currentColor" stroke-width="1.1" opacity="0.4" />
+                    <path d="M5 8.2L7.1 10.3L11.2 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <p class="text-sm text-ink leading-snug">{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div class="mt-6 rounded-2xl bg-pen/[0.06] border border-pen/20 p-5 sm:p-6">
+          <p class="text-sm text-ink leading-relaxed">
+            Curious what this looks like in practice? The <a href="/projects" class="text-pen underline decoration-pen/30 hover:decoration-pen underline-offset-4">Workbench</a> has
+            real prototypes, and <a href="/blog" class="text-pen underline decoration-pen/30 hover:decoration-pen underline-offset-4">Field Notes</a> has
+            the writing behind the thinking.
+          </p>
+          <p class="text-sm text-ink-soft leading-relaxed mt-2">
+            If you're evaluating me for a role or just want to talk shop, the fastest way to reach me is the email in the panel alongside this.
+          </p>
+        </div>
       </div>
 
       <aside aria-label="At a glance" class="glass rounded-3xl p-6 flex flex-col gap-6">
