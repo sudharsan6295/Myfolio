@@ -52,8 +52,14 @@ const relatedPosts = allPosts
 <BaseLayout title={title} description={description}>
   <div id="reading-progress" class="fixed top-0 left-0 h-[3px] bg-pen z-[70]" style="width:0%"></div>
   <div class="mx-auto max-w-5xl px-6 pt-10 sm:pt-14 pb-8">
-    <article class="max-w-4xl mx-auto relative">
-    <!-- TOC breaks out into the page margin via absolute positioning
+    <article class="relative">
+    <!-- No max-w-4xl narrowing here — the article fills this container's
+         full width, same as the footer's glass panel below it, so the
+         two visibly line up edge-to-edge, not just share a center point
+         (an earlier version kept the article narrower for reading width,
+         which per direct feedback read as "not aligned" against the
+         footer even though both were centered on the same midpoint).
+         TOC breaks out into the page margin via absolute positioning
          instead of widening this page's own container past max-w-5xl
          (which every other page, and the footer, are built to) — an
          earlier version used a wider max-w-6xl wrapper to make room

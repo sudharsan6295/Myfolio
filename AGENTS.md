@@ -961,6 +961,24 @@ page; TOC correctly hidden; no horizontal overflow. **375px mobile** —
 no horizontal overflow. Confirms the fix holds at every scale, not
 just the one width it was diagnosed at.
 
+**Follow-up, same fix, sent as a screenshot**: sharing a center point
+wasn't actually enough — a `max-w-4xl` article centered inside a
+`max-w-5xl` container has the *same midpoint* as the footer below it
+but visibly different edges (896px vs 976px wide), which reads as
+"not aligned" at a glance regardless of the underlying math being
+correct. Removed `max-w-4xl mx-auto` from `<article>` in both files
+entirely — it now fills its `max-w-5xl` container's full width, same
+as the footer's glass panel, so the two line up edge-to-edge. The TOC
+positioning (`-left-[232px]`, relative to the article) didn't need to
+change — it's an offset from the article's own edge either way, it
+just now starts from a position 40px further left than before (since
+the article itself moved 40px left to fill the wider container).
+Verified live on the personal-portfolio-site project: article and
+footer glass panels now match exactly (145/1121 both, confirmed via
+`===` comparison, not just visual inspection) at 1280px; at 2560px
+the TOC still clears the (now-wider) article with a clean 32px gap,
+no overlap; no horizontal overflow at 375px mobile.
+
 ## Working on this project
 
 - Nav labels (About Me / Notes / Workbench) are defined once in

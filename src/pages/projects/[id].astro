@@ -36,10 +36,12 @@ const linkLabels: Record<string, string> = {
 
 <BaseLayout title={title} description={summary}>
   <div class="mx-auto max-w-5xl px-6 pt-10 sm:pt-14 pb-8">
-    <article class="max-w-4xl mx-auto relative">
-    <!-- Same TOC treatment as blog/[id].astro — see that file's comment
-         for the full reasoning: absolute positioning breaks the TOC out
-         into the page margin instead of widening this page's own
+    <article class="relative">
+    <!-- Same treatment as blog/[id].astro — see that file's comment for
+         the full reasoning: no max-w-4xl narrowing, so this article's
+         glass card lines up edge-to-edge with the footer's, not just a
+         shared center point. TOC breaks out into the page margin via
+         absolute positioning instead of widening this page's own
          container past max-w-5xl (an earlier version did that, and left
          this page's content visibly wider than the nav/footer above and
          below it). top-0 + bottom-0 with no explicit height stretches
