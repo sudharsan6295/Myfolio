@@ -270,10 +270,27 @@ body {
   padding-left: 1.4em;
 }
 .prose ul li::before {
-  content: "—";
+  /* A small chevron-arrow icon, not a plain em-dash — same shape used for
+     the About page's highlights list and experience bullets (see
+     about.astro), kept in sync as one "modern icon" pointer instead of a
+     dash or checkmark. Rendered via mask-image (not a background-image)
+     so it picks up the current text color through background-color,
+     the same way an inline `fill="currentColor"` SVG would, without
+     needing a real SVG element for every list item in arbitrary-length
+     Markdown content. */
+  content: "";
   position: absolute;
   left: 0;
-  color: var(--color-pen-soft);
+  top: 0.5em;
+  width: 0.65em;
+  height: 0.65em;
+  background-color: var(--color-pen-soft);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M3 1.5L7 5L3 8.5' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M3 1.5L7 5L3 8.5' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
 }
 .prose blockquote {
   margin: 2em 0;
