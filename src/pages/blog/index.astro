@@ -19,12 +19,7 @@ function readingMinutesFor(body: string | undefined) {
 const [aboutEntry] = await getCollection("about");
 const about = aboutEntry?.data;
 
-const categories = [
-  "AI",
-  "Business",
-  "AI Product Management",
-  "Professional Peace",
-] as const;
+const categories = ["AI", "Business", "AI Product Management"] as const;
 const categoryCounts = categories.map((c) => ({
   label: c,
   count: allPosts.filter((p) => p.data.category === c).length,
@@ -33,7 +28,7 @@ const categoryCounts = categories.map((c) => ({
 
 <BaseLayout
   title="Blogs"
-  description="Field notes on AI, business, product management, and the professional peace that keeps it all running."
+  description="Field notes on AI, business, and product management."
 >
   <div class="mx-auto max-w-5xl px-6 pt-10 sm:pt-14 pb-8">
     <div class="glass rounded-3xl p-8 sm:p-10 mb-6">
@@ -42,10 +37,8 @@ const categoryCounts = categories.map((c) => ({
         Field Notes
       </h1>
       <p class="mt-4 text-ink-soft leading-relaxed max-w-xl">
-        Writing on AI, business, and product management — plus Professional
-        Peace, the discipline and quiet routines that keep the rest of it
-        running. Mostly the parts that don't survive the trip into a company
-        blog post.
+        Writing on AI, business, and product management — the parts that
+        don't survive the trip into a company blog post.
       </p>
 
       <a

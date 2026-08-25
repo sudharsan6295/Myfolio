@@ -609,6 +609,48 @@ in.
   Verified live: both controls measured exactly 32px tall, same `top`,
   at both mobile and desktop widths.
 
+### "Professional Peace" removed — content, category, and every reference
+
+Per direct request ("I will keep it professional") — this wasn't a bug
+fix, it's a content/scope decision: the site drops the personal-life
+writing lane entirely, staying strictly professional (AI, business,
+product management).
+
+- **Deleted both posts** in that category:
+  `src/content/blog/aquariums-in-home-and-mental-peace.md` and
+  `src/content/blog/health-term-insurance-first.md` (both were also
+  `featured: true`, so they'd been appearing in the homepage's Recent
+  Entries rail — that's automatic from the collection, no separate
+  fix needed once the files were gone).
+- **Removed the category itself** from the `category` enum in
+  `src/content.config.ts` (now just `'AI' | 'Business' | 'AI Product
+  Management'` — a new post using the old value will fail the Zod
+  schema, which is the intended guardrail) and from the `categories`
+  array in `src/pages/blog/index.astro` (drives both the filter
+  buttons and the subscribe-by-category checkboxes, per that file's
+  own comment — one array, two call sites, so removing it there was
+  enough for both).
+- **Copy references** — the blog page's `<BaseLayout description>`
+  and its own intro paragraph both used to mention "the professional
+  peace that keeps it all running" / "plus Professional Peace, the
+  discipline and quiet routines..."; the **homepage's** intro
+  paragraph separately said "posts on work, wealth, and peace" (an
+  allusion to the same two posts' subject matter — insurance/wealth,
+  aquarium/peace — without using the category name itself, so it
+  didn't show up in a literal string search for "Professional Peace"
+  and was easy to miss). All three rewritten to plainly describe the
+  three remaining categories.
+- **`README.md`**'s new-post frontmatter template listed the category
+  as one of four options — trimmed to three, so anyone following the
+  guide next doesn't recreate the fourth by copying the old comment.
+- Verified live: `npm run build` clean at 12 pages (down from 14),
+  blog page shows exactly 3 filter buttons with correct counts (no
+  4th "Professional Peace" pill), RSS feed (`/rss.xml`) contains only
+  the 4 remaining posts, entry numbers (`№001`–`№004`) renumbered
+  cleanly with no gap, and a full-tree grep for "professional peace" /
+  "mental peace" / "work, wealth" across `src/` and `README.md` comes
+  back empty.
+
 ## Working on this project
 
 - Nav labels (About Me / Blogs / Workbench) are defined once in

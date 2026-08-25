@@ -15,12 +15,7 @@ const blog = defineCollection({
       // Keep this list in sync with the categories mentioned in README.md
       // AND the `categories` array in src/pages/blog/index.astro (filter
       // buttons + subscribe-by-category checkboxes both read from there).
-      category: z.enum([
-        'AI',
-        'Business',
-        'AI Product Management',
-        'Professional Peace',
-      ]),
+      category: z.enum(['AI', 'Business', 'AI Product Management']),
       tags: z.array(z.string()).default([]),
       coverImage: image().optional(),
       coverImageAlt: z.string().optional(),
