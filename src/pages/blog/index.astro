@@ -83,7 +83,7 @@ const categoryCounts = [...new Set(allPosts.map((p) => p.data.category))]
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-6 lg:gap-8 items-start">
       <div>
         {allPosts.length > 1 && (
-          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="glass rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2 mb-3">
             <div class="relative flex-1 min-w-[160px] max-w-xs">
               <svg width="13" height="13" viewBox="0 0 16 16" fill="none" class="absolute left-2.5 top-1/2 -translate-y-1/2 text-ink-soft pointer-events-none">
                 <circle cx="7" cy="7" r="5.2" stroke="currentColor" stroke-width="1.3" />
