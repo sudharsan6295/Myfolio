@@ -12,10 +12,13 @@ const blog = defineCollection({
       description: z.string(),
       pubDate: z.coerce.date(),
       updatedDate: z.coerce.date().optional(),
-      // Keep this list in sync with the categories mentioned in README.md
-      // AND the `categories` array in src/pages/blog/index.astro (filter
-      // buttons + subscribe-by-category checkboxes both read from there).
-      category: z.enum(['AI', 'Business', 'AI Product Management']),
+      // Free-form, not a fixed enum — any number of categories, added or
+      // retired just by changing what posts actually use. Nothing else
+      // needs to be kept in sync: the blog page's filter buttons and
+      // subscribe-by-category checkboxes both derive their category list
+      // from the posts themselves (see src/pages/blog/index.astro), not
+      // from a hardcoded list here or in README.md.
+      category: z.string().min(1),
       tags: z.array(z.string()).default([]),
       coverImage: image().optional(),
       coverImageAlt: z.string().optional(),

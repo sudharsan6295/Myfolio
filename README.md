@@ -71,7 +71,11 @@ hyphen-separated filenames.
    title: "Your post title"
    description: "One or two sentences — this shows in the listing and in link previews."
    pubDate: 2026-08-23
-   category: "AI"   # one of: "AI" | "Business" | "AI Product Management"
+   category: "AI"   # any short label — not a fixed list; the blog page's filter
+                     # buttons and subscribe checkboxes are generated automatically
+                     # from whatever categories your posts actually use, most-used
+                     # first. A brand new category just appears the next time you
+                     # build; nothing else to register it in.
    tags: ["optional", "tags", "here"]
    featured: false   # true pins it to the homepage's Recent Entries rail
    draft: false      # true keeps it out of every listing/route until you're ready

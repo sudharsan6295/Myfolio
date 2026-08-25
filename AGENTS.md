@@ -651,6 +651,40 @@ product management).
   "mental peace" / "work, wealth" across `src/` and `README.md` comes
   back empty.
 
+### Blog categories are now open-ended, derived from the posts themselves
+
+Direct follow-up to the removal above: removing "Professional Peace"
+meant hand-editing 4 files to keep a hardcoded category list in sync
+(`content.config.ts`'s enum, `blog/index.astro`'s `categories` array,
+`README.md`'s comment, plus copy text). The user asked for this to
+just work for any number of categories going forward, without that
+manual sync.
+
+- **`content.config.ts`**: `category` is now `z.string().min(1)`
+  instead of `z.enum([...])` — any non-empty string is a valid
+  category. No fixed list to maintain here at all any more.
+- **`src/pages/blog/index.astro`**: the filter buttons (and the
+  subscribe-form's category checkboxes, which read from the same
+  array) are computed from the posts themselves —
+  `[...new Set(allPosts.map(p => p.data.category))]`, counted, sorted
+  most-used first with an alphabetical tie-break. A category with zero
+  posts simply doesn't appear (previously "Business (0)" stayed
+  visible even with nothing in it — arguably a UX improvement as a
+  side effect, not just a refactor).
+- **`README.md`**'s post-authoring template no longer lists specific
+  category names — just explains that any short label works and the
+  site picks it up automatically on the next build.
+- **Verified this is actually dynamic, not just refactored to look
+  dynamic**: added a real temporary post
+  (`_test-dynamic-category.md`) with a brand-new category ("Career
+  Notes") never mentioned anywhere in the codebase, ran `npm run
+  build` (succeeded — proves the schema accepts arbitrary categories,
+  not just the old three), loaded `/blog` live and confirmed a
+  "Career Notes (1)" filter button and subscribe checkbox appeared
+  with zero code changes, clicked it and confirmed it correctly
+  filtered to just that one post, then deleted the test post and
+  rebuilt back to 12 pages clean.
+
 ## Working on this project
 
 - Nav labels (About Me / Blogs / Workbench) are defined once in

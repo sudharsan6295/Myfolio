@@ -19,11 +19,15 @@ function readingMinutesFor(body: string | undefined) {
 const [aboutEntry] = await getCollection("about");
 const about = aboutEntry?.data;
 
-const categories = ["AI", "Business", "AI Product Management"] as const;
-const categoryCounts = categories.map((c) => ({
-  label: c,
-  count: allPosts.filter((p) => p.data.category === c).length,
-}));
+// Categories are open-ended (see content.config.ts) — derived from
+// whatever's actually used across the posts, not a fixed list, so
+// adding/renaming/retiring a category is just a matter of what's in a
+// post's frontmatter. Most-used first (a lone post in a new category
+// shouldn't crowd out the categories people actually read), ties
+// broken alphabetically for a stable, predictable order.
+const categoryCounts = [...new Set(allPosts.map((p) => p.data.category))]
+  .map((label) => ({ label, count: allPosts.filter((p) => p.data.category === label).length }))
+  .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
 ---
 
 <BaseLayout
@@ -177,11 +181,11 @@ const categoryCounts = categories.map((c) => ({
               class="w-full font-mono text-xs text-ink placeholder:text-ink-soft/70 bg-paper/60 border border-line rounded-[3px] px-3 py-2 focus:outline-none focus:border-pen"
             />
             <div class="flex flex-wrap gap-1.5">
-              {categories.map((c) => (
+              {categoryCounts.map(({ label }) => (
                 <label class="category-check-label cursor-pointer">
-                  <input type="checkbox" name="categories" value={c} class="sr-only" />
+                  <input type="checkbox" name="categories" value={label} class="sr-only" />
                   <span class="inline-flex items-center font-mono text-[0.6rem] uppercase tracking-[0.08em] border rounded-[3px] px-2 py-1 border-line text-ink-soft transition-colors">
-                    {c}
+                    {label}
                   </span>
                 </label>
               ))}
