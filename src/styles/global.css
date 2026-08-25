@@ -192,22 +192,6 @@ body {
   box-shadow: 0 1px 2px rgba(43, 33, 31, 0.04), 0 12px 32px -16px rgba(43, 33, 31, 0.16);
 }
 
-/* Floating overlays (popovers/dropdowns that sit *on top of* real page
-   content, not in-flow panels sitting over the empty gradient mesh) need
-   more opacity than the base .glass — at 62% + blur, whatever text is
-   directly underneath (e.g. the Connect dropdown opening over the
-   Dashboard's "Recent entries" list) stays legible enough to visually
-   compete with the popover's own contents. Confirmed with a screenshot
-   showing exactly that. Same blur/border/shadow shape, just a
-   near-opaque background so nothing behind it interferes. */
-.glass-popover {
-  background: color-mix(in srgb, var(--color-paper) 96%, transparent);
-  backdrop-filter: blur(18px) saturate(135%);
-  -webkit-backdrop-filter: blur(18px) saturate(135%);
-  border: 1px solid color-mix(in srgb, white 55%, var(--color-line));
-  box-shadow: 0 4px 8px rgba(43, 33, 31, 0.06), 0 16px 40px -16px rgba(43, 33, 31, 0.22);
-}
-
 /* The sticky top nav is a full-bleed glass bar, not a floating inset
    panel — it used to be inset with padding around it, which left gaps
    (no blur/background) that scrolled content showed through above/around

@@ -105,18 +105,23 @@ background, in the burgundy + brass palette. Tokens live in
   it is still a separate `<a href="/">`, still hidden below the `sm`
   breakpoint (Seal only on narrow screens — with Connect in the nav,
   there isn't room for the full name too).
-- Nav Connect (renamed from "Contact"): a `<details>`/`<summary>`
-  dropdown (no client framework needed) showing email, LinkedIn, and
-  GitHub (whichever of `about.email`/`about.social.*` are set),
-  rendered as a sibling of the page links' `<ul>`, not inside it — an
-  overflow-auto ancestor would clip an absolutely-positioned popover,
-  so Connect has to sit outside any such container. A small inline
-  `<script>` in Nav.astro closes it on outside-click/Escape, since
-  `<details>` has no built-in dismissal. Desktop-only (`hidden
-  sm:flex` wrapper) — the mobile menu has its own separate, plain-link
-  (non-popover) Connect section, see below.
+- **Nav Connect (renamed from "Contact") — no longer a dropdown.**
+  Desktop shows email/LinkedIn/GitHub (whichever of
+  `about.email`/`about.social.*` are set) as plain inline icon-only
+  links directly in the nav bar, same treatment as the theme-toggle
+  button next to them (`h-7 w-7 rounded-[3px]`, hover background) —
+  each has a `title` tooltip and `aria-label` since there's no text
+  label. This replaced a `<details>`/`<summary>` popover after several
+  rounds of fighting its background legibility (translucent let page
+  content underneath show through — a screenshot caught this directly
+  against a "Recent entries" list; opaque worked but visually didn't
+  fit). Icon buttons in the bar sidestep the problem entirely — nothing
+  floats over page content any more, so there's no legibility
+  trade-off left to make. Mobile menu has its own separate, always-
+  inline (never a popover, so never had this problem) Connect section,
+  see below — unchanged by this redesign.
 - **Nav has two structurally separate layouts, not one responsive
-  one** — `hidden sm:flex` (desktop: inline links + Connect dropdown +
+  one** — `hidden sm:flex` (desktop: inline links + Connect icons +
   theme toggle) and `flex sm:hidden` (mobile: just a theme toggle +
   hamburger button), each with duplicate content rather than one
   markup block reflowing. Replaced an earlier mobile approach that
@@ -578,26 +583,20 @@ in.
 
 ### Follow-up fixes, same day — two real bugs the user caught by eye
 
-- **Connect dropdown legibility — went back and forth, now settled on
-  `.glass-popover`.** The popover in `Nav.astro` (Email/LinkedIn/GitHub,
-  opened from the desktop "Connect" link) is a floating `absolute`
-  element that sits over real page content (About's "At a glance" list,
-  the homepage's "Recent entries" list), not the empty gradient mesh
-  every other `.glass` panel sits over — at the ambient `.glass` class's
-  62% opacity, whatever's underneath stays legible enough to visually
-  fight with the popover's own contents. This went through several
-  rounds: `.glass-popover` (96% opacity, same blur/border/shadow shape)
-  was built, reverted twice back to plain `.glass` per direct feedback
-  (once generically, once specifically "connect like in f4f74ca"), then
-  reinstated a third time after a screenshot showed the actual
-  bleed-through against "Recent entries" and the user confirmed they
-  wanted the opaque treatment specifically (not a scrim/backdrop, not a
-  repositioned dropdown — asked and confirmed directly). **Current,
-  settled state: `.glass-popover`, ~96% opaque, applied to this one
-  floating popover only** — every in-flow `.glass` panel elsewhere in
-  the codebase is untouched. If this comes up again, don't re-litigate
-  from scratch — check this note and ask which specific direction
-  before changing it.
+- **Connect dropdown — ultimately replaced, not just re-styled.** Several
+  rounds were spent trying to fix the popover's background legibility
+  (translucent `.glass` let page content show through, e.g. against
+  About's "At a glance" list and the homepage's "Recent entries" list;
+  a `.glass-popover` variant at ~96% opacity was tried, reverted twice
+  back to plain `.glass`, then reinstated once after a screenshot
+  confirmed the actual bleed-through). None of that stuck — the user
+  ultimately said "change the design" outright. Real fix: **the popover
+  is gone.** Desktop Connect is now plain inline icon links in the nav
+  bar itself (see the Design system section above) — there's no
+  floating element left to have an opacity opinion about, and
+  `.glass-popover` was removed from `global.css` again since nothing
+  uses it. If a future request touches Connect again, this is the
+  current shape: icon buttons in the bar, not a popover of any kind.
 - **Blog page's search box and sort dropdown didn't align — fixed.** They
   sat in one `items-center` flex row but relied on each control's own
   padding (`py-1.5` on the search input vs `py-1` on the select) to
