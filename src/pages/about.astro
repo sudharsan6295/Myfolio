@@ -52,8 +52,8 @@ const { Content } = await render(aboutEntry);
             <ul class="flex flex-col gap-2.5">
               {about.highlights.map((item) => (
                 <li class="flex items-start gap-2.5">
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" class="shrink-0 mt-1.5 text-pen">
-                    <path d="M3 1.5L7 5L3 8.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                  <svg width="8" height="8" viewBox="0 0 8 8" fill="none" class="shrink-0 mt-1.5 text-pen">
+                    <rect x="1" y="1" width="6" height="6" rx="1.2" fill="currentColor" transform="rotate(45 4 4)" />
                   </svg>
                   <p class="text-sm text-ink leading-snug">{item}</p>
                 </li>
@@ -207,8 +207,8 @@ const { Content } = await render(aboutEntry);
                   <ul class="space-y-1.5">
                     {role.bullets.map((bullet) => (
                       <li class="flex items-start gap-2 text-sm text-ink leading-relaxed">
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" class="shrink-0 mt-1.5 text-pen-soft">
-                          <path d="M3 1.5L7 5L3 8.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                        <svg width="8" height="8" viewBox="0 0 8 8" fill="none" class="shrink-0 mt-1.5 text-pen-soft">
+                          <rect x="1" y="1" width="6" height="6" rx="1.2" fill="currentColor" transform="rotate(45 4 4)" />
                         </svg>
                         <span>{bullet}</span>
                       </li>
