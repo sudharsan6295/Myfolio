@@ -349,6 +349,11 @@ background, in the burgundy + brass palette. Tokens live in
   the line length into its own readability problem. If asked to widen
   these further, re-measure `.prose p`'s rendered width before just
   bumping the class, for the same reason.
+- **`/about`'s intro-panel/"At a glance" row got the same `items-start`
+  removal** as the homepage hero (see below) — same fix, same
+  reasoning, applied to a third two-column row per direct follow-up
+  feedback. Both columns now match exactly (confirmed 1038px height,
+  identical top/bottom, at 1280px).
 - **Two-column layout alignment fixes, both from a screenshot** — the
   homepage hero row and the `/blog` list+sidebar row had different
   "which column should be taller/lower" answers, so don't copy one
