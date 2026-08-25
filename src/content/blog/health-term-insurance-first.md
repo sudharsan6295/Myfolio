@@ -2,7 +2,7 @@
 title: "Personal Finance: Importance of Health & Term Insurance First"
 description: "Before a single rupee goes into an investment, I make sure health and term insurance are actually in place. It's the least exciting part of a financial plan, and the one that protects everything else."
 pubDate: 2026-08-22
-category: "Personal Finance"
+category: "Professional Peace"
 tags: ["insurance", "financial planning", "risk"]
 featured: true
 ---

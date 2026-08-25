@@ -2,7 +2,7 @@
 title: "Aquariums in Home and Mental Peace"
 description: "A tank of water, some plants, and a few fish sounds like a small thing. It's turned out to be one of the more reliable ways I've found to switch my brain off in the evening."
 pubDate: 2026-08-18
-category: "Aquariums & Fishkeeping"
+category: "Professional Peace"
 tags: ["aquarium", "mental peace", "hobby"]
 featured: true
 ---

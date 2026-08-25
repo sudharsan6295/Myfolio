@@ -71,7 +71,7 @@ hyphen-separated filenames.
    title: "Your post title"
    description: "One or two sentences — this shows in the listing and in link previews."
    pubDate: 2026-08-23
-   category: "AI"   # one of: "AI" | "Business" | "AI Product Management" | "Personal Finance" | "Aquariums & Fishkeeping"
+   category: "AI"   # one of: "AI" | "Business" | "AI Product Management" | "Professional Peace"
    tags: ["optional", "tags", "here"]
    featured: false   # true pins it to the homepage's Recent Entries rail
    draft: false      # true keeps it out of every listing/route until you're ready

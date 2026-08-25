@@ -254,30 +254,46 @@ background, in the burgundy + brass palette. Tokens live in
   a content pass aimed at making the About page "job ready" — most
   personal sites never say this outright, leaving a hiring manager to
   infer it from the bio.
-- **`/about` is professional-only content; personal content lives on
-  the homepage, by explicit design.** A personal paragraph (family,
-  hobbies) was tried on `/about` first — a natural-seeming fit for a
-  "beyond the resume" bio aside — then moved to the homepage hero per
-  direct feedback ("about me is my professional details"). It's now in
-  `index.astro`'s hero card ("Off the clock: ..."), between the tagline
-  and the site-description paragraph. Hardcoded prose there, not an
-  `about.md` field — no schema field for it, so it doesn't flow through
-  to `/about` or anywhere else automatically. **If new About content is
-  ever proposed, ask whether it's professional (belongs in `about.md`)
-  or personal (belongs in `index.astro`'s hero) before adding it** —
-  this split was deliberate, not incidental, and the rest of the site
-  already respects it: `/blog`'s own intro copy is the one other place
-  personal topics (Personal Finance, Aquariums & Fishkeeping) show up,
-  framed there as writing topics, not biography.
-- **Homepage hero eyebrow is "Who I Am"** — history, if it moves again:
-  "Field Notebook" (original) → "The Notebook" (echoed the hero body's
-  "This is *the notebook*, not the portfolio...") → "Professional
-  Notebook" (clashed with the personal "Off the clock: ..." paragraph
-  sitting directly below it in the same card — flagged, not fixed) →
-  current. "Who I Am" was picked specifically because it covers both
-  the professional tagline and the personal paragraph without favoring
-  either, and echoes the H1 right below it ("Hi, I'm {name}.") instead
-  of competing with it.
+- **The whole site is professional-only content now, by explicit,
+  final decision** — reversing the personal-content experiment from a
+  few passes back:
+  - Homepage hero eyebrow history: "Field Notebook" → "The Notebook" →
+    "Professional Notebook" → "Who I Am" → **back to "Professional
+    Notebook"**, final (for now). The "Off the clock: ..." personal
+    paragraph (husband/father/hobbies) that used to sit in the hero
+    is now **removed entirely**, not relocated — there's no personal
+    content anywhere on the site any more, About or otherwise. The
+    hero's site-description paragraph was also reworded to explicitly
+    say "This is *my professional notebook*..." so the eyebrow and the
+    body copy agree with each other again (same reasoning as the
+    "Who I Am" pick, just resolved in the other direction — no
+    personal content left to accommodate, so the eyebrow could just
+    say what it says without contradiction).
+  - **Blog category "Personal Finance" and "Aquariums & Fishkeeping"
+    merged into one: "Professional Peace."** Schema
+    (`content.config.ts`), the `categories` array in
+    `blog/index.astro` (filter buttons + subscribe checkboxes both
+    read from it), and both affected posts' frontmatter
+    (`health-term-insurance-first.md`, `aquariums-in-home-and-mental-
+    peace.md`) all updated together — `category` is a Zod `z.enum`, so
+    a stale value fails the whole build, not just that one post.
+    `/blog`'s own intro copy reworded to stop naming "personal
+    finance"/"aquarium" directly and instead introduce "Professional
+    Peace" as a topic in its own right. The posts' own titles/content
+    still say "Personal Finance" and "aquariums" where that's the
+    literal subject matter — only the *category taxonomy* changed, not
+    the writing itself.
+  - **Real gotcha hit during this pass**: right after the schema
+    enum change, `/blog` briefly showed only 4 of 6 posts and
+    "Professional Peace (0)" — not a code bug, a **stale long-running
+    dev server**. `astro build` resyncs the content store in its own
+    process; the separately-running `astro dev` server (up for a very
+    long uptime across dozens of edits this session) didn't pick up
+    the `z.enum` change on its own. Restarting it (`astro dev
+    stop` + `npm run dev`) fixed it immediately — confirmed via the
+    exact same browser check before/after. Worth remembering: a schema
+    enum change specifically, more than a plain content edit, is a
+    good reason to restart the dev server rather than trust HMR here.
 - **Homepage hero leads with the person, not just the pitch**: was
   `Field Notebook — {about.role}` as the eyebrow (redundant with the
   same info already in the tagline below it, and inconsistent with
