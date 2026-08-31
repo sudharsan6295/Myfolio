@@ -13,8 +13,8 @@ hardcoded into it.
 - **Content:** Markdown files with frontmatter, read via Astro Content
   Collections (`src/content.config.ts`)
 - **Hosting:** Netlify, auto-deploy on push to the connected Git branch
-- **Fonts:** Newsreader (display), Work Sans (body), IBM Plex Mono (dates/tags/
-  status labels)
+- **Fonts:** Space Grotesk (display), IBM Plex Sans (body), IBM Plex Mono
+  (dates/tags/status labels)
 
 ---
 
@@ -26,6 +26,21 @@ npm run dev       # http://localhost:4321
 npm run build     # production build to dist/ — run this before pushing
 npm run preview   # serve the production build locally
 ```
+
+**Note:** the Notes page's subscribe form posts to a Netlify Function
+(`netlify/functions/`), which plain `astro dev` can't run — that fetch
+will fail locally with a real error, which is expected. To actually test
+subscribing/unsubscribing locally, use the Netlify CLI instead:
+
+```bash
+npx netlify dev
+```
+
+That also needs `RESEND_API_KEY` (and optionally `RESEND_FROM_EMAIL`) set
+— either in Netlify's dashboard (Site configuration → Environment
+variables) for the deployed site, or in a local `.env` file for
+`netlify dev`. Without `RESEND_API_KEY`, the scheduled notify function
+just no-ops instead of failing.
 
 ---
 

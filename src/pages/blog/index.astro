@@ -170,12 +170,9 @@ const categoryCounts = [...new Set(allPosts.map((p) => p.data.category))]
           <form
             name="blog-subscribe"
             method="POST"
-            data-netlify="true"
-            netlify-honeypot="bot-field"
             id="subscribe-form"
             class="flex flex-col gap-3"
           >
-            <input type="hidden" name="form-name" value="blog-subscribe" />
             <p class="hidden">
               <label>Don't fill this out: <input name="bot-field" /></label>
             </p>
@@ -313,11 +310,14 @@ const categoryCounts = [...new Set(allPosts.map((p) => p.data.category))]
 
     searchInput?.addEventListener("input", applyVisibility);
 
-    // Netlify Forms: submit via fetch so the page doesn't reload. Only
-    // actually captures anything once this site is deployed to Netlify —
-    // locally (`astro dev`) the POST still resolves OK (so the success
-    // message shows either way) but there's no real Netlify backend behind
-    // it here, so nothing is actually saved until it's live.
+    // Posts to a Netlify Function (netlify/functions/subscribe.mts), which
+    // stores the subscriber in Netlify Blobs — a separate scheduled
+    // function (notify-subscribers.mts) reads that store and actually
+    // emails people when a new post goes up. Only works once deployed to
+    // Netlify and run via `netlify dev` locally; a plain `astro dev`
+    // server has no Netlify Functions runtime, so this fetch will fail
+    // there (the error message below will show, which is correct — there
+    // genuinely is nothing listening locally without `netlify dev`).
     const subscribeForm = document.getElementById("subscribe-form") as HTMLFormElement | null;
     const subscribeSuccess = document.getElementById("subscribe-success");
     const subscribeError = document.getElementById("subscribe-error");
@@ -333,7 +333,7 @@ const categoryCounts = [...new Set(allPosts.map((p) => p.data.category))]
         params.append(key, value as string);
       }
       try {
-        const response = await fetch("/", {
+        const response = await fetch("/.netlify/functions/subscribe", {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: params.toString(),
