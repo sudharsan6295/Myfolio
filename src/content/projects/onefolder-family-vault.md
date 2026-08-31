@@ -4,6 +4,8 @@ summary: "A secure record of a family's bank accounts, loans, insurance, and inv
 status: "prototype"
 startDate: 2026-08-01
 stack: ["Next.js", "TypeScript", "Tailwind CSS", "Supabase (Postgres, Auth, Storage)", "Resend"]
+links:
+  demo: "https://one-folder.vercel.app/"
 featured: true
 order: 1
 ---

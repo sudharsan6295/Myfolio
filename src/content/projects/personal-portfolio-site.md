@@ -4,6 +4,8 @@ summary: "This site — a professional site for portfolio, Notes and Workbench -
 status: "prototype"
 startDate: 2026-08-23
 stack: ["Astro", "TypeScript", "Tailwind CSS", "Netlify Forms", "Resend"]
+links:
+  demo: "https://sudharsanbalaji.netlify.app"
 featured: true
 order: 3
 ---

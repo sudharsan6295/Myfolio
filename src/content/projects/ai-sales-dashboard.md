@@ -4,6 +4,8 @@ summary: "A prototype dashboard where AI agents do the first pass on sales pipel
 status: "prototype"
 startDate: 2026-08-01
 stack: ["AI Agents", "LLM APIs"]
+links:
+  demo: "https://field-brief-beta.vercel.app/"
 featured: false
 order: 2
 ---

@@ -4,6 +4,8 @@ summary: "A retrieval-grounded assistant for ENOVIA/3DEXPERIENCE developers that
 status: "prototype"
 startDate: 2026-08-30
 stack: ["Python", "Streamlit", "Gemini API", "RAG", "ChromaDB", "BM25"]
+links:
+  demo: "https://mql-assistance.streamlit.app/"
 featured: false
 order: 4
 ---
