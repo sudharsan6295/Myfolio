@@ -4,8 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  // Update this once the site has a real domain — used for canonical URLs / RSS.
-  site: 'https://example.com',
+  site: 'https://sudharsanbalaji.netlify.app',
   vite: {
     plugins: [tailwindcss()],
   },
