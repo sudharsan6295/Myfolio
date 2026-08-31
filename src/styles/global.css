@@ -1,90 +1,76 @@
-@import url("https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------------
+ * Design system: "The Spec" — visual language borrowed from the artifact an
+ * AI Product Manager actually produces day to day: a spec doc / release
+ * note. Doc-header fields, status chips, section numbering, and a margin
+ * "redline rail" replace the site's earlier glass/field-notebook identity.
+ * Flat surfaces on a cool porcelain paper, not frosted glass on a gradient
+ * mesh — depth comes from hairline borders and a colored top edge on cards,
+ * not blur.
+ *
  * Fonts
- * Newsreader — display serif, set non-italic at heading sizes; italic is
- *              reserved for the small nav wordmark and blockquotes. Replaced
- *              Fraunces (its "j" glyph rendered with a broken/boxed
- *              descender on this variable-font axis in testing) — Newsreader
- *              is a similar warm editorial serif without that issue.
- * Work Sans  — body copy. Humanist, warm, reads comfortably at length.
- * IBM Plex Mono — utility face: dates, tags, status stamps, entry numbers.
+ * Space Grotesk — display. Geometric, technical, used at heading sizes only.
+ * IBM Plex Sans  — body copy. Clean and legible at length, pairs with the
+ *                  mono face without competing for the same "technical"
+ *                  register the way a default humanist sans would.
+ * IBM Plex Mono  — utility face: doc-header fields, dates, status chips,
+ *                  section numbers. Carried over from the previous system
+ *                  since it suits this concept even better than the last.
  * ------------------------------------------------------------------------ */
 @theme {
-  /* Palette carried over from the "Letterpress & Seal" hybrid review —
-     burgundy ink + brass highlight. The page background below is the
-     Glassmorphic Studio concept's gradient mesh, warmed to match this
-     palette (peach/blush/cream instead of that concept's peach/sky). */
-  --color-paper: #f8ecdd;
-  --color-paper-raised: #f2e2cc;
-  --color-ink: #2b211f;
-  --color-ink-soft: #7a655f;
-  --color-pen: #5b1a22;
-  --color-pen-soft: #8a3b45;
-  /* Deepened from the original #b9975b — that read at only 2.2–2.4:1
-     against paper/paper-raised (fails WCAG AA even for large text),
-     measured while auditing text-highlight usage (About page's
-     certifications chips). This darker antique-brass clears 4.5:1+ on
-     both surfaces while staying in the same warm-brass family. Dark
-     mode's highlight was already fine (7.5–8.4:1) and is untouched. */
-  --color-highlight: #7d6230;
-  --color-line: #e4d2c0;
+  --color-paper: #f2f4f5;
+  --color-paper-raised: #e7ebec;
+  --color-ink: #191d1f;
+  --color-ink-soft: #5c666b;
+  /* "pen" = the redline accent: links, active states, the "live" status.
+     #b93a14 measured at 5.17:1 against paper/paper-raised (WCAG AA). */
+  --color-pen: #b93a14;
+  --color-pen-soft: #d3572a;
+  /* "highlight" = amber, the "prototype/draft" status tone.
+     #8a6200 measured at 4.97:1 against paper/paper-raised (WCAG AA). */
+  --color-highlight: #8a6200;
+  --color-line: #d7dcde;
 
-  /* Gradient-mesh background stops (Glassmorphic Studio). */
-  --color-mesh-a: #fce1ce; /* peach */
-  --color-mesh-b: #f1dce6; /* blush */
-  --color-mesh-c: #f7ecd8; /* warm cream */
-
-  --font-display: "Newsreader", ui-serif, Georgia, serif;
-  --font-body: "Work Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
 }
 
 /* ---------------------------------------------------------------------------
  * Dark mode — same token set, redefined. Every color on the page comes from
- * these CSS custom properties (Tailwind's generated utilities read them at
- * paint time, e.g. `bg-paper` is literally `background: var(--color-paper)`),
- * so redefining them here is enough to retheme the whole site — no `dark:`
- * utility variants needed anywhere in the markup.
+ * these CSS custom properties (Tailwind utilities read them at paint time,
+ * e.g. `bg-paper` is literally `background: var(--color-paper)`), so
+ * redefining them here retheme the whole site — no `dark:` variants needed
+ * anywhere in the markup.
  *
- * Three states, not two: an explicit choice sets data-theme="dark" or
- * "light" on <html> (via the toggle in Nav.astro, persisted to
- * localStorage and applied pre-paint in BaseLayout.astro to avoid a flash);
- * with no explicit choice, the un-stamped default follows the OS via
- * prefers-color-scheme. :root:not([data-theme="light"]) below means "system
- * says dark, and the user hasn't explicitly overridden to light" — an
- * explicit light choice always wins over the OS setting.
+ * Three states: an explicit choice sets data-theme="dark"/"light" on <html>
+ * (Nav.astro's toggle, persisted to localStorage, applied pre-paint in
+ * BaseLayout.astro to avoid a flash); with no explicit choice, the
+ * un-stamped default follows the OS via prefers-color-scheme.
  * ------------------------------------------------------------------------ */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --color-paper: #241c1a;
-    --color-paper-raised: #2f2523;
-    --color-ink: #f3e9e2;
-    --color-ink-soft: #b3a099;
-    --color-pen: #e0839a;
-    --color-pen-soft: #c98c9b;
-    --color-highlight: #d9b273;
-    --color-line: #4a3b37;
-
-    --color-mesh-a: #2b1a1d;
-    --color-mesh-b: #221826;
-    --color-mesh-c: #1c1614;
+    --color-paper: #15181a;
+    --color-paper-raised: #1d2124;
+    --color-ink: #eceeef;
+    --color-ink-soft: #97a1a5;
+    --color-pen: #ff7a4d;
+    --color-pen-soft: #ff9970;
+    --color-highlight: #e8b04a;
+    --color-line: #2b3134;
   }
 }
 :root[data-theme="dark"] {
-  --color-paper: #241c1a;
-  --color-paper-raised: #2f2523;
-  --color-ink: #f3e9e2;
-  --color-ink-soft: #b3a099;
-  --color-pen: #e0839a;
-  --color-pen-soft: #c98c9b;
-  --color-highlight: #d9b273;
-  --color-line: #4a3b37;
-
-  --color-mesh-a: #2b1a1d;
-  --color-mesh-b: #221826;
-  --color-mesh-c: #1c1614;
+  --color-paper: #15181a;
+  --color-paper-raised: #1d2124;
+  --color-ink: #eceeef;
+  --color-ink-soft: #97a1a5;
+  --color-pen: #ff7a4d;
+  --color-pen-soft: #ff9970;
+  --color-highlight: #e8b04a;
+  --color-line: #2b3134;
 }
 
 /* Theme-toggle icon: show whichever icon represents where a click takes
@@ -118,21 +104,21 @@
 }
 
 html {
-  background: var(--color-paper); /* fallback if the gradient can't paint */
+  background: var(--color-paper);
   color: var(--color-ink);
   scroll-behavior: smooth;
 }
 
-/* Glassmorphic Studio background — a fixed, soft gradient mesh behind the
-   whole page. Surfaces above it (nav's bg-paper/90 backdrop-blur, cards'
-   semi-transparent bg-paper-raised/50, etc.) read as glass over this. */
+/* Flat paper background with a faint dot grid — a restrained nod to graph
+   paper / spec-sheet vellum, not a decorative flourish. ~4% opacity so it
+   reads as texture, not pattern, in both themes (the dot color rides on
+   --color-line, which already flips per theme). */
 body {
   font-family: var(--font-body);
-  background:
-    radial-gradient(ellipse 70% 55% at 12% 8%, var(--color-mesh-c), transparent 60%),
-    radial-gradient(ellipse 65% 60% at 88% 18%, var(--color-mesh-b), transparent 60%),
-    linear-gradient(165deg, var(--color-mesh-a), var(--color-mesh-b) 55%, var(--color-mesh-c));
-  background-attachment: fixed;
+  background-color: var(--color-paper);
+  background-image: radial-gradient(var(--color-line) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: -4px -4px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -157,8 +143,7 @@ body {
 }
 
 /* Skip-to-content link — first focusable element in BaseLayout, off-screen
-   until a keyboard user tabs to it. Lets someone skip the nav (and, on
-   pages with one, the Connect dropdown) straight to <main id="main-content">. */
+   until a keyboard user tabs to it. */
 .skip-link {
   position: fixed;
   top: -100px;
@@ -179,27 +164,41 @@ body {
 }
 
 /* ---------------------------------------------------------------------------
- * Glass panel — full Glassmorphic Studio layout: every surface (nav,
- * footer, hero, section wrappers, cards) is a frosted panel floating over
- * the gradient mesh, not a flat/bordered block. Depth comes from blur, not
- * a heavy shadow doing all the work alone.
+ * Panel — the standard flat surface: a hairline border, a dense fill, a
+ * small precise radius (never the soft 24px "blob" corners of the old
+ * glass system), and a shadow just barely present. Depth comes from the
+ * border and the surface tone shift against the dot-grid paper, not blur.
  * ------------------------------------------------------------------------ */
-.glass {
-  background: color-mix(in srgb, var(--color-paper) 62%, transparent);
-  backdrop-filter: blur(18px) saturate(135%);
-  -webkit-backdrop-filter: blur(18px) saturate(135%);
-  border: 1px solid color-mix(in srgb, white 55%, var(--color-line));
-  box-shadow: 0 1px 2px rgba(43, 33, 31, 0.04), 0 12px 32px -16px rgba(43, 33, 31, 0.16);
+.panel {
+  background: var(--color-paper-raised);
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(20, 22, 23, 0.05);
 }
 
-/* The sticky top nav is a full-bleed glass bar, not a floating inset
-   panel — it used to be inset with padding around it, which left gaps
-   (no blur/background) that scrolled content showed through above/around
-   the bar. Edge-to-edge with only a bottom edge fixes that. */
-.nav-glass {
-  border-radius: 0;
-  border-width: 0 0 1px;
-  box-shadow: 0 1px 2px rgba(43, 33, 31, 0.04), 0 16px 28px -20px rgba(43, 33, 31, 0.14);
+/* The sticky top nav is a flat, full-bleed bar — opaque so scrolled content
+   never shows through, a bottom hairline instead of a border all around. */
+.nav-bar {
+  background: var(--color-paper);
+  border-bottom: 1px solid var(--color-line);
+}
+
+/* A card's colored top edge — the "flagged document" cue that carries
+   status/category meaning (see PostCard.astro / ProjectCard.astro), driven
+   by an inline custom property (`--edge`) set per instance rather than a
+   fixed set of modifier classes, since status/category values are open-
+   ended (content.config.ts) with no fixed list to key classes off of. */
+.card-edge {
+  border-top: 3px solid var(--edge, var(--color-line));
+}
+
+/* Doc-rail — the signature margin device: a vertical rule that the table-
+   of-contents nav's own per-heading tick marks (each .toc-link's left
+   border, toggled active by the scroll-spy script) sit against. Reads as
+   a reviewer's margin annotation strip — the artifact a spec doc actually
+   accumulates as it's iterated on — not a decoration. */
+.doc-rail {
+  border-left: 2px solid var(--color-line);
 }
 
 /* Long-form article typography, applied via .prose on rendered Markdown. */
@@ -213,33 +212,30 @@ body {
   margin-bottom: 0;
 }
 
-/* Opt-in drop cap — used on blog post bodies only (blog/[id].astro adds
-   the modifier class), not the About bio or project write-ups, since an
-   oversized first letter reads odd on shorter text. A float-based drop
-   cap, not CSS `initial-letter` (still inconsistently supported), for the
-   same "don't rely on a bleeding-edge property alone" reasoning already
-   applied elsewhere in this file. */
+/* Opt-in drop cap — blog post bodies only (blog/[id].astro adds the
+   modifier class), not the About bio or project write-ups. */
 .prose--dropcap > p:first-of-type::first-letter {
   font-family: var(--font-display);
-  font-size: 3.6em;
-  font-weight: 600;
+  font-size: 3.4em;
+  font-weight: 700;
   float: left;
-  line-height: 0.82;
+  line-height: 0.86;
   margin: 0.03em 0.1em 0 0;
   color: var(--color-pen);
 }
 .prose h2 {
   font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 1.6rem;
+  font-weight: 600;
+  font-size: 1.5rem;
   margin-top: 1.7em;
   margin-bottom: 0.6em;
   color: var(--color-ink);
+  letter-spacing: -0.005em;
 }
 .prose h3 {
   font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 1.25rem;
+  font-weight: 600;
+  font-size: 1.15rem;
   margin-top: 1.5em;
   margin-bottom: 0.5em;
 }
@@ -270,26 +266,20 @@ body {
   padding-left: 1.4em;
 }
 .prose ul li::before {
-  /* A small diamond icon, not a plain em-dash — same shape used for the
-     About page's highlights list and experience bullets (see
-     about.astro), kept in sync as one "modern icon" pointer instead of a
-     dash or checkmark. Echoes the site's Seal/wax-stamp ornamental style
-     more than a generic round bullet would. Rendered via mask-image (not
-     a background-image) so it picks up the current text color through
-     background-color, the same way an inline `fill="currentColor"` SVG
-     would, without needing a real SVG element for every list item in
-     arbitrary-length Markdown content. */
+  /* A small square marker (not a circular bullet) — consistent with the
+     site-wide "no circular edges" rule, rendered via mask-image so it
+     picks up the current text color through background-color. */
   content: "";
   position: absolute;
   left: 0;
-  top: 0.55em;
-  width: 0.55em;
-  height: 0.55em;
+  top: 0.6em;
+  width: 0.5em;
+  height: 0.5em;
   background-color: var(--color-pen-soft);
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect x='1' y='1' width='6' height='6' rx='1.2' fill='black' transform='rotate(45 4 4)'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' rx='1.2' fill='black'/%3E%3C/svg%3E");
   mask-repeat: no-repeat;
   mask-size: contain;
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect x='1' y='1' width='6' height='6' rx='1.2' fill='black' transform='rotate(45 4 4)'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' rx='1.2' fill='black'/%3E%3C/svg%3E");
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-size: contain;
 }
@@ -297,16 +287,17 @@ body {
   margin: 2em 0;
   padding: 0.2em 0 0.2em 1.3em;
   border-left: 2px solid var(--color-highlight);
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-style: italic;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: var(--color-ink-soft);
 }
 .prose code {
   font-family: var(--font-mono);
   font-size: 0.85em;
-  background: var(--color-paper-raised);
-  padding: 0.15em 0.4em;
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  padding: 0.1em 0.4em;
   border-radius: 3px;
 }
 .prose pre {
@@ -314,11 +305,13 @@ body {
   padding: 1.1em 1.2em;
   border-radius: 6px;
   border: 1px solid var(--color-line);
+  background: var(--color-paper);
   overflow-x: auto;
   font-size: 0.85em;
 }
 .prose pre code {
   background: none;
+  border: none;
   padding: 0;
 }
 .prose table {
@@ -338,11 +331,12 @@ body {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  background: var(--color-paper-raised);
+  background: var(--color-paper);
 }
 .prose img {
   border-radius: 6px;
   margin-top: 1.6em;
+  border: 1px solid var(--color-line);
 }
 .prose hr {
   border: none;

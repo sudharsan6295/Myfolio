@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Stamp from "../../components/Stamp.astro";
+import StatusChip from "../../components/StatusChip.astro";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
@@ -54,7 +54,7 @@ const relatedPosts = allPosts
   <div class="mx-auto max-w-5xl px-6 pt-10 sm:pt-14 pb-8">
     <article class="relative">
     <!-- No max-w-4xl narrowing here — the article fills this container's
-         full width, same as the footer's glass panel below it, so the
+         full width, same as the footer's panel below it, so the
          two visibly line up edge-to-edge, not just share a center point
          (an earlier version kept the article narrower for reading width,
          which per direct feedback read as "not aligned" against the
@@ -75,7 +75,7 @@ const relatedPosts = allPosts
       <nav aria-label="Table of contents" class="hidden 2xl:block absolute top-0 bottom-0 -left-[232px] w-[200px]">
         <div class="sticky top-24">
           <p class="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-ink-soft mb-3">On this page</p>
-          <ul id="toc-list" class="space-y-1 border-l border-line">
+          <ul id="toc-list" class="space-y-1 doc-rail">
             {tocHeadings.map((h) => (
               <li>
                 <a
@@ -99,16 +99,16 @@ const relatedPosts = allPosts
       ← All entries
     </a>
 
-    <div class="glass rounded-3xl p-8 sm:p-12">
+    <div class="panel p-8 sm:p-12">
       <div class="flex items-center gap-3 mb-5">
-        <Stamp label={category} tone="pen" />
+        <StatusChip label={category} tone="pen" />
         <span class="font-mono text-xs text-ink-soft">
           {formattedDate} · {readingMinutes} min read
           {updatedDate && ` · updated ${updatedDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`}
         </span>
       </div>
 
-      <h1 class="font-display font-normal text-3xl sm:text-[2.5rem] leading-[1.15] tracking-[-0.01em] text-ink text-balance">
+      <h1 class="font-display font-semibold text-3xl sm:text-[2.5rem] leading-[1.15] tracking-[-0.01em] text-ink text-balance">
         {title}
       </h1>
       <p class="mt-4 text-lg text-ink-soft leading-relaxed">{description}</p>
@@ -117,7 +117,7 @@ const relatedPosts = allPosts
         <img
           src={coverImage.src}
           alt={coverImageAlt ?? ""}
-          class="mt-8 w-full rounded-2xl border border-line"
+          class="mt-8 w-full rounded-md border border-line"
         />
       )}
 
@@ -143,10 +143,10 @@ const relatedPosts = allPosts
           {relatedPosts.map((p) => (
             <a
               href={`/blog/${p.id}`}
-              class="group glass block rounded-2xl p-5 hover:bg-paper/75 transition-colors"
+              class="group panel block p-5 hover:border-pen/50 transition-colors"
             >
-              <Stamp label={p.data.category} tone="pen" class="mb-2" />
-              <p class="font-display text-base text-ink group-hover:text-pen transition-colors leading-snug">
+              <StatusChip label={p.data.category} tone="pen" class="mb-2" />
+              <p class="font-display font-medium text-base text-ink group-hover:text-pen transition-colors leading-snug">
                 {p.data.title}
               </p>
               <p class="mt-1.5 text-xs text-ink-soft leading-relaxed line-clamp-2">{p.data.description}</p>

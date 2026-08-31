@@ -35,14 +35,15 @@ const categoryCounts = [...new Set(allPosts.map((p) => p.data.category))]
   description="Field notes on AI, business, and product management."
 >
   <div class="mx-auto max-w-5xl px-6 pt-10 sm:pt-14 pb-8">
-    <div class="glass rounded-3xl p-8 sm:p-10 mb-6">
+    <div class="panel p-8 sm:p-10 mb-6">
       <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-4">Notes</p>
-      <h1 class="font-display font-normal text-4xl sm:text-[3.25rem] leading-[1.1] tracking-[-0.01em] text-ink text-balance">
+      <h1 class="font-display font-semibold text-4xl sm:text-[3.25rem] leading-[1.1] tracking-[-0.01em] text-ink text-balance">
         Field Notes
       </h1>
       <p class="mt-4 text-ink-soft leading-relaxed max-w-xl">
-        Writing on AI, business, and product management — the parts that
-        don't survive the trip into a company blog post.
+        I write about AI, business, and product management — the stuff I
+        actually work with day to day. Short, useful reads on things I think
+        matter.
       </p>
 
       <a
@@ -63,7 +64,7 @@ const categoryCounts = [...new Set(allPosts.map((p) => p.data.category))]
           type="button"
           data-filter="all"
           aria-pressed="true"
-          class="filter-btn inline-flex items-center font-mono text-[0.65rem] uppercase tracking-[0.14em] border rounded-[3px] px-2 py-1 -rotate-2 transition-colors border-pen/50 text-pen"
+          class="filter-btn inline-flex items-center font-mono text-[0.65rem] uppercase tracking-[0.14em] border rounded-[3px] px-2 py-1 transition-colors border-pen/50 text-pen"
         >
           All ({allPosts.length})
         </button>
@@ -72,7 +73,7 @@ const categoryCounts = [...new Set(allPosts.map((p) => p.data.category))]
             type="button"
             data-filter={label}
             aria-pressed="false"
-            class="filter-btn inline-flex items-center font-mono text-[0.65rem] uppercase tracking-[0.14em] border rounded-[3px] px-2 py-1 -rotate-2 transition-colors border-ink/40 text-ink opacity-60 hover:opacity-100"
+            class="filter-btn inline-flex items-center font-mono text-[0.65rem] uppercase tracking-[0.14em] border rounded-[3px] px-2 py-1 transition-colors border-ink/40 text-ink opacity-60 hover:opacity-100"
           >
             {label} ({count})
           </button>
@@ -86,7 +87,7 @@ const categoryCounts = [...new Set(allPosts.map((p) => p.data.category))]
              post list) rather than the full hero-panel width — per
              direct request, reverting the earlier full-width version. -->
         {allPosts.length > 1 && (
-          <div class="glass rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2 mb-6">
+          <div class="panel p-3 flex flex-wrap items-center justify-between gap-2 mb-6">
             <div class="relative flex-1 min-w-[160px] max-w-xs ml-2">
               <svg width="13" height="13" viewBox="0 0 16 16" fill="none" class="absolute left-2.5 top-1/2 -translate-y-1/2 text-ink-soft pointer-events-none">
                 <circle cx="7" cy="7" r="5.2" stroke="currentColor" stroke-width="1.3" />
@@ -145,11 +146,11 @@ const categoryCounts = [...new Set(allPosts.map((p) => p.data.category))]
       </div>
 
       <div class="flex flex-col gap-6 lg:sticky lg:top-24 self-start">
-        <aside aria-label="About the author" class="glass rounded-3xl p-6">
+        <aside aria-label="About the author" class="panel p-6">
           <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-3 border-b border-line pb-2">
             Written by
           </p>
-          <p class="font-display text-lg text-ink">{about?.name ?? "Sudharsan Balaji"}</p>
+          <p class="font-display font-medium text-lg text-ink">{about?.name ?? "Sudharsan Balaji"}</p>
           <p class="text-sm text-ink-soft leading-relaxed mt-2">{about?.tagline}</p>
           <a
             href="/about"
@@ -159,7 +160,7 @@ const categoryCounts = [...new Set(allPosts.map((p) => p.data.category))]
           </a>
         </aside>
 
-        <aside aria-label="Subscribe" class="glass rounded-3xl p-6">
+        <aside aria-label="Subscribe" class="panel p-6">
           <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-3 border-b border-line pb-2">
             Get new posts by email
           </p>

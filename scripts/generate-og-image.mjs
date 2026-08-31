@@ -2,6 +2,11 @@
 // Not a standing build step — re-run manually if the brand/name changes
 // meaningfully. Uses `sharp` (already a project dependency via astro:assets)
 // to rasterize, since sharp/libvips can render SVG directly to PNG.
+//
+// Matches the site's "spec doc" visual identity (see src/styles/global.css):
+// flat porcelain paper, a dot-grid texture, a doc-header field block, and
+// the bracketed [SB] mark — replacing the earlier glass/gradient-mesh/wax-
+// seal card.
 import sharp from "sharp";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -26,58 +31,40 @@ function esc(s) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+// Dot-grid texture as a tiled pattern — same 28px spacing as the live
+// site's body background, at a similarly faint opacity.
 const svg = `
 <svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <radialGradient id="meshA" cx="12%" cy="10%" r="65%">
-      <stop offset="0%" stop-color="#f7ecd8" />
-      <stop offset="100%" stop-color="#f7ecd8" stop-opacity="0" />
-    </radialGradient>
-    <radialGradient id="meshB" cx="90%" cy="18%" r="60%">
-      <stop offset="0%" stop-color="#f1dce6" />
-      <stop offset="100%" stop-color="#f1dce6" stop-opacity="0" />
-    </radialGradient>
-    <linearGradient id="base" x1="0%" y1="0%" x2="70%" y2="100%">
-      <stop offset="0%" stop-color="#fce1ce" />
-      <stop offset="55%" stop-color="#f1dce6" />
-      <stop offset="100%" stop-color="#f7ecd8" />
-    </linearGradient>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#d7dcde" />
+    </pattern>
   </defs>
 
-  <rect width="1200" height="630" fill="url(#base)" />
-  <rect width="1200" height="630" fill="url(#meshA)" />
-  <rect width="1200" height="630" fill="url(#meshB)" />
+  <rect width="1200" height="630" fill="#f2f4f5" />
+  <rect width="1200" height="630" fill="url(#dots)" />
 
-  <!-- faint notebook rule lines, right side, tactile brand detail -->
-  <g stroke="#e4d2c0" stroke-width="1.5" opacity="0.55">
-    <line x1="860" y1="90" x2="1140" y2="90" />
-    <line x1="860" y1="150" x2="1140" y2="150" />
-    <line x1="860" y1="210" x2="1140" y2="210" />
-    <line x1="860" y1="270" x2="1140" y2="270" />
-    <line x1="860" y1="330" x2="1140" y2="330" />
-    <line x1="860" y1="390" x2="1140" y2="390" />
-    <line x1="860" y1="450" x2="1140" y2="450" />
-    <line x1="860" y1="510" x2="1140" y2="510" />
+  <!-- doc-header field block -->
+  <g font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="18" letter-spacing="1.5">
+    <text x="96" y="98" fill="#5c666b">DOCUMENT</text>
+    <text x="270" y="98" fill="#191d1f">PROFESSIONAL NOTEBOOK</text>
+    <text x="96" y="128" fill="#5c666b">OWNER</text>
+    <text x="270" y="128" fill="#191d1f">${esc(name).toUpperCase()}</text>
+    <text x="96" y="158" fill="#5c666b">STATUS</text>
+    <circle cx="278" cy="153" r="4" fill="#b93a14" />
+    <text x="292" y="158" fill="#b93a14">ACTIVELY SHIPPING</text>
   </g>
+  <line x1="96" y1="180" x2="1104" y2="180" stroke="#d7dcde" stroke-width="1.5" />
 
-  <!-- seal monogram -->
-  <g transform="translate(96,84)">
-    <circle cx="40" cy="40" r="37" stroke="#5b1a22" stroke-width="2.4" opacity="0.85" fill="none" />
-    <circle cx="40" cy="40" r="30" stroke="#5b1a22" stroke-width="1.2" opacity="0.5" fill="none" />
-    <line x1="76.5" y1="40" x2="80.5" y2="40" stroke="#5b1a22" stroke-width="2" opacity="0.7" />
-    <line x1="40" y1="76.5" x2="40" y2="80.5" stroke="#5b1a22" stroke-width="2" opacity="0.7" />
-    <line x1="3.5" y1="40" x2="-0.5" y2="40" stroke="#5b1a22" stroke-width="2" opacity="0.7" />
-    <line x1="40" y1="3.5" x2="40" y2="-0.5" stroke="#5b1a22" stroke-width="2" opacity="0.7" />
-    <text x="40" y="52" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-weight="600" font-size="26" fill="#5b1a22">SB</text>
-  </g>
+  <!-- [SB] mark -->
+  <rect x="96" y="216" width="64" height="64" rx="6" fill="none" stroke="#b93a14" stroke-width="2.5" />
+  <text x="128" y="258" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-weight="600" font-size="22" fill="#b93a14">SB</text>
 
-  <text x="96" y="280" font-family="Georgia, serif" font-size="30" fill="#5b1a22" letter-spacing="2" font-weight="600">PROFESSIONAL NOTEBOOK</text>
+  <text x="96" y="340" font-family="'Space Grotesk', 'Arial', sans-serif" font-size="60" font-weight="700" fill="#191d1f">${esc(name)}</text>
 
-  <text x="96" y="360" font-family="Georgia, 'Times New Roman', serif" font-size="66" fill="#2b211f" font-weight="500">${esc(name)}</text>
+  <text x="96" y="384" font-family="'IBM Plex Sans', Arial, sans-serif" font-size="27" fill="#5c666b">${esc(roleShort)}</text>
 
-  <text x="96" y="410" font-family="Georgia, serif" font-size="30" fill="#7a655f">${esc(roleShort)}</text>
-
-  <text x="96" y="540" font-family="Courier New, monospace" font-size="22" fill="#7a655f" letter-spacing="1">${esc(location)}</text>
+  <text x="96" y="540" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="20" fill="#5c666b" letter-spacing="1">${esc(location)}</text>
 </svg>
 `;
 

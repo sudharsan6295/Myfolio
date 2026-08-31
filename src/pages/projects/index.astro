@@ -29,14 +29,14 @@ const statusCounts = [...new Set(projects.map((p) => p.data.status))]
   description="MVPs and prototypes built outside the day job — some live, some archived, all documented for what they actually taught me."
 >
   <div class="mx-auto max-w-5xl px-6 pt-10 sm:pt-14 pb-8">
-    <div class="glass rounded-3xl p-8 sm:p-10 mb-6">
+    <div class="panel p-8 sm:p-10 mb-6">
       <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-4">Projects &amp; Prototypes</p>
-      <h1 class="font-display font-normal text-4xl sm:text-[3.25rem] leading-[1.1] tracking-[-0.01em] text-ink text-balance">
+      <h1 class="font-display font-semibold text-4xl sm:text-[3.25rem] leading-[1.1] tracking-[-0.01em] text-ink text-balance">
         The Workbench
       </h1>
       <p class="mt-4 text-ink-soft leading-relaxed max-w-xl">
-        Side projects, MVPs, and prototypes — built to test an idea, not to hit a
-        roadmap. Each one notes what shipped, what didn't, and why.
+        Side projects and prototypes. Built to test ideas — sometimes for
+        work, sometimes just for me.
       </p>
       {github && (
         <a
@@ -55,7 +55,7 @@ const statusCounts = [...new Set(projects.map((p) => p.data.status))]
             type="button"
             data-filter="all"
             aria-pressed="true"
-            class="filter-btn inline-flex items-center font-mono text-[0.65rem] uppercase tracking-[0.14em] border rounded-[3px] px-2 py-1 -rotate-2 transition-colors border-pen/50 text-pen"
+            class="filter-btn inline-flex items-center font-mono text-[0.65rem] uppercase tracking-[0.14em] border rounded-[3px] px-2 py-1 transition-colors border-pen/50 text-pen"
           >
             All ({projects.length})
           </button>
@@ -64,7 +64,7 @@ const statusCounts = [...new Set(projects.map((p) => p.data.status))]
               type="button"
               data-filter={value}
               aria-pressed="false"
-              class="filter-btn inline-flex items-center font-mono text-[0.65rem] uppercase tracking-[0.14em] border rounded-[3px] px-2 py-1 -rotate-2 transition-colors border-ink/40 text-ink opacity-60 hover:opacity-100"
+              class="filter-btn inline-flex items-center font-mono text-[0.65rem] uppercase tracking-[0.14em] border rounded-[3px] px-2 py-1 transition-colors border-ink/40 text-ink opacity-60 hover:opacity-100"
             >
               {label} ({count})
             </button>

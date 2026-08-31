@@ -25,86 +25,98 @@ is for working on the *content*.
 
 ## Design system
 
-Warm editorial "field notebook" identity, in full Glassmorphic Studio
-layout: type is the original field-notebook system (Newsreader/Work
-Sans/IBM Plex Mono) and the signature motif is `<Stamp>` (not `<Seal>`),
-but every surface — nav, footer, hero, section wrappers, and every card —
-is a frosted `.glass` panel floating over a fixed gradient-mesh
-background, in the burgundy + brass palette. Tokens live in
-`src/styles/global.css`'s `@theme` block:
+**"The Spec" — a full visual redesign, replacing the earlier "field
+notebook" / Glassmorphic Studio identity entirely** (glass panels,
+gradient-mesh background, burgundy + brass palette, Newsreader serif,
+the rotated `<Stamp>` and circular `<Seal>`). Per direct request ("use
+your best UI/UX judgment and rebuild this site"), grounded in the
+subject instead: the site belongs to an AI Product Manager, and the
+visual language is borrowed from the artifact that role actually
+produces — a spec doc / release note. Status chips and a margin
+"redline rail" carry real content structure, not decoration (an
+earlier pass also put a literal `DOCUMENT/OWNER/STATUS` field block in
+the homepage hero — removed per direct feedback as one signature
+device too many; the OG image generator still has its own copy of that
+motif and wasn't touched, see below). Flat surfaces on a cool porcelain paper with a faint dot-
+grid texture, not frosted glass on a gradient mesh — depth comes from
+hairline borders and a colored top edge on cards, not blur. Tokens live
+in `src/styles/global.css`'s `@theme` block:
 
-- Colors: `paper` (#F8ECDD), `paper-raised` (#F2E2CC, denser panel fill),
-  `ink` (#2B211F, text), `ink-soft` (#7A655F, muted text), `pen`
-  (#5B1A22, burgundy — the accent: links, active states), `pen-soft`
-  (#8A3B45, lighter burgundy for hovers), `highlight` (#B9975B, brass,
-  used sparingly), `line` (#E4D2C0, hairline borders used *inside* glass
-  panels, e.g. under a card's metadata row).
-- **Dark mode**: every one of the color tokens above is redefined (same
-  names, dark values) rather than the markup using Tailwind `dark:`
-  variants anywhere — Tailwind utilities like `bg-paper` compile to
-  `background: var(--color-paper)`, so redefining the variable is enough
-  to retheme the whole site. **Any new color must go through one of
-  these existing tokens (or a new token added in both places) — a raw
-  hex/rgb value in a class or inline style will not respond to the
+- Colors: `paper` (#F2F4F5, cool porcelain), `paper-raised` (#E7EBEC,
+  denser flat panel fill), `ink` (#191D1F, text), `ink-soft` (#5C666B,
+  muted text), `pen` (#B93A14, a deep vermillion/redline accent — links,
+  active states, the "live" status; measured at 5.17:1 against
+  paper/paper-raised, WCAG AA), `pen-soft` (#D3572A, lighter for
+  hovers), `highlight` (#8A6200, amber — the "prototype/draft" status
+  tone; measured at 4.97:1, WCAG AA), `line` (#D7DCDE, hairline
+  borders). Dark mode brightens `pen`/`highlight` (#FF7A4D / #E8B04A)
+  since they sit on a near-black paper (#15181A) there instead.
+- **Dark mode**: unchanged mechanism from the previous identity — every
+  color token above is redefined (same names, dark values) rather than
+  the markup using Tailwind `dark:` variants anywhere, so redefining the
+  variable retheme the whole site. **Any new color must go through one
+  of these existing tokens (or a new token added in both places) — a
+  raw hex/rgb value in a class or inline style will not respond to the
   toggle.** The three-state pattern (see `global.css`): bare `:root` =
-  light (the values above); `@media (prefers-color-scheme: dark)`
-  guarded by `:root:not([data-theme="light"])` = follow the OS unless
-  the user explicitly chose light; `:root[data-theme="dark"]` = explicit
-  dark choice, wins regardless of OS. The toggle button
-  (`#theme-toggle` in `Nav.astro`) just sets/clears `data-theme` on
-  `<html>` and persists it to `localStorage`; a pre-paint `is:inline`
-  script in `BaseLayout.astro`'s `<head>` applies the saved choice
-  before first render, to avoid a flash of the wrong theme.
-- **Page background**: `body` (not `html`, and *not* a `bg-paper`
-  Tailwind class — that would override it, see the comment in
-  `global.css`) paints a fixed gradient mesh from `mesh-a`/`mesh-b`/`mesh-c`
-  (#FCE1CE peach / #F1DCE6 blush / #F7ECD8 warm cream). `html` keeps a
-  flat `--color-paper` background only as a fallback.
-- **`.glass` is the standard surface treatment now** (`global.css`):
-  `color-mix()` translucent background, `backdrop-filter: blur(18px)
-  saturate(135%)`, a soft light border, a soft shadow. Nav, footer,
-  `PostCard`, `ProjectCard`, and every page-section wrapper (hero panels,
-  the About bio/experience panels, blog/project intro blocks, article
-  bodies) use `class="glass rounded-2xl"` / `rounded-3xl` rather than a
-  flat `bg-paper-raised` + `border-line` combo. **When adding a new
-  section, wrap it in `.glass`, not a plain bordered box** — an opaque
-  flat background on a new section would look like a mistake against
-  everything else on the page.
-- Fonts: `font-display` = Newsreader (headings, used italic for the voice-y
-  moments), `font-body` = Work Sans, `font-mono` = IBM Plex Mono (dates,
-  tags, status labels — never body text).
-- Signature motifs: `<Stamp>` (`src/components/Stamp.astro`) — a small
-  rotated ink-stamp label, mono/uppercase/bordered, for blog categories
-  and project status. `<Seal>` (`src/components/Seal.astro`) — a small
-  circular engraved-monogram SVG ("SB"), added to finish the site's
-  originally-chosen concept ("Letterpress & Seal" — only the
-  letterpress/Stamp half had been built). It lives in exactly two
-  places: the **nav header circle** (`Nav.astro` — a plain `<a href="/">`
-  wrapping the Seal, always shown regardless of whether `about.photo` is
-  set; it replaced the old photo/initials avatar entirely, see below)
-  and marking a project flagged `featured: true` on `/projects`
-  (`ProjectCard`, small inline mark next to the date). It's
-  `aria-hidden` — pair it with its own visible or `sr-only` label at
-  the call site (e.g. the `sr-only` "Featured" span next to the
-  Workbench usage) rather than relying on the Seal's own accessible
-  name. **Not** used on the About page or `/blog` any more — see the
-  photo and Featured-entry notes below for why.
-- **Tags/chips use `rounded-[3px]`, not `rounded-full`** — the About
-  page's focus-area/tools/certifications chips were originally pill-
-  shaped and were deliberately changed to match `<Stamp>`'s square-ish
-  corner radius (no circular edges is a stated preference). Any new
-  tag/chip UI should follow `rounded-[3px]`, not reach for a pill.
-- **Nav header circle is always `<Seal>` now, never the photo.** Earlier
-  it showed `about.photo` (with a click-to-magnify lightbox) or, absent
-  a photo, initials computed from `about.name`. Per direct feedback,
-  the photo moved to the About page instead (see below) and the nav
-  circle became purely the site's Seal mark — no more conditional
-  photo/initials logic, no more `initials` computation, no more
-  lightbox in `Nav.astro` at all. It's a plain `<a href="/">`, not a
-  `<button>` — nothing to magnify there any more. The name text next to
-  it is still a separate `<a href="/">`, still hidden below the `sm`
-  breakpoint (Seal only on narrow screens — with Connect in the nav,
-  there isn't room for the full name too).
+  light; `@media (prefers-color-scheme: dark)` guarded by
+  `:root:not([data-theme="light"])` = follow the OS unless the user
+  explicitly chose light; `:root[data-theme="dark"]` = explicit dark
+  choice, wins regardless of OS. The toggle button (`#theme-toggle` in
+  `Nav.astro`) just sets/clears `data-theme` on `<html>` and persists it
+  to `localStorage`; a pre-paint `is:inline` script in
+  `BaseLayout.astro`'s `<head>` (with `data-astro-rerun`, see the dark-
+  mode bug note further down) applies the saved choice before first
+  render, to avoid a flash of the wrong theme.
+- **Page background**: `body` paints a flat `--color-paper` fill plus a
+  faint dot-grid texture (`radial-gradient(var(--color-line) 1px,
+  transparent 1px)`, 28px spacing, ~4% visual weight) — a restrained nod
+  to graph paper / spec-sheet vellum, not the old gradient mesh. No
+  blur anywhere in the system.
+- **`.panel` is the standard flat surface now** (`global.css`,
+  replacing `.glass`): `paper-raised` fill, a 1px `line` border, an 8px
+  radius (never the old 24px "blob" corners), and a shadow just barely
+  present. Nav (`.nav-bar` — opaque `paper` fill, bottom hairline only),
+  footer, `PostCard`, `ProjectCard`, and every page-section wrapper use
+  `class="panel"` rather than `.glass rounded-2xl/3xl`. **When adding a
+  new section, wrap it in `.panel`, not a plain bordered box.**
+- **`.card-edge` — the colored top border on `PostCard`/`ProjectCard`**,
+  driven by an inline `--edge` custom property (not a fixed set of
+  modifier classes, since category/status values are open-ended — see
+  `content.config.ts`) rather than a rotated stamp. Reads as a flagged/
+  tabbed document, the literal "this one's marked" cue.
+- Fonts: `font-display` = Space Grotesk (headings only — geometric,
+  technical character, weights 500–700), `font-body` = IBM Plex Sans
+  (body copy), `font-mono` = IBM Plex Mono (doc-header fields, dates,
+  tags, status chips — carried over from the previous system since it
+  suits this concept even better). Newsreader and Work Sans are gone
+  entirely.
+- Signature motifs: `<StatusChip>` (`src/components/StatusChip.astro`,
+  replacing `<Stamp>`) — a flat chip with a small colored status dot
+  plus a mono uppercase label (build-status/eval-status badge
+  vocabulary), for blog categories and project status; same "keep it
+  rare" rule as before, just flat instead of rotated. `<Mark>`
+  (`src/components/Mark.astro`, replacing `<Seal>`) — a square
+  bracketed monogram (`[SB]`), styled like a doc reference id rather
+  than a wax-seal circle; no circular edges anywhere in this system. It
+  lives in the **nav home link** (`Nav.astro`) and the 404 page's own
+  header. The old "featured project" Seal mark on `/projects` is now
+  just a small filled square dot next to the date (`ProjectCard`),
+  paired with an `sr-only` "Featured" span — `<Mark>` itself is reserved
+  for the site's own identity, not a generic flag.
+- **Tags/chips use `rounded-[3px]`, not `rounded-full`** — unchanged
+  rule from the previous identity (no circular edges is a stated
+  preference, and it fits this sharper-cornered system even better than
+  it fit the old one). Any new tag/chip UI should follow `rounded-[3px]`.
+  Cards/panels use `rounded-md`/`.panel`'s 8px, not the old
+  `rounded-2xl`/`rounded-3xl`; buttons use `rounded-[4px]`, not
+  `rounded-full` pills (icon buttons like the theme toggle and the
+  About photo lightbox's close button are the one exception — a round
+  icon button isn't a tag/chip and was never what this rule targeted).
+- **Nav home link is `<Mark>`, never the photo.** Same arrangement as
+  before the redesign — the photo lives on the About page with its own
+  lightbox; the nav link is a plain `<a href="/">` wrapping `<Mark>`
+  plus the name (hidden below `sm:`), one link with
+  `aria-label="Home — {name}"`, not a `<button>`.
 - **Nav Connect — plain inline icon links in the bar, no dropdown.**
   Desktop shows email/LinkedIn/GitHub as three icon-only buttons
   directly in the nav bar (`h-7 w-7 rounded-[3px]`, same treatment as
@@ -492,7 +504,7 @@ the history if it comes up again, but the current, live state is: it's
 in.
 
 - **Custom 404** (`src/pages/404.astro`) — same visual language as
-  every other page (glass panel, Seal, links to Home/About/Blogs/
+  every other page (`.panel`, `<Mark>`, links to Home/About/Blogs/
   Workbench), not Astro's bare default. Astro's dev server and static
   build both pick this up automatically for unmatched routes — no
   config needed beyond the file existing at that path.
@@ -505,7 +517,7 @@ in.
 - **Open Graph image** (`public/og-image.png`, 1200×630) — generated by
   `scripts/generate-og-image.mjs` (`npm run generate:og`), a one-off
   script (not a build step) that hand-builds an SVG matching the
-  site's actual palette/Seal motif and rasterizes it with `sharp`
+  site's actual palette/doc-header/`[SB]` mark and rasterizes it with `sharp`
   (already a project dependency via `astro:assets`). Pulls the current
   `name`/`role`/`location` straight from `about.md` at generation time
   so it doesn't hardcode stale copy — but it's still a **static file
@@ -1012,6 +1024,28 @@ opens the menu with no horizontal overflow at 375px.
 
 ## Working on this project
 
+- **Every Workbench (project) write-up follows the same five-section
+  template, in order** — per direct request: `## The Problem`,
+  `## What it does`, `## How it is built`, `## A simple tech stack workflow
+  to understand`, `## Where it stands`. Documented in `README.md`'s
+  project-authoring template. All 4 existing projects
+  (`onefolder-family-vault`, `ai-sales-dashboard`, `personal-portfolio-site`,
+  `mql-assistant`) were rewritten to this shape in one pass — earlier
+  ad-hoc headings (`The idea`, `What it is`, `How it works`, `Why I'm
+  building it`, etc.) are gone; motivation that used to live in a separate
+  `Why I'm building it` section is now folded into the end of `The
+  Problem`. **A new project write-up should use this exact heading set,
+  not a bespoke structure** — the "tech stack workflow" section is the one
+  most likely to be skipped by habit; don't skip it.
+- **The "tech stack workflow" section is a fenced-code arrow diagram, not
+  a paragraph** — per direct follow-up feedback ("should be like a
+  workflow and visual") after the first pass wrote it as prose. Pattern: a
+  fenced code block with one stage per line (`Input` / `→ step` / `→ step`
+  / `→ output`), then at most one or two sentences of context after it.
+  All 4 existing write-ups were converted to this shape; template updated
+  in `README.md` to match. Renders inside `.prose pre` (bordered,
+  monospace) so it already reads as a distinct diagram-like block against
+  the rest of the write-up — no new component needed.
 - Nav labels (About Me / Notes / Workbench) are defined once in
   `src/components/Nav.astro` — don't hardcode nav links elsewhere.
   ("Notes" is the nav label and page eyebrow/title; the route is still

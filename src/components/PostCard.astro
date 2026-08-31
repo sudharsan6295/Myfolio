@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import Stamp from "./Stamp.astro";
+import StatusChip from "./StatusChip.astro";
 
 interface Props {
   post: CollectionEntry<"blog">;
@@ -22,19 +22,20 @@ const readingMinutes = Math.max(1, Math.round(wordCount / 200));
 
 <a
   href={`/blog/${post.id}`}
-  class="group glass block rounded-2xl p-6 sm:p-7 mb-4 last:mb-0 hover:bg-paper/75 transition-colors"
+  class="group card-edge panel block p-6 sm:p-7 mb-4 last:mb-0 hover:border-pen/50 transition-colors"
+  style="--edge: var(--color-pen)"
 >
   <div class="flex items-center gap-3 mb-3">
     {entryNumber !== undefined && (
       <span class="font-mono text-[0.7rem] text-ink-soft/70">
-        №{String(entryNumber).padStart(3, "0")}
+        DOC-{String(entryNumber).padStart(3, "0")}
       </span>
     )}
-    <Stamp label={category} tone="pen" />
+    <StatusChip label={category} tone="pen" />
     <span class="font-mono text-[0.7rem] text-ink-soft">{formattedDate} · {readingMinutes} min read</span>
   </div>
 
-  <h3 class="font-display font-normal text-2xl sm:text-[1.6rem] leading-snug tracking-[-0.005em] text-ink group-hover:text-pen transition-colors">
+  <h3 class="font-display font-semibold text-2xl sm:text-[1.6rem] leading-snug tracking-[-0.01em] text-ink group-hover:text-pen transition-colors">
     {title}
   </h3>
   <p class="mt-2 text-ink-soft leading-relaxed max-w-2xl">{description}</p>

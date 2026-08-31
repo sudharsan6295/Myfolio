@@ -1,0 +1,40 @@
+---
+// A flat status/category chip — a small colored status dot plus a mono
+// uppercase label, borrowed from build-status and eval-status badges (the
+// literal vocabulary of shipping AI products) rather than a rotated ink
+// stamp. Replaces <Stamp> as part of the full visual redesign: same call
+// sites (post categories, project status, entry references), same "keep
+// it rare" rule, flat instead of rotated, dot-plus-label instead of a
+// bordered rectangle alone.
+interface Props {
+  label: string;
+  tone?: "ink" | "pen" | "highlight";
+  class?: string;
+}
+
+const { label, tone = "ink", class: className = "" } = Astro.props;
+
+const toneClasses: Record<string, string> = {
+  ink: "border-line text-ink-soft",
+  pen: "border-pen/40 text-pen",
+  highlight: "border-highlight/40 text-highlight",
+};
+
+const dotClasses: Record<string, string> = {
+  ink: "bg-ink-soft",
+  pen: "bg-pen",
+  highlight: "bg-highlight",
+};
+---
+
+<span
+  class:list={[
+    "inline-flex items-center gap-1.5 font-mono text-[0.65rem] uppercase tracking-[0.14em]",
+    "border rounded-[3px] px-2 py-0.5 select-none",
+    toneClasses[tone],
+    className,
+  ]}
+>
+  <span class:list={["h-1.5 w-1.5 rounded-[1.5px] shrink-0", dotClasses[tone]]} />
+  {label}
+</span>

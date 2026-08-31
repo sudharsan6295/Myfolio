@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import Stamp from "../../components/Stamp.astro";
+import StatusChip from "../../components/StatusChip.astro";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
@@ -39,7 +39,7 @@ const linkLabels: Record<string, string> = {
     <article class="relative">
     <!-- Same treatment as blog/[id].astro — see that file's comment for
          the full reasoning: no max-w-4xl narrowing, so this article's
-         glass card lines up edge-to-edge with the footer's, not just a
+         panel lines up edge-to-edge with the footer's, not just a
          shared center point. TOC breaks out into the page margin via
          absolute positioning instead of widening this page's own
          container past max-w-5xl (an earlier version did that, and left
@@ -52,7 +52,7 @@ const linkLabels: Record<string, string> = {
       <nav aria-label="Table of contents" class="hidden 2xl:block absolute top-0 bottom-0 -left-[232px] w-[200px]">
         <div class="sticky top-24">
           <p class="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-ink-soft mb-3">On this page</p>
-          <ul id="toc-list" class="space-y-1 border-l border-line">
+          <ul id="toc-list" class="space-y-1 doc-rail">
             {tocHeadings.map((h) => (
               <li>
                 <a
@@ -76,15 +76,15 @@ const linkLabels: Record<string, string> = {
       ← Workbench
     </a>
 
-    <div class="glass rounded-3xl p-8 sm:p-12">
+    <div class="panel p-8 sm:p-12">
       <div class="flex items-center gap-3 mb-5">
-        <Stamp label={status} tone={statusTone[status] ?? "ink"} />
+        <StatusChip label={status} tone={statusTone[status] ?? "ink"} />
         <span class="font-mono text-xs text-ink-soft">
           Started {startDate.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
         </span>
       </div>
 
-      <h1 class="font-display font-normal text-3xl sm:text-[2.5rem] leading-[1.15] tracking-[-0.01em] text-ink text-balance">
+      <h1 class="font-display font-semibold text-3xl sm:text-[2.5rem] leading-[1.15] tracking-[-0.01em] text-ink text-balance">
         {title}
       </h1>
       <p class="mt-4 text-lg text-ink-soft leading-relaxed">{summary}</p>
@@ -103,7 +103,7 @@ const linkLabels: Record<string, string> = {
         <img
           src={coverImage.src}
           alt={coverImageAlt ?? ""}
-          class="mt-8 w-full rounded-2xl border border-line"
+          class="mt-8 w-full rounded-md border border-line"
         />
       )}
 

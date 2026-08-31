@@ -1,7 +1,7 @@
 ---
 name: "Sudharsan Balaji Vijayakumar"
-role: "Lead Solution Consultant — Applied AI‑driven methodologies in product & project management, ensuring efficient Scrum delivery and innovative solution design on Enovia 3DExperience platforms"
-tagline: "Lead Solution Consultant with a decade across project, product, and solution delivery — now pointed at AI implementation, figuring out what that looks like in practice rather than in theory."
+role: "PLM Solution Consultant by trade, AI product thinker by direction"
+tagline: "Lead Solution Consultant with a decade across project, product, and solution delivery — PLM Solution Consultant by trade, AI product thinker by direction."
 location: "Coimbatore, India"
 email: "sudharsan6295@gmail.com"
 resumeUrl: "/resume.pdf"
@@ -10,12 +10,16 @@ photoAlt: "Sudharsan Balaji Vijayakumar"
 social:
   linkedin: "https://www.linkedin.com/in/sudharsan-balaji-65a06791/"
   github: "https://github.com/sudharsan6295"
-currently: "Pursuing a PGP in AI & Business with Scaler, building toward AI product management and analytics-translator roles between business and technical teams."
+currently:
+  - "Lead Solution Consultant at Addnode India"
+  - "Pursuing online PGP in Business & AI with Scaler, building toward AI product management roles."
+currentlyUrl: "https://www.scaler.com/online-pgp-in-business-and-ai/"
 highlights:
   - "Delivered cost/timeline improvements across 5+ enterprise PLM engagements while sustaining 100% project transparency"
-  - "Directed full 3DExperience upgrades"
   - "Built custom tools to support migration and data import activities"
   - "Introduced AI into day-to-day workflows to drive business improvements"
+  - "Architecting TECHNIA's on-premise-to-cloud transition framework for 3DExperience/Enovia, from the ground up"
+  - "Growing into a senior mentor role, guiding the team through every program I lead"
 focusAreas:
   - "PLM & Enterprise Solution Delivery"
   - "AI Solution Implementation"
@@ -50,7 +54,7 @@ principles:
     description: "New tools, platforms, or ways of working earn a real evaluation — a prototype, a pilot, a proof of concept — before I bring them into a delivery plan. Once I commit, I build for adoption, not just for launch."
 
   - title: "AI belongs in the product, not just the process"
-    description: "I look past using AI to speed up my own work and ask where it changes what the product can actually do for the customer — turning that into a concrete roadmap item, not a slide."
+    description: "I look past using AI to speed work and ask where it changes what the product can actually do for the customer — turning that into a concrete roadmap item, not a slide."
 
   - title: "Delivery includes mentoring the team"
     description: "I mentor the team alongside every PM and Scrum Master role I hold — a project isn't done until the people who built it can run the next one, or the next initiative, without me."
@@ -81,10 +85,7 @@ experience:
       - "Delivered enterprise PLM upgrade projects — solution design, defect resolution, customization, and delivery support — for global clients."
 ---
 
-I'm a Lead Solution Consultant with ten years across solution delivery, project, and
-product management — creating solutions, planning delivery, managing risk, and leading the
-teams that ship enterprise PLM programs for global manufacturing and life
-sciences clients.
+Ten years in the PLM domain, working across solution delivery, project, and product management. I design the solutions, shape what gets built next, plan the delivery, and lead the teams that ship enterprise PLM programs for global manufacturing and life sciences clients..
 
 I'm currently pursuing a PGP in AI & Business with Scaler, and building
 toward AI product management — the kind of role that translates between

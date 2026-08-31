@@ -8,21 +8,44 @@ featured: false
 order: 2
 ---
 
-## The idea
+## The Problem
 
-Most sales dashboards show you everything and prioritize nothing — a rep
+Most sales dashboards show you everything and prioritize nothing. A rep
 still has to read the whole pipeline to figure out what actually needs
-their attention today. This prototype puts an AI agent in front of that
-data instead: pulling it together, summarizing what's changed, and
-surfacing the handful of accounts that genuinely need a decision, rather
-than a wall of rows sorted by last-modified date.
+attention today — which accounts moved, which ones are stalling, which one
+genuinely needs a decision from them this week. Mostly I wanted to practice
+the thing I'm actually trying to get good at: translating between what an
+AI system can do and what a business user — in this case a sales team —
+actually needs from it, rather than whatever looks most impressive in a
+demo.
 
-## Why I'm building it
+## What it does
 
-It's a small, concrete way to practice the thing I'm actually trying to get
-good at — translating between what an AI system can do and what a business
-user, in this case a sales team, actually needs from it, rather than what's
-technically impressive in a demo.
+An AI agent takes the first pass on the pipeline instead of the rep. It
+pulls the data together, summarizes what's changed since the last
+check-in, and surfaces the handful of accounts that genuinely need a
+decision — not a wall of rows sorted by last-modified date.
+
+## How it is built
+
+Early-stage: an LLM sits in front of the pipeline data and does the
+summarizing and prioritizing work an analyst would otherwise do by hand.
+The design deliberately keeps the model's job narrow — read, summarize,
+flag — rather than letting it also decide what to do about an account,
+since that decision still belongs to the rep.
+
+## A simple tech stack workflow to understand
+
+```
+Pipeline data
+   → LLM agent reads it
+   → summarizes what changed
+   → flags the accounts that need a decision
+   → short brief delivered to the rep
+```
+
+No dashboard full of filters to configure first — the agent does the
+sorting a rep would otherwise do by hand.
 
 ## Where it stands
 

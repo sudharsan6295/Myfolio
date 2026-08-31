@@ -90,8 +90,13 @@ const about = defineCollection({
           twitter: z.string().url().optional(),
         })
         .default({}),
-      // What to focus on right now — shown in the "At a glance" panel.
-      currently: z.string().optional(),
+      // What to focus on right now — shown in the "At a glance" panel, one
+      // line per item (e.g. current role, current course).
+      currently: z.array(z.string()).default([]),
+      // Optional link backing the `currently` line (e.g. the actual course
+      // page) — when set, the whole line links out instead of rendering as
+      // plain text.
+      currentlyUrl: z.string().url().optional(),
       // Target role titles, e.g. "AI Product Manager" — shown as chips at
       // the top of the About page's sidebar, above "At a glance". The one
       // explicit "here's what I'm looking for" signal on the site — most

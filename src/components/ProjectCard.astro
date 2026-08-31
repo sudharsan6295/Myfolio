@@ -1,7 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import Stamp from "./Stamp.astro";
-import Seal from "./Seal.astro";
+import StatusChip from "./StatusChip.astro";
 
 interface Props {
   project: CollectionEntry<"projects">;
@@ -15,31 +14,42 @@ const statusTone: Record<string, "pen" | "highlight" | "ink"> = {
   prototype: "highlight",
   archived: "ink",
 };
+const tone = statusTone[status] ?? "ink";
+const edgeVar: Record<string, string> = {
+  pen: "var(--color-pen)",
+  highlight: "var(--color-highlight)",
+  ink: "var(--color-ink-soft)",
+};
 ---
 
 <a
   href={`/projects/${project.id}`}
-  class="group glass flex flex-col h-full rounded-2xl p-6 sm:p-7 hover:bg-paper/75 transition-colors"
+  class="group card-edge panel flex flex-col h-full p-6 sm:p-7 hover:border-pen/50 transition-colors"
+  style={`--edge: ${edgeVar[tone]}`}
 >
   <div class="flex items-center justify-between gap-3 mb-4">
-    <Stamp label={status} tone={statusTone[status] ?? "ink"} />
+    <StatusChip label={status} tone={tone} />
     <div class="flex items-center gap-2">
       <span class="font-mono text-[0.65rem] text-ink-soft">
         {new Date(project.data.startDate).getFullYear()}
       </span>
-      {featured && <Seal size={20} tone="pen" />}
-      {featured && <span class="sr-only">Featured</span>}
+      {featured && (
+        <span class="inline-flex items-center gap-1" title="Featured">
+          <span class="h-2 w-2 rounded-[1.5px] bg-pen" aria-hidden="true" />
+          <span class="sr-only">Featured</span>
+        </span>
+      )}
     </div>
   </div>
 
-  <h3 class="font-display text-xl leading-snug text-ink group-hover:text-pen transition-colors">
+  <h3 class="font-display font-semibold text-xl leading-snug text-ink group-hover:text-pen transition-colors">
     {title}
   </h3>
   <p class="mt-2 text-sm text-ink-soft leading-relaxed">{summary}</p>
 
   <ul class="mt-auto pt-4 flex flex-wrap gap-1.5">
     {stack.slice(0, 4).map((item) => (
-      <li class="font-mono text-[0.65rem] text-ink-soft border border-line rounded-[3px] px-1.5 py-0.5 bg-paper/50">
+      <li class="font-mono text-[0.65rem] text-ink-soft border border-line rounded-[3px] px-1.5 py-0.5 bg-paper">
         {item}
       </li>
     ))}

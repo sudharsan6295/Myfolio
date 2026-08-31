@@ -8,7 +8,7 @@ featured: true
 order: 1
 ---
 
-## The problem
+## The Problem
 
 In most households, one person holds the complete mental map of the
 family's finances — which bank accounts exist, which policies are active,
@@ -28,7 +28,7 @@ contacts by email; they get view-only access to whatever you choose to
 share, an auto-generated plain-language emergency checklist built from your
 own records, and an access log so you can see who looked at what and when.
 
-## How it's built
+## How it is built
 
 Real Supabase Auth with mandatory MFA (TOTP, not a fixed code), Row Level
 Security enforcing that a trusted contact only ever sees what's explicitly
@@ -37,15 +37,23 @@ function rather than a raw client write — so a view can't be forged or
 skipped. Sensitive fields (account numbers, policy numbers) are encrypted
 at the application layer before they ever reach the database.
 
+## A simple tech stack workflow to understand
+
+```
+Sign up (Supabase Auth + MFA)
+   → add a record → encrypted, then stored in Postgres
+   → upload a document → Supabase Storage
+   → invite a contact → Resend sends the email
+   → contact opens the link → Row Level Security decides what they see
+```
+
+Next.js renders the app and handles routing; everything past that is
+Supabase — Auth, Postgres, and Storage all enforcing the same rule, that a
+trusted contact only ever sees what's explicitly shared with them.
+
 ## Where it stands
 
 The MVP is built and verified end to end against the real backend — real
 signup, real MFA, real encrypted records, real file uploads, real email
 invites — not mocked. It's currently in testing with a small number of real
 accounts, not yet publicly launched.
-
-## Why I'm building it
-
-It's the same discipline I bring to enterprise PLM programs — plan the risk
-out in advance, don't let anything depend on one person remembering it —
-just applied to a product of my own instead of a client's.

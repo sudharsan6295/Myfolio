@@ -42,7 +42,7 @@ src/
       my-project-slug.md
     about/
       about.md              # exactly one file — your bio + work history
-  components/                # PostCard, ProjectCard, Stamp (status/category label), Nav, Footer
+  components/                # PostCard, ProjectCard, StatusChip (status/category label), Nav, Footer
   layouts/
     BaseLayout.astro         # shared <head>, nav, footer — every page uses this
   pages/
@@ -119,8 +119,43 @@ To pull a post down temporarily without deleting it, set `draft: true`.
    draft: false
    ---
 
-   The full write-up: what problem it solved, what you built, what you'd do
-   differently. Regular Markdown.
+   The write-up always follows the same five sections, in this order, as
+   plain `##` Markdown headings:
+
+   ```markdown
+   ## The Problem
+
+   What was broken, missing, or annoying enough to build this for.
+
+   ## What it does
+
+   What it actually does for whoever uses it, in plain terms.
+
+   ## How it is built
+
+   The real implementation choices — not just the stack list above, but
+   why it's built that way.
+
+   ## A simple tech stack workflow to understand
+
+   A visual step-by-step, not a paragraph: a fenced code block with an
+   arrow chain (data/request in → what happens to it → what comes out),
+   like this —
+
+       ```
+       Input
+          → step
+          → step
+          → output
+       ```
+
+   — followed by at most one or two sentences of context. Someone
+   unfamiliar with the stack should be able to follow the shape of it from
+   the diagram alone.
+
+   ## Where it stands
+
+   Status in plain language: what's real and working, what's still ahead.
    ```
 
 3. Commit, push, done — it appears at `/projects/your-slug-here` and on the

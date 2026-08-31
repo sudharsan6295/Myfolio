@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import Seal from "./Seal.astro";
+import Mark from "./Mark.astro";
 
 const { pathname } = Astro.url;
 
@@ -47,18 +47,16 @@ const hasConnectLinks = about?.email || linkedinHandle || githubHandle;
 // label next to the icon the way the old dropdown's rows had.
 ---
 
-<header class="glass nav-glass sticky top-0 z-40">
+<header class="nav-bar sticky top-0 z-40">
   <div class="mx-auto max-w-5xl px-6">
     <nav class="flex items-center justify-between h-16" aria-label="Primary">
-      <!-- Header circle is the site's <Seal> monogram, not the person's
-           photo — the photo now lives (with its own magnify/lightbox)
-           on the About page instead. One link for the Seal + name
-           together (not two separate overlapping-purpose "Home" links)
-           — Template A from the header-template comparison, picked
-           directly. -->
+      <!-- Header mark is the site's <Mark> monogram, not the person's
+           photo — the photo lives (with its own magnify/lightbox) on the
+           About page instead. One link for the mark + name together (not
+           two separate overlapping-purpose "Home" links). -->
       <a href="/" class="flex items-center gap-2.5 group" aria-label={`Home — ${name}`}>
-        <Seal size={28} tone="pen" />
-        <span class="hidden sm:inline font-display italic text-base text-ink group-hover:text-pen transition-colors">
+        <Mark size={28} tone="pen" />
+        <span class="hidden sm:inline font-display font-semibold text-base text-ink group-hover:text-pen transition-colors">
           {name}
         </span>
       </a>

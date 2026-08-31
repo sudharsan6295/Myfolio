@@ -2,7 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PostCard from "../components/PostCard.astro";
 import ProjectCard from "../components/ProjectCard.astro";
-import Stamp from "../components/Stamp.astro";
+import StatusChip from "../components/StatusChip.astro";
 import { getCollection } from "astro:content";
 
 const [aboutEntry] = await getCollection("about");
@@ -24,31 +24,28 @@ const previewProjects = allProjects.slice(0, 3);
   <!-- Hero -->
   <section class="mx-auto max-w-5xl px-6 pt-10 sm:pt-14 pb-8">
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6 lg:gap-8">
-      <div class="glass rounded-3xl p-8 sm:p-10">
-        <p class="font-mono text-xs uppercase tracking-[0.16em] text-pen mb-5">
-          Professional Notebook
-        </p>
-        <h1 class="font-display font-normal text-[1.85rem] sm:text-[2.35rem] leading-[1.3] tracking-[-0.01em] text-ink text-balance">
+      <div class="panel p-8 sm:p-10">
+        <h1 class="font-display font-semibold text-[1.85rem] sm:text-[2.35rem] leading-[1.25] tracking-[-0.01em] text-ink text-balance">
           Hi, I'm {about?.name}.
         </h1>
         <p class="mt-3 max-w-xl text-ink leading-relaxed text-[1.1rem]">
           {about?.tagline}
         </p>
         <p class="mt-6 max-w-xl text-ink-soft leading-relaxed text-[1.05rem]">
-          This is my professional notebook — the writing and thinking that
-          doesn't fit a company blog, and the prototypes that never needed a
-          roadmap. Start with <a href="/about" class="text-pen underline decoration-line hover:decoration-pen underline-offset-4">About Me</a> to know
+          This is my professional notebook — a record of the thinking behind
+          my career and the prototypes born from it. Start with <a href="/about" class="text-pen underline decoration-line hover:decoration-pen underline-offset-4">About Me</a> to know
           my professional journey, browse the <a href="/projects" class="text-pen underline decoration-line hover:decoration-pen underline-offset-4">Workbench</a> for
           ideas and prototypes, or skip straight to <a href="/blog" class="text-pen underline decoration-line hover:decoration-pen underline-offset-4">the Notes</a> for
           posts on AI, business, and product management.
         </p>
         <div class="mt-7 flex flex-wrap items-center gap-2.5">
-          {about?.location && <Stamp label={about.location} tone="ink" />}
-          <Stamp label="10 Years in PLM" tone="highlight" />
+          {about?.location && <StatusChip label={about.location} tone="ink" />}
+          <StatusChip label="10 Years in PLM Delivery" tone="highlight" />
+          <StatusChip label="Business & AI" tone="pen" />
         </div>
       </div>
 
-      <aside aria-label="Recent entries" class="glass rounded-3xl p-6">
+      <aside aria-label="Recent entries" class="panel p-6">
         <p class="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft mb-4 border-b border-line pb-2">
           Recent entries
         </p>
@@ -71,7 +68,7 @@ const previewProjects = allProjects.slice(0, 3);
   <!-- Field Notes preview -->
   <section class="mx-auto max-w-5xl px-6 pt-6 pb-8">
     <div class="flex items-baseline justify-between mb-2">
-      <h2 class="font-display text-2xl text-ink">Field Notes</h2>
+      <h2 class="font-display font-semibold text-2xl text-ink">Field Notes</h2>
       <a href="/blog" class="font-mono text-xs uppercase tracking-[0.1em] text-pen hover:text-ink transition-colors">
         View all →
       </a>
@@ -85,7 +82,7 @@ const previewProjects = allProjects.slice(0, 3);
   <!-- Workbench preview -->
   <section class="mx-auto max-w-5xl px-6 pt-6 pb-8">
     <div class="flex items-baseline justify-between mb-2">
-      <h2 class="font-display text-2xl text-ink">The Workbench</h2>
+      <h2 class="font-display font-semibold text-2xl text-ink">The Workbench</h2>
       <a href="/projects" class="font-mono text-xs uppercase tracking-[0.1em] text-pen hover:text-ink transition-colors">
         View all →
       </a>
@@ -98,16 +95,16 @@ const previewProjects = allProjects.slice(0, 3);
 
   <!-- About teaser -->
   <section class="mx-auto max-w-5xl px-6 pt-6 pb-8">
-    <div class="glass rounded-3xl p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10 justify-between">
+    <div class="panel p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10 justify-between">
       <div>
         <p class="font-mono text-xs uppercase tracking-[0.14em] text-ink-soft mb-2">About</p>
-        <h2 class="font-display text-xl text-ink max-w-md">
+        <h2 class="font-display font-semibold text-xl text-ink max-w-md">
           Career history, the roles I've held, and how I ended up leading PLM programs.
         </h2>
       </div>
       <a
         href="/about"
-        class="shrink-0 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.1em] text-paper bg-ink hover:bg-pen transition-colors rounded-full px-5 py-2.5"
+        class="shrink-0 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.1em] text-paper bg-ink hover:bg-pen transition-colors rounded-[4px] px-5 py-2.5"
       >
         Read About Me →
       </a>

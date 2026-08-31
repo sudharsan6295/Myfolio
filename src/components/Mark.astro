@@ -1,0 +1,29 @@
+---
+// The site's home/identity mark — a square bracketed monogram, styled like
+// a citation or doc reference id ([SB]) rather than a wax-seal circle.
+// Replaces the old <Seal> as part of the full visual redesign away from
+// the glass/letterpress concept: no circular edges anywhere in this
+// system, and a bracketed reference reads as "spec doc" vocabulary rather
+// than ornamental flourish. Used in exactly one place now — the nav's
+// home link — plus the 404 page's own header. aria-hidden by default,
+// same convention <Seal> used: pair it with a visible/sr-only label at
+// the call site rather than relying on this component's own accessible
+// name.
+interface Props {
+  size?: number;
+  tone?: "pen" | "ink";
+  class?: string;
+}
+
+const { size = 28, tone = "pen", class: className = "" } = Astro.props;
+const color = tone === "pen" ? "var(--color-pen)" : "var(--color-ink)";
+const fontSize = Math.round(size * 0.34);
+---
+
+<span
+  aria-hidden="true"
+  class:list={["inline-flex items-center justify-center shrink-0 select-none rounded-[3px] border-[1.5px]", className]}
+  style={`width:${size}px;height:${size}px;color:${color};border-color:${color}`}
+>
+  <span class="font-mono font-semibold leading-none" style={`font-size:${fontSize}px`}>SB</span>
+</span>
