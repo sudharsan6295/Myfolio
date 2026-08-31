@@ -42,6 +42,13 @@ variables) for the deployed site, or in a local `.env` file for
 `netlify dev`. Without `RESEND_API_KEY`, the scheduled notify function
 just no-ops instead of failing.
 
+To test the notify function without waiting on its daily schedule, set a
+`MANUAL_TRIGGER_SECRET` env var (any random string) and hit:
+
+```
+https://<your-site>/.netlify/functions/notify-subscribers-test?secret=<that value>
+```
+
 ---
 
 ## Folder structure
