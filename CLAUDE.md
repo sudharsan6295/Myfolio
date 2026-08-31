@@ -547,6 +547,15 @@ in.
   `.md` file shows up on the next build with no separate list to
   maintain. Linked in `<head>` (`rel="alternate"`) and as a visible
   "Subscribe via RSS" link on `/blog` itself.
+- **Sitemap + robots.txt** — `@astrojs/sitemap` (added to
+  `astro.config.mjs`'s `integrations`) generates `sitemap-index.xml` /
+  `sitemap-0.xml` at build time from the site's actual routes, same
+  "no separate list to maintain" principle as the RSS feed. Excludes
+  `/404` automatically (not a real page). `public/robots.txt` allows
+  all crawlers and points at the sitemap. Added specifically to get the
+  live site (`sudharsanbalaji.com`, connected once a real domain +
+  Netlify DNS were set up) properly discoverable — submitting it to
+  Google Search Console is a manual step outside this repo.
 - **Client-side search on `/blog`** — a `#post-search` input, matching
   against a precomputed `data-search` attribute (title + description +
   tags, lowercased) on each post's wrapper. Composes with the existing
