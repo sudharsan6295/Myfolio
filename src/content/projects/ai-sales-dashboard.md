@@ -1,9 +1,9 @@
 ---
 title: "Field-Brief Intelligence Dashboard"
-summary: "A prototype dashboard where AI agents do the first pass on sales pipeline data — pulling it together, summarizing what changed, and surfacing which accounts actually need attention today, instead of a rep piecing that together by hand."
+summary: "An on-demand AI-generated intelligence brief for any tracked customer — company overview, recent developments, and suggested talking points — sourced from the company's own website, LinkedIn, and web search, with citations, not guesses."
 status: "prototype"
 startDate: 2026-08-01
-stack: ["AI Agents", "LLM APIs"]
+stack: ["Next.js", "TypeScript", "Tailwind CSS", "Gemini API", "Tavily", "Supabase (Postgres)", "Vercel"]
 links:
   demo: "https://field-brief-beta.vercel.app/"
 featured: false
@@ -12,44 +12,56 @@ order: 2
 
 ## The Problem
 
-Most sales dashboards show you everything and prioritize nothing. A rep
-still has to read the whole pipeline to figure out what actually needs
-attention today — which accounts moved, which ones are stalling, which one
-genuinely needs a decision from them this week. Mostly I wanted to practice
-the thing I'm actually trying to get good at: translating between what an
-AI system can do and what a business user — in this case a sales team —
-actually needs from it, rather than whatever looks most impressive in a
-demo.
+Before a call, a rep has to piece together who a company actually is, what's
+changed recently, and who to talk to — scattered across the company's own
+site, LinkedIn, and general search, redone from scratch by whoever's making
+the call. Mostly I wanted to practice the thing I'm actually trying to get
+good at: translating between what an AI system can do and what a business
+user — in this case a sales team — actually needs from it, rather than
+whatever looks most impressive in a demo.
 
 ## What it does
 
-An AI agent takes the first pass on the pipeline instead of the rep. It
-pulls the data together, summarizes what's changed since the last
-check-in, and surfaces the handful of accounts that genuinely need a
-decision — not a wall of rows sorted by last-modified date.
+Track a list of customers; for any one of them, generate an on-demand
+brief — Overview, Recent developments, Suggested talking points, and a
+suggested Key Contact for outreach — sourced from real web search, with the
+source links kept alongside it, not invented. A separate Opportunity
+Discovery feature runs the search the other way: starting from what you
+sell, it surfaces companies you don't yet track that show a real signal of
+needing it, each with a rationale, so you can add a promising one straight
+to the customer list.
 
 ## How it is built
 
-Early-stage: an LLM sits in front of the pipeline data and does the
-summarizing and prioritizing work an analyst would otherwise do by hand.
-The design deliberately keeps the model's job narrow — read, summarize,
-flag — rather than letting it also decide what to do about an account,
-since that decision still belongs to the rep.
+One orchestrator runs three research agents concurrently — Company Profile,
+Recent Developments, Key Contact — each doing a web search and an AI read
+of the results, followed by a synthesis pass that turns that research into
+the final brief; one agent failing doesn't fail the whole brief, the gap is
+just noted instead of invented. Supabase Postgres holds everything, reached
+only through a server-side key with row-level security locking out every
+other path — there's no per-user login, so a shared-password gate protects
+the whole app instead, the right amount of auth for one internal team
+sharing one customer list rather than individual accounts.
 
 ## A simple tech stack workflow to understand
 
 ```
-Pipeline data
-   → LLM agent reads it
-   → summarizes what changed
-   → flags the accounts that need a decision
-   → short brief delivered to the rep
+Customer added to the list
+   → "Refresh" triggers 3 research agents (concurrent)
+   → each searches the web, then an AI read summarizes it
+   → a synthesis pass turns that into overview / developments / talking points
+   → brief shown to the rep, sources cited
 ```
 
-No dashboard full of filters to configure first — the agent does the
-sorting a rep would otherwise do by hand.
+Opportunity Discovery reuses the same search-then-summarize idea in the
+other direction — starting from what you sell instead of a known company —
+to surface leads you don't have yet.
 
 ## Where it stands
 
-Early-stage prototype, actively being worked on — not yet in front of real
-users. Details here will fill in as it takes shape.
+Live, behind a shared-password login gate rather than open to the public.
+Verified end to end against the real app with real accounts, not mocked —
+real briefs generated, real leads surfaced. A security review of its
+auth/access-control was run and its one real finding (no login at all) was
+fixed the same week. Still a single shared internal tool, not something
+with individual accounts yet.
