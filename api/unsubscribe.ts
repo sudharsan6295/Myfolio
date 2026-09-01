@@ -3,8 +3,17 @@
 // subscriber list and shows a plain confirmation page. GET (not POST) so
 // it works as a plain link click from an email client with no JS involved.
 import { getSubscribers, saveSubscribers } from "../src/lib/notify-logic.js";
+import { checkRateLimit, clientIp } from "../src/lib/rate-limit.js";
 
 export async function GET(request: Request): Promise<Response> {
+  const { allowed } = await checkRateLimit(`unsubscribe:${clientIp(request)}`, {
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+  });
+  if (!allowed) {
+    return html("Too many attempts. Try again in a few minutes.", 429);
+  }
+
   // request.url is just the path in this runtime ("/api/unsubscribe?..."),
   // not a full URL -- the `host` header supplies the base new URL() needs.
   const email = new URL(request.url, `https://${request.headers.get("host")}`).searchParams

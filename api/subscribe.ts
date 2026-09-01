@@ -4,8 +4,20 @@
 // suspended Netlify account. Upserts by email -- resubscribing just
 // updates the category picks rather than creating a duplicate entry.
 import { getSubscribers, saveSubscribers } from "../src/lib/notify-logic.js";
+import { checkRateLimit, clientIp } from "../src/lib/rate-limit.js";
 
 export async function POST(request: Request): Promise<Response> {
+  // 5 submissions per 15 minutes per IP -- generous for a real visitor
+  // (including retries after a typo), tight enough to block a bot
+  // hammering this endpoint with fake addresses.
+  const { allowed } = await checkRateLimit(`subscribe:${clientIp(request)}`, {
+    windowMs: 15 * 60 * 1000,
+    max: 5,
+  });
+  if (!allowed) {
+    return json({ error: "Too many attempts. Try again in a few minutes." }, 429);
+  }
+
   let form: URLSearchParams;
   try {
     form = new URLSearchParams(await request.text());
