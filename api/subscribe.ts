@@ -3,7 +3,7 @@
 // original netlify/functions/subscribe.mts after the site moved off a
 // suspended Netlify account. Upserts by email -- resubscribing just
 // updates the category picks rather than creating a duplicate entry.
-import { getSubscribers, saveSubscribers } from "../src/lib/notify-logic";
+import { getSubscribers, saveSubscribers } from "../src/lib/notify-logic.js";
 
 export default async function handler(request: Request): Promise<Response> {
   if (request.method !== "POST") {

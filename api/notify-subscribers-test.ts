@@ -8,7 +8,7 @@
 //   MANUAL_TRIGGER_SECRET - any random string you choose
 //
 // Usage once that's set: GET /api/notify-subscribers-test?secret=<value>
-import { runNotify } from "../src/lib/notify-logic";
+import { runNotify } from "../src/lib/notify-logic.js";
 
 export default async function handler(request: Request): Promise<Response> {
   const secret = new URL(request.url).searchParams.get("secret");

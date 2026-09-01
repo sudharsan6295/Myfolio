@@ -9,7 +9,7 @@
 // when that env var is set -- checked here so this endpoint can't be
 // triggered by an arbitrary public GET, only Vercel's own scheduler (or
 // someone who has the secret).
-import { runNotify } from "../src/lib/notify-logic";
+import { runNotify } from "../src/lib/notify-logic.js";
 
 export default async function handler(request: Request): Promise<Response> {
   const cronSecret = process.env.CRON_SECRET;

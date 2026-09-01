@@ -2,7 +2,7 @@
 // subscriber's own address in the query string. Removes them from the
 // subscriber list and shows a plain confirmation page. GET (not POST) so
 // it works as a plain link click from an email client with no JS involved.
-import { getSubscribers, saveSubscribers } from "../src/lib/notify-logic";
+import { getSubscribers, saveSubscribers } from "../src/lib/notify-logic.js";
 
 export default async function handler(request: Request): Promise<Response> {
   const email = new URL(request.url).searchParams.get("email")?.trim().toLowerCase();

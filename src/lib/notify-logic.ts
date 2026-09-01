@@ -4,7 +4,7 @@
 // version (see git history / CLAUDE.md) after the account hosting that
 // pipeline was suspended and the site moved to Vercel; logic is otherwise
 // unchanged, just Netlify Blobs -> Vercel Blob for storage.
-import { readJsonBlob, writeJsonBlob } from "./blob-store";
+import { readJsonBlob, writeJsonBlob } from "./blob-store.js";
 
 interface Subscriber {
   email: string;
