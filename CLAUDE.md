@@ -20,11 +20,14 @@ is for working on the *content*.
   `projects`, `about`. A file's slug (filename minus `.md`) becomes its
   route — enforced by `getStaticPaths()` in `src/pages/blog/[id].astro` and
   `src/pages/projects/[id].astro`.
-- **Hosting**: Netlify, static build (`netlify.toml`: `npm run build` →
-  `dist/`). No Astro adapter needed — the site itself is still fully
-  static/no SSR. The one exception is `netlify/functions/` (plain
-  Netlify Functions, outside Astro's build entirely) backing the
-  subscribe/notify pipeline — see the subscribe form note further down.
+- **Hosting**: Vercel, static build (`npm run build` → `dist/`, auto-
+  detected). Moved off Netlify after the Netlify *account* (not this
+  project) was suspended — `netlify.toml` and `netlify/functions/` are
+  still in the repo, unused but harmless, in case of a future move back.
+  No Astro adapter needed — the site itself is still fully static/no
+  SSR. The one exception is the top-level `api/` directory (plain Vercel
+  Functions, outside Astro's build entirely) backing the subscribe/notify
+  pipeline — see the subscribe form note further down.
 
 ## Design system
 
@@ -1107,66 +1110,70 @@ opens the menu with no horizontal overflow at 375px.
   not just the one being edited — this is a shared visual rhythm, and
   a one-page fix that isn't cross-checked is how it drifted the first
   time.
-- **The Blogs page's subscribe form is a real mailing pipeline now, not
-  just a Netlify Forms capture box** — replaced per direct report ("the
-  subscriber did not get email") that the original Netlify Forms setup
-  only ever stored submissions in a dashboard and had no mechanism to
-  actually email anyone, ever, ever since it was built. Current shape:
-  - `src/pages/blog/index.astro`'s form posts (AJAX, same as before) to
-    `/.netlify/functions/subscribe` instead of `/` — the old
-    `data-netlify="true"` / `netlify-honeypot` attributes and the hidden
-    `form-name` input are gone since Netlify's automatic form-detection
-    no longer applies (it only intercepts POSTs to page URLs, not
-    function endpoints). The honeypot field itself (`bot-field`) stays;
-    the function checks it manually now.
-  - `netlify/functions/subscribe.mts` — upserts the subscriber (email +
-    chosen categories) into a Netlify Blobs store (`subscribers`), keyed
-    by email so resubscribing just updates category picks.
-  - `netlify/functions/lib/notify-logic.mts` — the actual "send an email
-    on a new post" logic, shared between the two functions below (kept in
-    a `lib/` subfolder, not directly in `netlify/functions/`, since a
-    bare file there with no default export would otherwise get scanned
-    as its own broken function). A static site has no database trigger
-    to hook into, so this fetches the site's own `/rss.xml` at runtime,
-    compares each post's `pubDate` against a `lastNotifiedAt` timestamp
-    (also in Blobs, store `site-meta`), and for any genuinely new
-    post(s) emails only the subscribers whose category picks match (or
-    everyone, if they left categories unchecked) — one digest email per
-    subscriber, via Resend's REST API (plain `fetch`, no SDK dependency
-    added). Uses a small hand-rolled `<item>` regex parser, not a
-    general XML library — deliberately scoped to the exact stable shape
-    `@astrojs/rss` produces in `src/pages/rss.xml.js`.
-  - `netlify/functions/notify-subscribers.mts` — the **scheduled**
-    entry point (`@daily`), just calls `runNotify()`.
-  - `netlify/functions/notify-subscribers-test.mts` — a **manual**
-    entry point calling the same `runNotify()`, for testing the whole
-    pipeline without waiting on the daily cron. Added after discovering
-    Netlify returns `403` on a direct HTTP hit to a *scheduled* function
-    — there was no way to force a test run otherwise. Gated behind a
-    `?secret=` query param matching the `MANUAL_TRIGGER_SECRET` env var
-    (refuses to run at all if that var isn't set) so it can't be used to
-    spam-trigger real subscriber emails from a public URL. Safe to leave
-    deployed permanently.
-  - `netlify/functions/unsubscribe.mts` — a plain `GET` link (works from
-    an email client with no JS) that every digest email includes,
-    removing that address from the Blobs store.
-  - **Requires environment variables set in Netlify's dashboard** (Site
-    configuration → Environment variables) that nothing in this repo can
-    set for you: `RESEND_API_KEY` (from a Resend account), optionally
+- **The Blogs page's subscribe form is a real mailing pipeline, hosted on
+  Vercel (moved off Netlify)** — originally built on Netlify Functions +
+  Netlify Blobs, then rebuilt on Vercel Functions + Vercel Blob after the
+  Netlify *account* (not this project specifically) was suspended and the
+  whole site had to move hosts. Same design, ported: nothing about the
+  actual pipeline logic changed, only which platform's serverless
+  functions/storage it runs on. Current shape:
+  - `src/pages/blog/index.astro`'s form posts (AJAX) to `/api/subscribe`.
+  - `api/subscribe.ts` — upserts the subscriber (email + chosen
+    categories) into a single `subscribers.json` blob (Vercel Blob,
+    `access: "private"` — these are real email addresses, not something
+    to leave publicly readable by URL), keyed by email in that JSON array
+    so resubscribing just updates category picks. Vercel Blob has no
+    Netlify-Blobs-style per-key store, hence one JSON blob for the whole
+    list rather than one blob per subscriber — plenty for the scale a
+    personal blog's subscriber list reaches.
+  - `src/lib/notify-logic.ts` — the actual "send an email on a new post"
+    logic, shared between the two `api/` entry points below. Lives under
+    `src/lib/`, not `api/`, specifically so Vercel's function builder
+    (which scans `api/` for routes) never mistakes it for one. A static
+    site has no database trigger to hook into, so this fetches the
+    site's own `/rss.xml` at runtime, compares each post's `pubDate`
+    against a `lastNotifiedAt` timestamp (`site-meta.json` blob), and for
+    any genuinely new post(s) emails only the subscribers whose category
+    picks match (or everyone, if they left categories unchecked) — one
+    digest email per subscriber, via Resend's REST API (plain `fetch`,
+    no SDK dependency added). Uses a small hand-rolled `<item>` regex
+    parser, not a general XML library — deliberately scoped to the exact
+    stable shape `@astrojs/rss` produces in `src/pages/rss.xml.js`.
+  - `api/notify-subscribers.ts` — the **cron** entry point, scheduled via
+    `vercel.json`'s `crons` array (`0 0 * * *`, daily). Checks Vercel's
+    own `Authorization: Bearer $CRON_SECRET` signature (when that env var
+    is set) so the endpoint can't be triggered by an arbitrary public GET.
+  - `api/notify-subscribers-test.ts` — a **manual** entry point calling
+    the same `runNotify()`, for testing the whole pipeline without
+    waiting on the daily cron. Gated behind a `?secret=` query param
+    matching the `MANUAL_TRIGGER_SECRET` env var (refuses to run at all
+    if that var isn't set) so it can't be used to spam-trigger real
+    subscriber emails from a public URL. Safe to leave deployed
+    permanently.
+  - `api/unsubscribe.ts` — a plain `GET` link (works from an email
+    client with no JS) that every digest email includes, removing that
+    address from the subscriber list.
+  - **Requires environment variables set in Vercel's dashboard** (Project
+    → Settings → Environment Variables) that nothing in this repo can set
+    for you: `RESEND_API_KEY` (from a Resend account), optionally
     `RESEND_FROM_EMAIL` (defaults to Resend's shared sandbox
     `onboarding@resend.dev`, which only delivers to the address the
     Resend account itself was signed up with — verify a real domain in
-    Resend to actually reach subscribers), and `MANUAL_TRIGGER_SECRET`
-    (any random string, only needed to use the manual test trigger
-    above). Without `RESEND_API_KEY` set, `notify-subscribers` no-ops
-    safely (logs and returns 200) rather than failing the scheduled run.
-  - `@netlify/blobs` (runtime dependency) and `@netlify/functions` +
-    `@types/node` (devDependencies, for local types only — Netlify's own
-    build provides the real runtime) were added for this.
-  - **Known local-testing gap**: plain `astro dev` has no Netlify
+    Resend to actually reach subscribers), `MANUAL_TRIGGER_SECRET` (any
+    random string, only needed to use the manual test trigger above),
+    and optionally `CRON_SECRET` (Vercel sets/checks this automatically
+    for you when present — see Vercel's cron docs). A connected Vercel
+    Blob store is also required (Project → Storage → connect a Blob
+    store); without `RESEND_API_KEY` set, `notify-subscribers` no-ops
+    safely (logs and returns 200) rather than failing the cron run.
+  - `@vercel/blob` (runtime dependency) was added for this. The earlier
+    `netlify/functions/` directory and its `@netlify/blobs` /
+    `@netlify/functions` dependencies were left in place, unused but
+    harmless, in case the site ever moves back to Netlify.
+  - **Known local-testing gap**: plain `astro dev` has no Vercel
     Functions runtime at all, so the subscribe form's fetch will fail
     locally with a real error (correct behavior, not a bug) unless run
-    via `netlify dev` instead, which proxies both Astro's dev server and
+    via `vercel dev` instead, which proxies both Astro's dev server and
     the functions together.
 - Images: reference them from frontmatter (`coverImage: "./file.jpg"`
   relative to the content file) so Astro's image pipeline optimizes them at

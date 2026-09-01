@@ -310,14 +310,14 @@ const categoryCounts = [...new Set(allPosts.map((p) => p.data.category))]
 
     searchInput?.addEventListener("input", applyVisibility);
 
-    // Posts to a Netlify Function (netlify/functions/subscribe.mts), which
-    // stores the subscriber in Netlify Blobs — a separate scheduled
-    // function (notify-subscribers.mts) reads that store and actually
-    // emails people when a new post goes up. Only works once deployed to
-    // Netlify and run via `netlify dev` locally; a plain `astro dev`
-    // server has no Netlify Functions runtime, so this fetch will fail
-    // there (the error message below will show, which is correct — there
-    // genuinely is nothing listening locally without `netlify dev`).
+    // Posts to a Vercel Function (api/subscribe.ts), which stores the
+    // subscriber in Vercel Blob — a separate cron-scheduled function
+    // (api/notify-subscribers.ts) reads that store and actually emails
+    // people when a new post goes up. Only works once deployed to Vercel
+    // and run via `vercel dev` locally; a plain `astro dev` server has no
+    // Vercel Functions runtime, so this fetch will fail there (the error
+    // message below will show, which is correct — there genuinely is
+    // nothing listening locally without `vercel dev`).
     const subscribeForm = document.getElementById("subscribe-form") as HTMLFormElement | null;
     const subscribeSuccess = document.getElementById("subscribe-success");
     const subscribeError = document.getElementById("subscribe-error");
@@ -333,7 +333,7 @@ const categoryCounts = [...new Set(allPosts.map((p) => p.data.category))]
         params.append(key, value as string);
       }
       try {
-        const response = await fetch("/.netlify/functions/subscribe", {
+        const response = await fetch("/api/subscribe", {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: params.toString(),

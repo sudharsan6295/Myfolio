@@ -12,7 +12,7 @@ hardcoded into it.
 - **Styling:** Tailwind CSS v4
 - **Content:** Markdown files with frontmatter, read via Astro Content
   Collections (`src/content.config.ts`)
-- **Hosting:** Netlify, auto-deploy on push to the connected Git branch
+- **Hosting:** Vercel, auto-deploy on push to the connected Git branch
 - **Fonts:** Space Grotesk (display), IBM Plex Sans (body), IBM Plex Mono
   (dates/tags/status labels)
 
@@ -27,26 +27,26 @@ npm run build     # production build to dist/ — run this before pushing
 npm run preview   # serve the production build locally
 ```
 
-**Note:** the Notes page's subscribe form posts to a Netlify Function
-(`netlify/functions/`), which plain `astro dev` can't run — that fetch
-will fail locally with a real error, which is expected. To actually test
-subscribing/unsubscribing locally, use the Netlify CLI instead:
+**Note:** the Notes page's subscribe form posts to a Vercel Function
+(`api/`), which plain `astro dev` can't run — that fetch will fail
+locally with a real error, which is expected. To actually test
+subscribing/unsubscribing locally, use the Vercel CLI instead:
 
 ```bash
-npx netlify dev
+npx vercel dev
 ```
 
-That also needs `RESEND_API_KEY` (and optionally `RESEND_FROM_EMAIL`) set
-— either in Netlify's dashboard (Site configuration → Environment
-variables) for the deployed site, or in a local `.env` file for
-`netlify dev`. Without `RESEND_API_KEY`, the scheduled notify function
-just no-ops instead of failing.
+That also needs `RESEND_API_KEY` (and optionally `RESEND_FROM_EMAIL`) set,
+plus a Vercel Blob store connected to the project — either in Vercel's
+dashboard (Project → Settings → Environment Variables / Storage) for the
+deployed site, or in a local `.env` file for `vercel dev`. Without
+`RESEND_API_KEY`, the cron notify function just no-ops instead of failing.
 
-To test the notify function without waiting on its daily schedule, set a
+To test the notify function without waiting on its daily cron, set a
 `MANUAL_TRIGGER_SECRET` env var (any random string) and hit:
 
 ```
-https://<your-site>/.netlify/functions/notify-subscribers-test?secret=<that value>
+https://<your-site>/api/notify-subscribers-test?secret=<that value>
 ```
 
 ---
