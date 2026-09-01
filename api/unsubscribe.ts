@@ -10,7 +10,8 @@ export async function GET(request: Request): Promise<Response> {
   const email = new URL(request.url, `https://${request.headers.get("host")}`).searchParams
     .get("email")
     ?.trim()
-    .toLowerCase();
+    .toLowerCase()
+    .slice(0, 254); // RFC 5321 max mailbox length -- matches subscribe.ts's cap
 
   if (!email) {
     return html("Missing email address.", 400);

@@ -20,11 +20,22 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   const email = (form.get("email") ?? "").trim().toLowerCase();
-  if (!email || !email.includes("@")) {
+  // A real format check (not just "has an @"), plus a length cap matching
+  // RFC 5321's max mailbox length -- both cheap ways to reject obviously
+  // bogus/oversized submissions before they ever reach storage.
+  if (!email || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return json({ error: "A valid email is required" }, 400);
   }
 
-  const categories = form.getAll("categories").map(String);
+  // Capped at 20 categories / 50 chars each -- there are only a handful of
+  // real categories on the site, so this is generous headroom for a
+  // legitimate submission while bounding how much a single POST can add
+  // to the stored subscriber list.
+  const categories = form
+    .getAll("categories")
+    .map(String)
+    .slice(0, 20)
+    .map((c) => c.slice(0, 50));
 
   const subscribers = await getSubscribers();
   const existing = subscribers.find((s) => s.email === email);

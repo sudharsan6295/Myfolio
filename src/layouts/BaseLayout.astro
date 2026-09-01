@@ -81,7 +81,13 @@ const personSchema = about
     <meta name="twitter:image" content={ogImageUrl} />
     <link rel="alternate" type="application/rss+xml" title={`${siteTitle} — Field Notes`} href="/rss.xml" />
     {personSchema && (
-      <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+      // Escaping "<" (as <) closes a theoretical script-breakout gap:
+      // JSON.stringify alone doesn't escape a literal "</script>" sequence
+      // inside a string value, which could otherwise end this tag early.
+      // Low real risk here (about.md is first-party content, not public
+      // input) but a one-line fix for a JSON-LD block that's cheap
+      // insurance either way.
+      <script type="application/ld+json" set:html={JSON.stringify(personSchema).replace(/</g, "\\u003c")} />
     )}
     <script is:inline data-astro-rerun>
       // Applies a saved theme choice before first paint, so there's no
