@@ -11,7 +11,7 @@
 // someone who has the secret).
 import { runNotify } from "../src/lib/notify-logic.js";
 
-export default async function handler(request: Request): Promise<Response> {
+export async function GET(request: Request): Promise<Response> {
   const cronSecret = process.env.CRON_SECRET;
   if (cronSecret) {
     const auth = request.headers.get("authorization");
@@ -20,9 +20,12 @@ export default async function handler(request: Request): Promise<Response> {
     }
   }
 
+  // request.url is just the path in this runtime, not a full URL -- prefer
+  // Vercel's own env var for the real production origin, falling back to
+  // the `host` header (which new URL() needs as a base either way).
   const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : new URL(request.url).origin;
+    : new URL(request.url, `https://${request.headers.get("host")}`).origin;
 
   const result = await runNotify(siteUrl);
   console.log(`notify-subscribers: ${result}`);

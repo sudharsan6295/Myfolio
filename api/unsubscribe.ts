@@ -4,8 +4,13 @@
 // it works as a plain link click from an email client with no JS involved.
 import { getSubscribers, saveSubscribers } from "../src/lib/notify-logic.js";
 
-export default async function handler(request: Request): Promise<Response> {
-  const email = new URL(request.url).searchParams.get("email")?.trim().toLowerCase();
+export async function GET(request: Request): Promise<Response> {
+  // request.url is just the path in this runtime ("/api/unsubscribe?..."),
+  // not a full URL -- the `host` header supplies the base new URL() needs.
+  const email = new URL(request.url, `https://${request.headers.get("host")}`).searchParams
+    .get("email")
+    ?.trim()
+    .toLowerCase();
 
   if (!email) {
     return html("Missing email address.", 400);

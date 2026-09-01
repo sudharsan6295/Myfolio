@@ -71,10 +71,11 @@ export async function runNotify(siteUrl: string): Promise<string> {
     if (matching.length === 0) continue;
 
     const result = await sendDigest({ siteUrl, resendApiKey, fromEmail, subscriber, posts: matching });
-    if (result.ok) {
+    if (result.ok === true) {
       emailsSent++;
     } else {
-      errors.push(`${subscriber.email}: ${result.error}`);
+      const error: string = result.error;
+      errors.push(`${subscriber.email}: ${error}`);
     }
   }
 

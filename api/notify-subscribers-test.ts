@@ -10,8 +10,11 @@
 // Usage once that's set: GET /api/notify-subscribers-test?secret=<value>
 import { runNotify } from "../src/lib/notify-logic.js";
 
-export default async function handler(request: Request): Promise<Response> {
-  const secret = new URL(request.url).searchParams.get("secret");
+export async function GET(request: Request): Promise<Response> {
+  // request.url is just the path in this runtime, not a full URL -- the
+  // `host` header supplies the base both new URL() calls below need.
+  const url = new URL(request.url, `https://${request.headers.get("host")}`);
+  const secret = url.searchParams.get("secret");
   const expected = process.env.MANUAL_TRIGGER_SECRET;
 
   if (!expected) {
@@ -23,7 +26,7 @@ export default async function handler(request: Request): Promise<Response> {
 
   const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : new URL(request.url).origin;
+    : url.origin;
 
   const result = await runNotify(siteUrl);
   return new Response(result, { status: 200 });

@@ -5,11 +5,7 @@
 // updates the category picks rather than creating a duplicate entry.
 import { getSubscribers, saveSubscribers } from "../src/lib/notify-logic.js";
 
-export default async function handler(request: Request): Promise<Response> {
-  if (request.method !== "POST") {
-    return new Response("Method not allowed", { status: 405 });
-  }
-
+export async function POST(request: Request): Promise<Response> {
   let form: URLSearchParams;
   try {
     form = new URLSearchParams(await request.text());
