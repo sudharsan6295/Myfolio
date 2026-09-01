@@ -49,4 +49,4 @@ answer, cite.
 ## Where it stands
 
 An early-stage prototype developed to illustrate the vision for a larger
-initiative — the Internal Knowledge Bot.
+initiative.
