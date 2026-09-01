@@ -3,7 +3,7 @@ title: "MyFolio"
 summary: "This site — a professional site for portfolio, Notes and Workbench - built so that publishing something new is just adding a Markdown file, no code required. You're looking at the current build."
 status: "prototype"
 startDate: 2026-08-23
-stack: ["Astro", "TypeScript", "Tailwind CSS", "Netlify Functions", "Netlify Blobs", "Resend"]
+stack: ["Astro", "TypeScript", "Tailwind CSS", "Vercel Functions", "Vercel Blob", "Resend"]
 links:
   demo: "https://sudharsanbalaji.com"
 featured: true
@@ -38,10 +38,12 @@ is now a flatter, more technical one, but the underlying content and
 structure never had to change for that.
 
 The subscribe pipeline is a small serverless setup living outside Astro's
-own build: a Netlify Function stores each subscriber in Netlify Blobs (a
+own build: a Vercel Function stores each subscriber in Vercel Blob (a
 key-value store, no separate database), and a scheduled function checks
 the site's own RSS feed daily, emailing only the subscribers whose topic
-picks match a genuinely new post, via Resend.
+picks match a genuinely new post, via Resend. It originally ran on
+Netlify's equivalents — moved to Vercel after the Netlify account
+hosting it was suspended and later deleted for good.
 
 ## A simple tech stack workflow to understand
 
@@ -50,10 +52,10 @@ Markdown file (+ frontmatter)
    → Astro content collection (schema-checked)
    → page template renders it
    → static HTML at build time
-   → deployed to Netlify
+   → deployed to Vercel
 ```
 
-Every page itself is zero-runtime — Netlify just serves the static files.
+Every page itself is zero-runtime — Vercel just serves the static files.
 The one exception is the subscribe/notify pipeline, a small serverless
 layer that runs independently of the static build and doesn't touch it.
 
