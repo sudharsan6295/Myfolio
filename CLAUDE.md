@@ -21,12 +21,13 @@ is for working on the *content*.
   route — enforced by `getStaticPaths()` in `src/pages/blog/[id].astro` and
   `src/pages/projects/[id].astro`.
 - **Hosting**: Vercel, static build (`npm run build` → `dist/`, auto-
-  detected). Moved off Netlify after the Netlify *account* (not this
-  project) was suspended — `netlify.toml` and `netlify/functions/` are
-  still in the repo, unused but harmless, in case of a future move back.
-  No Astro adapter needed — the site itself is still fully static/no
-  SSR. The one exception is the top-level `api/` directory (plain Vercel
-  Functions, outside Astro's build entirely) backing the subscribe/notify
+  detected). Moved off Netlify after the Netlify account (not this
+  project specifically) was suspended, and that account was later
+  deleted for good — `netlify.toml` and `netlify/functions/` were
+  removed from the repo (no move back is coming). No Astro adapter
+  needed — the site itself is still fully static/no SSR. The one
+  exception is the top-level `api/` directory (plain Vercel Functions,
+  outside Astro's build entirely) backing the subscribe/notify
   pipeline — see the subscribe form note further down.
 
 ## Design system
@@ -1168,8 +1169,9 @@ opens the menu with no horizontal overflow at 375px.
     safely (logs and returns 200) rather than failing the cron run.
   - `@vercel/blob` (runtime dependency) was added for this. The earlier
     `netlify/functions/` directory and its `@netlify/blobs` /
-    `@netlify/functions` dependencies were left in place, unused but
-    harmless, in case the site ever moves back to Netlify.
+    `@netlify/functions` dependencies were removed once the Netlify
+    account was deleted for good, not just suspended — no reason to keep
+    dead code for a platform the site can't go back to.
   - **Known local-testing gap**: plain `astro dev` has no Vercel
     Functions runtime at all, so the subscribe form's fetch will fail
     locally with a real error (correct behavior, not a bug) unless run

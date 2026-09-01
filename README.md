@@ -257,29 +257,23 @@ compression step needed.
 
 ---
 
-## Deploying (Netlify)
+## Deploying (Vercel)
 
-This repo includes `netlify.toml` (build command `npm run build`, publish
-directory `dist`), so connecting it to Netlify is config-free:
+Astro's static output is auto-detected by Vercel, so connecting it is
+config-free:
 
 1. Push this repo to GitHub.
-2. In Netlify: **Add new site → Import an existing project**, pick the repo.
-   Netlify will read `netlify.toml` automatically — no settings to fill in.
+2. In Vercel: **Add New → Project**, pick the repo. Vercel detects Astro
+   automatically (build command `astro build`, output `dist`) — no
+   settings to fill in.
 3. Every push to the connected branch triggers a new build and deploy.
    New/edited files under `src/content/` go live on the very next push —
    that's the whole content workflow.
 4. Once you have a real domain, update the `site` field in
-   `astro.config.mjs` (used for canonical URLs).
-5. The Blogs page's "Get new posts by email" form uses
-   [Netlify Forms](https://docs.netlify.com/manage/forms/setup/) —
-   detection is automatic (Netlify scans the deployed HTML for the
-   `data-netlify` form), no extra setup needed. Submissions show up under
-   **Site → Forms** in the Netlify dashboard. Note that Netlify Forms only
-   *collects* subscriber emails; it doesn't send anything to them when a
-   new post goes up. Actually emailing subscribers needs a real mailing
-   tool (Resend, Buttondown, Mailchimp, …) wired up separately — not built
-   yet. The form also collects which category checkboxes a subscriber
-   picked (same `categories` list as the blog filter buttons, in
-   `src/pages/blog/index.astro`) — each submission shows up in the
-   Netlify dashboard with its chosen categories, so a per-category send
-   is a manual filter on that data today, not automatic.
+   `astro.config.mjs` (used for canonical URLs) and add the domain under
+   the project's **Settings → Domains**.
+5. The Blogs page's "Get new posts by email" form is a real pipeline —
+   see the `api/` section below — not just a submissions box. It needs a
+   Vercel Blob store connected to the project (**Storage** tab) and a
+   few environment variables set (**Settings → Environment Variables**);
+   see that section for exactly which ones.
