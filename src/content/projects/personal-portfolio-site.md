@@ -7,7 +7,7 @@ stack: ["Astro", "TypeScript", "Tailwind CSS", "Vercel Functions", "Vercel Blob"
 links:
   demo: "https://sudharsanbalaji.com"
 featured: true
-order: 3
+order: 2
 ---
 
 ## The Problem
