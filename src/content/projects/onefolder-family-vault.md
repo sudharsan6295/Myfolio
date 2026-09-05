@@ -1,9 +1,18 @@
 ---
-title: "OneFolder — a family vault"
-summary: "A secure record of a family's bank accounts, loans, insurance, and investments — with view-only access for a handful of trusted people, so nothing sits undiscovered if something happens to the one person who kept it all in their head."
-status: "prototype"
+title: "Findash — net worth, and the record behind it"
+summary: "A personal finance app that shows a household's net worth as one live number, and keeps the record of accounts, loans and policies behind it — shared read-only with a few trusted people."
+status: "live"
 startDate: 2026-08-01
-stack: ["Next.js", "TypeScript", "Tailwind CSS", "Supabase (Postgres, Auth, Storage)", "Resend"]
+stack:
+  [
+    "Next.js 16 (App Router)",
+    "TypeScript",
+    "Tailwind CSS v4",
+    "Supabase (Postgres, Auth, Storage, RLS)",
+    "dnd-kit",
+    "Resend",
+    "Vercel (hosting + cron)",
+  ]
 links:
   demo: "https://one-folder.vercel.app/"
 featured: true
@@ -12,50 +21,49 @@ order: 1
 
 ## The Problem
 
-In most households, one person holds the complete mental map of the
-family's finances — which bank accounts exist, which policies are active,
-what's owed on what loan — and none of it is written down anywhere the rest
-of the family can get to. In India alone, roughly ₹1.84 lakh crore in
-financial assets currently sits unclaimed with banks and regulators, per
-government disclosures. That's not fraud or negligence; it's just what
-happens when the one person who knew where everything was isn't there to
-say so.
+There is no one place that says what a family is worth. Shares sit with a
+broker, PPF with a bank, EPF with the government, the home loan on an
+emailed statement. Adding it up means opening six apps.
+
+And usually one person holds that whole picture in their head. Over
+₹1 lakh crore sits unclaimed with Indian banks and regulators — mostly
+because nobody else knew where to look.
 
 ## What it does
 
-OneFolder lets you build a structured record across four categories — bank
-accounts, loans, insurance policies, investments — each with document
-uploads (a scanned passbook, a policy PDF). You invite up to four trusted
-contacts by email; they get view-only access to whatever you choose to
-share, an auto-generated plain-language emergency checklist built from your
-own records, and an access log so you can see who looked at what and when.
+Shows net worth as one number: everything owned minus everything owed,
+with a trend line. Goals let you drag a holding onto a target and see the
+growth rate you would still need. The Portfolio Tracker groups shares and
+funds your own way and shows profit, allocation and CAGR per group. Gold,
+FDs and PPF sit on a separate board so a big balance there does not skew
+the equity view.
+
+Behind the number is the Ledger — each account, loan and policy with its
+nominee, due date and document. You can invite up to four trusted
+contacts. Each one sees only the entries you tick, read-only, and every
+view is logged.
 
 ## How it is built
 
-Real Supabase Auth with mandatory MFA (TOTP, not a fixed code), Row Level
-Security enforcing that a trusted contact only ever sees what's explicitly
-shared with them, and every trusted-contact view logged through a database
-function rather than a raw client write — so a view can't be forged or
-skipped. Sensitive fields (account numbers, policy numbers) are encrypted
-at the application layer before they ever reach the database.
+Sign-in requires an authenticator code. Access rules live in the database
+itself, so a trusted contact can only read a row you explicitly shared.
+Account numbers are encrypted before they are stored, and the edit history
+never records them — a log of decrypted account numbers would undo the
+encryption.
 
 ## A simple tech stack workflow to understand
 
 ```
-Sign up (Supabase Auth + MFA)
-   → add a record → encrypted, then stored in Postgres
-   → upload a document → Supabase Storage
-   → invite a contact → Resend sends the email
-   → contact opens the link → Row Level Security decides what they see
+Sign in (Supabase Auth + TOTP)
+   → add a holding → encrypted → Postgres
+   → net worth, goals and portfolio all read that one table
+   → share entries → invite by email (Resend)
+   → contact signs in → database rules decide what they see
+   → daily Vercel cron → emails what is due next
 ```
 
-Next.js renders the app and handles routing; everything past that is
-Supabase — Auth, Postgres, and Storage all enforcing the same rule, that a
-trusted contact only ever sees what's explicitly shared with them.
+Next.js renders and routes; Supabase stores and enforces.
 
 ## Where it stands
 
-The MVP is built and verified end to end against the real backend — real
-signup, real MFA, real encrypted records, real file uploads, real email
-invites — not mocked. It's currently in testing with a small number of real
-accounts, not yet publicly launched.
+Live on Vercel.
