@@ -1,6 +1,6 @@
 ---
 name: "Sudharsan Balaji Vijayakumar"
-role: "PLM Solution Consultant by trade, AI product thinker by direction"
+role: "Lead Solution Consultant at TECHNIA — PLM Consultant by trade, AI product thinker by direction"
 tagline: "Lead Solution Consultant with a decade across project, product, and solution delivery — PLM Solution Consultant by trade, AI product thinker by direction."
 location: "Coimbatore, India"
 email: "sudharsan6295@gmail.com"
@@ -11,20 +11,32 @@ social:
   linkedin: "https://www.linkedin.com/in/sudharsan-balaji-65a06791/"
   github: "https://github.com/sudharsan6295"
 currently:
-  - "Lead Solution Consultant at Addnode India"
-  - "Pursuing online PGP in Business & AI with Scaler, building toward AI product management roles."
+  - "Lead Solution Consultant at TECHNIA (Addnode Group India)"
+  - "Pursuing online PGP in Business & AI with Scaler"
 currentlyUrl: "https://www.scaler.com/online-pgp-in-business-and-ai/"
 highlights:
-  - "Delivered cost/timeline improvements across 5+ enterprise PLM engagements while sustaining 100% project transparency"
-  - "Built custom tools to support migration and data import activities"
-  - "Introduced AI into day-to-day workflows to drive business improvements"
   - "Architecting TECHNIA's on-premise-to-cloud transition framework for 3DExperience/Enovia, from the ground up"
-  - "Growing into a senior mentor role, guiding the team through every program I lead"
+  - "Reduced project costs by 15% on one enterprise PLM programme and 10% on another through strategic resource and budget planning, while maintaining 100% cost transparency and zero unplanned downtime across all go-lives."
+  - "Built a migration tool on the TECHNIA Integration Framework that cut migration time by 30%, plus verification scripts that removed most of the manual checking around it"
+  - "Automated user creation and Data imports  — a recurring block of manual setup gone from every engagement, and delivery timelines pulled in as a result"
+  - "Built Query Assist — a retrieval-grounded assistant that answers MQL questions from a curated corpus and cites the exact source it used, rather than guessing"
+  - "Built the Field-Brief Intelligence Dashboard — an on-demand Opportunity Explorer and AI brief on any tracked account: overview, recent developments and talking points, each pulled from live search with a citation attached rather than generated from memory"
+  - "Senior Team Mentor, guiding technical and functional growth alongside every programme I lead"
+stats:
+  - value: "10 yrs"
+    label: "in enterprise PLM"
+  - value: "7"
+    label: "enterprise programmes delivered"
+  - value: "Senior"
+    label: "team mentor"
+  - value: "Certified"
+    label: "PSM & Google PM"
 focusAreas:
   - "PLM & Enterprise Solution Delivery"
   - "AI Solution Implementation"
   - "Business–Tech Translation"
   - "Program Management"
+  - "Product Management"
 tools:
   - "LLM Tools & AI Agents"
   - "Prompt Engineering"
@@ -61,34 +73,80 @@ principles:
 experience:
   - company: "TECHNIA (Addnode Group India)"
     role: "Lead Solution Consultant — Solution Delivery, Product Owner, Project Manager & Scrum Master"
-    start: "2022"
+    start: "Jun 2022"
     end: "Present"
     location: "India"
     bullets:
       - "Leading end-to-end delivery across enterprise PLM programs as Solution Architect, Project Manager, Scrum Master, and Product Owner — currently managing multiple concurrent projects."
-      - "Proposed and am architecting the company's on-premise-to-cloud transition framework for 3DExperience/Enovia — migration methodology, framework structure, and rollout roadmap, built from scratch."
+      - "Proposed and architecting the company's on-premise-to-cloud transition framework for 3DExperience/Enovia — migration methodology, framework structure, and rollout roadmap, built from scratch."
       - "Delivered cost and timeline improvements across 5+ enterprise PLM engagements while sustaining 100% project transparency and zero unplanned downtime on every go-live."
-      - "Built custom tooling to support data migration and import activities, and introduced AI into day-to-day delivery work to improve team throughput."
+      - "Owned a 3DExperience 2021x to 2024x upgrade end to end — the project plan and Statement of Work through implementation, licensing, testing and documentation."
+      - "Built migration tooling on the TECHNIA Integration Framework (TIF), verification scripts that took most of the manual checking out of data imports."
+    skills:
+      - "Project Management"
+      - "Product Ownership"
+      - "Scrum"
+      - "Solution Delivery"
+      - "Stakeholder Management"
+      - "Risk & Budget Management"
+      - "3DExperience / Enovia"
+      - "TIF / JAVA / MQL / TCL"
+      - "Data Migration"
+      - "AI Tooling"
   - company: "NTT DATA"
     role: "Software Development Senior Analyst — Solution Delivery & Team Lead"
-    start: "2019"
-    end: "2022"
+    start: "Jul 2019"
+    end: "Jun 2022"
     location: "India"
     bullets:
-      - "Led a cross-functional engineering team supporting enterprise PLM platform delivery and migration for a global manufacturing client."
+      - "Supported enterprise PLM platforms for a global manufacturing client — solution implementation, planning, estimation, high-priority issue resolution, and stakeholder reporting."
+      - "Planned and ran a cross-platform PLM data migration end to end, aligning the extracted data with the target system's data model rather than lifting it across as-is."
+    skills:
+      - "Team Leadership"
+      - "Estimation & Planning"
+      - "3DExperience / Enovia"
+      - "Java/ MQL / TCL"
+      - "Data Migration"
+      - "Incident Management"
+      - "Stakeholder Reporting"
   - company: "Infosys"
     role: "Senior System Engineer"
-    start: "2016"
-    end: "2019"
+    start: "Aug 2016"
+    end: "Jul 2019"
     location: "India"
     bullets:
-      - "Delivered enterprise PLM upgrade projects — solution design, defect resolution, customization, and delivery support — for global clients."
+      - "Delivered upgrade and customisation work on Enovia 3DExperience for global pharmaceutical and rail-transport clients — requirement analysis, estimation, Java-based customisation, and testing."
+      - "Merged heavily customised functionality through a major platform upgrade, then cleared the performance blockers and long-standing defects it surfaced."
+    skills:
+      - "3DExperience / Enovia"
+      - "Java"
+      - "MQL"
+      - "TCL"
+      - "Requirement Analysis"
+      - "Platform Upgrades"
+      - "Defect Resolution"
 ---
 
-Ten years in the PLM domain, working across solution delivery, project, and product management. I design the solutions, shape what gets built next, plan the delivery, and lead the teams that ship enterprise PLM programs for global manufacturing and life sciences clients..
+Ten years in the PLM domain, working across solution delivery, project, and product management. I design the solutions, shape what gets built next, plan the delivery, and lead the teams that ship enterprise PLM programs for global manufacturing and life sciences clients.
+
+Day to day, that's solution design, upgrades, migrations and support
+programmes on 3DEXPERIENCE and ENOVIA — sizing the risks, planning the
+cutover, running the sprints, managing resources and budgets, mentoring
+the team, and standing in front of the sponsor when something moves.
+Mostly for medical device, life sciences and industrial manufacturers,
+where a bad go-live isn't an inconvenience but a business and operational
+problem — which has shaped how I work: pragmatic planning, clear
+ownership, disciplined execution, and risks surfaced early.
+
+Along the way I've worn most of the hats on a delivery team — developer,
+module lead, team lead, product owner, scrum master, project manager,
+delivery lead — which gives me a grounded view of what it takes to turn a
+solution from an idea into something that actually works in production.
 
 I'm currently pursuing a PGP in AI & Business with Scaler, and building
 toward AI product management — the kind of role that translates between
 what's technically possible and what a business actually needs, or leads
-that translation from the top.
+that translation from the top. The Workbench is where that turns into
+something running: retrieval-grounded assistants, AI briefing tools, and
+the small products I build to find out where the idea actually breaks.
 

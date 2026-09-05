@@ -1,6 +1,6 @@
 ---
-title: "MQL Assistant"
-summary: "A retrieval-grounded assistant for ENOVIA/3DEXPERIENCE developers that answers Matrix Query Language (MQL) questions from a curated set of example scripts and reference notes, citing the exact source it pulled from instead of guessing."
+title: "Query Assist"
+summary: "A retrieval-grounded assistant for developers that answers Matrix Query Language (MQL) questions from a curated set of example scripts and reference notes, citing the exact source it pulled from instead of guessing."
 status: "prototype"
 startDate: 2026-08-30
 stack: ["Python", "Streamlit", "Gemini API", "RAG", "ChromaDB", "BM25"]
@@ -11,7 +11,7 @@ order: 4
 ## The Problem
 
 MQL (Matrix Query Language) is the scripting language behind ENOVIA/
-3DEXPERIENCE's MatrixOne platform. Good material for it is scattered —
+3DEXPERIENCE's platform. Good material for it is scattered —
 some real example scripts here, a note there, tribal knowledge nobody's
 ever centralized. Every developer ends up rediscovering the same syntax
 answers for themselves instead of having one place to ask.

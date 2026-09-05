@@ -108,6 +108,17 @@ const about = defineCollection({
       // can get its own modern card treatment instead of sharing
       // .prose's generic <ul> styling).
       highlights: z.array(z.string()).default([]),
+      // A handful of headline figures shown as a strip in the About hero.
+      // Deliberately few — four is the most that still reads at a glance,
+      // and every one should be defensible from the résumé.
+      stats: z
+        .array(
+          z.object({
+            value: z.string(),
+            label: z.string(),
+          }),
+        )
+        .default([]),
       // Short tags, e.g. "AI Product Strategy" — shown as chips.
       focusAreas: z.array(z.string()).default([]),
       // Short tags, e.g. "Python" — shown as chips.
@@ -142,6 +153,11 @@ const about = defineCollection({
             end: z.string(), // e.g. "Present"
             location: z.string().optional(),
             bullets: z.array(z.string()).default([]),
+            // Short skill tags shown as a chip row under the role's
+            // bullets. Keep them to the handful that actually
+            // characterise the job — a long row reads as a keyword
+            // dump rather than a summary.
+            skills: z.array(z.string()).default([]),
           }),
         )
         .default([]),

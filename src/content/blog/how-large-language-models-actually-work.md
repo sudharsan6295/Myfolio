@@ -10,13 +10,18 @@ featured: false
 You don't need to build a model to understand what it's doing. You just need a mental model that isn't wrong. Here's the whole pipeline in one picture before we go section by section:
 
 ```
-"Unbelievable" (your text)
-   → tokens: [Un] [believ] [able]
-   → embeddings: each token becomes a list of numbers
-   → attention: every token weighs every other token
-   → next-token prediction: guess what comes next, one token at a time
-   → fine-tuning + RLHF: shape raw prediction into a helpful assistant
-   → output: a response, generated token by token
+TRAINED ONCE, LONG BEFORE YOU SEE IT
+  pretraining    predict the next token, over enormous text
+  → fine-tuning  curated examples of how to behave
+  → RLHF         human preference shapes what it does
+
+EVERY TIME YOU SEND A MESSAGE
+  "Unbelievable" (your text)
+  → tokens       [Un] [believ] [able]
+  → embeddings   each token becomes a list of numbers
+  → attention    each token weighs the tokens before it
+  → prediction   guess the next token, one at a time
+  → output       a response, generated token by token
 ```
 
 ## It doesn't read words, it reads tokens
@@ -25,11 +30,11 @@ Text gets broken into chunks called tokens — sometimes a whole word, sometimes
 
 ## Every token becomes a list of numbers
 
-Each token turns into an embedding — a list of numbers representing its meaning in a way the model can do math with. Tokens used in similar ways end up with similar numbers. This is the layer where "king − man + woman ≈ queen" lives.
+Each token turns into an embedding — a list of numbers representing its meaning in a way the model can do math with. Tokens used in similar ways end up with similar numbers — the property behind the classic word-vector result "king − man + woman ≈ queen." That result comes from older, standalone word embeddings, and it's a good intuition for what this layer holds, with one difference that matters: in an LLM these starting numbers are only the input. The layers above reshape them using the surrounding text, so the same word carries different numbers in different sentences — which is how "bank" stops being ambiguous.
 
 ## Attention is how it decides what matters
 
-For each token, the model weighs every other token in the input to figure out what's relevant right now. This is how it resolves "it" back to a noun three sentences earlier, and why more relevant context tends to produce better answers.
+For each token, the model weighs the tokens that came before it to figure out what's relevant right now. This is how it resolves "it" back to a noun three sentences earlier, and why more relevant context tends to produce better answers.
 
 ## Training is just next-token prediction, at enormous scale
 
@@ -37,7 +42,7 @@ Given the text so far, predict the next token — that's the whole objective. Do
 
 ## Fine-tuning and RLHF shape behavior, not raw knowledge
 
-A raw next-token predictor is a strange conversational partner. Extra training — fine-tuning on curated examples, then reinforcement learning from human feedback — teaches it to follow instructions, refuse certain requests, and format answers usefully. This is also where a lot of personality and guardrails get set.
+A raw next-token predictor is a strange conversational partner. Extra training — fine-tuning on curated examples, then reinforcement learning from human feedback — teaches it to follow instructions, refuse certain requests, and format answers usefully. This is also where a lot of personality and guardrails get set. All of it happens before the model is ever deployed — none of it runs when you send a message.
 
 ## Why it hallucinates
 

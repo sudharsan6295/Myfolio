@@ -108,6 +108,13 @@ html {
   color: var(--color-ink);
   scroll-behavior: smooth;
 }
+/* Smooth scrolling is a nicety; for anyone who has asked the OS not to
+   animate, an in-page jump should land instantly instead. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
 
 /* Flat paper background with a faint dot grid — a restrained nod to graph
    paper / spec-sheet vellum, not a decorative flourish. ~4% opacity so it
@@ -319,6 +326,17 @@ body {
   border-collapse: collapse;
   margin-top: 1.6em;
   font-size: 0.95em;
+}
+/* Below ~420px a 3-column table's min-content width exceeds the article
+   column and spills past the viewport (cells can't shrink below their
+   longest word). Let it scroll inside its own box instead of pushing the
+   whole page sideways. Scoped to narrow widths so the desktop table
+   layout — which fits fine — is untouched. */
+@media (max-width: 420px) {
+  .prose table {
+    display: block;
+    overflow-x: auto;
+  }
 }
 .prose th,
 .prose td {
