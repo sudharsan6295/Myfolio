@@ -1,7 +1,7 @@
 ---
 title: "MyFolio"
 summary: "This site — a professional site for portfolio, Notes and Workbench - built so that publishing something new is just adding a Markdown file, no code required. You're looking at the current build."
-status: "prototype"
+status: "Live"
 startDate: 2026-08-23
 stack: ["Astro", "TypeScript", "Tailwind CSS", "Vercel Functions", "Vercel Blob", "Resend"]
 links:
