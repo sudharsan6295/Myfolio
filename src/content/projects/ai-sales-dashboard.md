@@ -4,10 +4,8 @@ summary: "An on-demand AI-generated intelligence brief for any tracked customer 
 status: "prototype"
 startDate: 2026-08-01
 stack: ["Next.js", "TypeScript", "Tailwind CSS", "Gemini API", "Tavily", "Supabase (Postgres)", "Vercel"]
-links:
-  demo: "https://field-brief-beta.vercel.app/"
 featured: false
-order: 2
+order: 3
 ---
 
 ## The Problem
