@@ -8,7 +8,7 @@ resumeUrl: "/resume.pdf"
 photo: "./photo.png"
 photoAlt: "Sudharsan Balaji Vijayakumar"
 social:
-  linkedin: "https://www.linkedin.com/in/sudharsan-balaji-65a06791/"
+  linkedin: "https://www.linkedin.com/in/sudharsanbalaji6295"
   github: "https://github.com/sudharsan6295"
 currently:
   - "Lead Solution Consultant at TECHNIA (Addnode Group India)"
