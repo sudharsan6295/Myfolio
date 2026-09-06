@@ -4,9 +4,10 @@
 // version (see git history / CLAUDE.md) after the account hosting that
 // pipeline was suspended and the site moved to Vercel; logic is otherwise
 // unchanged, just Netlify Blobs -> Vercel Blob for storage.
-import { readJsonBlob, writeJsonBlob } from "./blob-store.js";
+import { readJsonBlob, updateJsonBlob, writeJsonBlob } from "./blob-store.js";
+import { unsubscribeUrl } from "./unsubscribe-token.js";
 
-interface Subscriber {
+export interface Subscriber {
   email: string;
   categories: string[];
   subscribedAt: string;
@@ -27,8 +28,27 @@ export async function getSubscribers(): Promise<Subscriber[]> {
   return readJsonBlob<Subscriber[]>(SUBSCRIBERS_KEY, []);
 }
 
-export async function saveSubscribers(subs: Subscriber[]): Promise<void> {
-  await writeJsonBlob(SUBSCRIBERS_KEY, subs);
+/**
+ * Read-modify-write the subscriber list under optimistic concurrency.
+ *
+ * Use this for EVERY subscriber-list change. The obvious alternative --
+ * read the list, change it, write it back -- silently loses one of two
+ * simultaneous writes: both callers read the same array, and the second
+ * write overwrites the first, so a subscriber signs up, gets a 200, and
+ * simply isn't there. This is not hypothetical here. rate-limit.ts's own
+ * header records the same bug being found and fixed in that file (7 rapid
+ * POSTs against a max of 5 all returned 200, counter stuck at 5) -- the
+ * fix just never reached the subscriber list it was written to protect.
+ *
+ * `mutate` must be pure and is re-run on each retry, so derive everything
+ * from the `subs` it is handed rather than from a value read earlier --
+ * a retry sees a newer list, and stale captured state is what this exists
+ * to prevent.
+ */
+export async function updateSubscribers(
+  mutate: (subs: Subscriber[]) => Subscriber[],
+): Promise<void> {
+  await updateJsonBlob<Subscriber[]>(SUBSCRIBERS_KEY, [], mutate);
 }
 
 export async function runNotify(siteUrl: string): Promise<string> {
@@ -97,7 +117,10 @@ async function sendDigest(opts: {
   posts: Post[];
 }): Promise<{ ok: true } | { ok: false; error: string }> {
   const { siteUrl, resendApiKey, fromEmail, subscriber, posts } = opts;
-  const unsubscribeUrl = new URL(`/api/unsubscribe?email=${encodeURIComponent(subscriber.email)}`, siteUrl).toString();
+  // Signed, so the link only works for this one address. Null only when
+  // no signing key is configured, which cannot happen on this path: the
+  // caller has already checked RESEND_API_KEY, which the key derives from.
+  const unsubscribeLink = unsubscribeUrl(subscriber.email, siteUrl);
 
   const itemsHtml = posts
     .map(
@@ -114,7 +137,7 @@ async function sendDigest(opts: {
       <p>New on Field Notes:</p>
       <ul style="list-style:none; padding:0;">${itemsHtml}</ul>
       <p style="margin-top:2em; font-size:0.8em; color:#5C666B;">
-        <a href="${unsubscribeUrl}" style="color:#5C666B;">Unsubscribe</a>
+        <a href="${unsubscribeLink}" style="color:#5C666B;">Unsubscribe</a>
       </p>
     </div>`;
 

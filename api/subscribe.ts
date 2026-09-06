@@ -3,7 +3,7 @@
 // original netlify/functions/subscribe.mts after the site moved off a
 // suspended Netlify account. Upserts by email -- resubscribing just
 // updates the category picks rather than creating a duplicate entry.
-import { getSubscribers, saveSubscribers } from "../src/lib/notify-logic.js";
+import { updateSubscribers } from "../src/lib/notify-logic.js";
 import { checkRateLimit, clientIp } from "../src/lib/rate-limit.js";
 
 export async function POST(request: Request): Promise<Response> {
@@ -49,15 +49,21 @@ export async function POST(request: Request): Promise<Response> {
     .slice(0, 20)
     .map((c) => c.slice(0, 50));
 
-  const subscribers = await getSubscribers();
-  const existing = subscribers.find((s) => s.email === email);
-  const updated = { email, categories, subscribedAt: existing?.subscribedAt ?? new Date().toISOString() };
-
-  const next = existing
-    ? subscribers.map((s) => (s.email === email ? updated : s))
-    : [...subscribers, updated];
-
-  await saveSubscribers(next);
+  // The upsert happens INSIDE the updater, not around it: two people
+  // subscribing at the same moment used to both read the same list and
+  // the second write silently dropped the first. Re-runs on a conflict
+  // against the newer list, so `existing` is always current.
+  await updateSubscribers((subscribers) => {
+    const existing = subscribers.find((s) => s.email === email);
+    const updated = {
+      email,
+      categories,
+      subscribedAt: existing?.subscribedAt ?? new Date().toISOString(),
+    };
+    return existing
+      ? subscribers.map((s) => (s.email === email ? updated : s))
+      : [...subscribers, updated];
+  });
 
   return json({ ok: true }, 200);
 }

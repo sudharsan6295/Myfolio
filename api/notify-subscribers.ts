@@ -12,12 +12,21 @@
 import { runNotify } from "../src/lib/notify-logic.js";
 
 export async function GET(request: Request): Promise<Response> {
+  // Fails CLOSED. This used to be `if (cronSecret) { ...check... }`, so an
+  // unset CRON_SECRET meant no check at all and any stranger could GET
+  // this endpoint. Most days that is harmless -- runNotify only emails on
+  // a genuinely new post -- but the day after publishing, two concurrent
+  // triggers could both read the old lastNotifiedAt and mail the whole
+  // list twice. An endpoint that sends real email to real people should
+  // refuse to run when it cannot tell who is calling it, rather than
+  // treating a missing secret as permission.
   const cronSecret = process.env.CRON_SECRET;
-  if (cronSecret) {
-    const auth = request.headers.get("authorization");
-    if (auth !== `Bearer ${cronSecret}`) {
-      return new Response("Unauthorized", { status: 401 });
-    }
+  if (!cronSecret) {
+    console.error("[notify] CRON_SECRET is not set -- refusing to run.");
+    return new Response("Not configured", { status: 503 });
+  }
+  if (request.headers.get("authorization") !== `Bearer ${cronSecret}`) {
+    return new Response("Unauthorized", { status: 401 });
   }
 
   // request.url is just the path in this runtime, not a full URL -- prefer

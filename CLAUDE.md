@@ -1142,8 +1142,19 @@ opens the menu with no horizontal overflow at 375px.
     stable shape `@astrojs/rss` produces in `src/pages/rss.xml.js`.
   - `api/notify-subscribers.ts` — the **cron** entry point, scheduled via
     `vercel.json`'s `crons` array (`0 0 * * *`, daily). Checks Vercel's
-    own `Authorization: Bearer $CRON_SECRET` signature (when that env var
-    is set) so the endpoint can't be triggered by an arbitrary public GET.
+    own `Authorization: Bearer $CRON_SECRET` signature, and **fails
+    closed** — a missing `CRON_SECRET` returns 503 rather than skipping
+    the check. It used to be `if (cronSecret) { ...check... }`, so an
+    unset variable meant no protection at all and any public GET would
+    run it. Usually harmless (runNotify only mails on a genuinely new
+    post), but the day after publishing, two concurrent triggers could
+    both read the old `lastNotifiedAt` and mail the whole list twice.
+    `notify-subscribers-test.ts` already failed closed on its own
+    `MANUAL_TRIGGER_SECRET`; the cron endpoint was the odd one out.
+    Confirmed set in Production via `vercel env ls` before making the
+    change, so this cannot silently stop the cron. **Note the schedule
+    and the secret are separate settings** — a configured cron in
+    `vercel.json` says nothing about whether `CRON_SECRET` exists.
   - `api/notify-subscribers-test.ts` — a **manual** entry point calling
     the same `runNotify()`, for testing the whole pipeline without
     waiting on the daily cron. Gated behind a `?secret=` query param
@@ -1153,7 +1164,41 @@ opens the menu with no horizontal overflow at 375px.
     permanently.
   - `api/unsubscribe.ts` — a plain `GET` link (works from an email
     client with no JS) that every digest email includes, removing that
-    address from the subscriber list.
+    address from the subscriber list. **The link is signed** — see the
+    note below; an address alone is no longer enough.
+  - **Every subscriber-list write goes through `updateSubscribers()`**
+    (`notify-logic.ts`), which wraps `updateJsonBlob` — ETag optimistic
+    concurrency with a jittered retry. `subscribe.ts` and
+    `unsubscribe.ts` used to do a plain read-modify-write via
+    `saveSubscribers()` (now removed, it had no callers left), so two
+    people subscribing in the same moment both read the same array and
+    the second write silently dropped the first — a 200 OK and no
+    subscriber. **This exact bug had already been found and fixed in
+    `rate-limit.ts`** (its header records the live proof: 7 rapid POSTs
+    against a max of 5 all returned 200, counter stuck at 5); the fix
+    just never reached the subscriber list it was written to protect.
+    The upsert now happens INSIDE the updater callback, so a retry
+    against a newer list re-derives `existing` rather than reusing a
+    stale read. **A `mutate` passed to `updateJsonBlob` must be pure** —
+    it re-runs on every conflict.
+  - **Unsubscribe links carry an HMAC** (`src/lib/unsubscribe-token.ts`).
+    They used to be `?email=<address>` and nothing else, so anyone could
+    unsubscribe anyone by guessing an address, and — since the response
+    differed by outcome — could use the endpoint to test whether an
+    address was on the list. Now every link carries `&t=<hmac>` over the
+    normalized address, verified with `timingSafeEqual` (a plain `===`
+    leaks how much of the token was right through timing). The signing
+    key is `UNSUBSCRIBE_SECRET` when set, otherwise **derived** from
+    `RESEND_API_KEY` via a domain-separated SHA-256 — deliberately not a
+    "no key means no check" fallback, which would look fixed while doing
+    nothing. Deriving is safe because the notify pipeline no-ops without
+    `RESEND_API_KEY`, so no email and therefore no link exists without
+    it. **Tradeoff: rotating the Resend key invalidates unsubscribe
+    links in already-delivered mail** — set `UNSUBSCRIBE_SECRET` to
+    decouple them. Links in mail sent *before* this change no longer
+    work; that page now points the reader at the site's contact details
+    rather than failing silently, since honouring them would mean
+    reopening the hole.
   - **Requires environment variables set in Vercel's dashboard** (Project
     → Settings → Environment Variables) that nothing in this repo can set
     for you: `RESEND_API_KEY` (from a Resend account), optionally
@@ -1162,7 +1207,9 @@ opens the menu with no horizontal overflow at 375px.
     Resend account itself was signed up with — verify a real domain in
     Resend to actually reach subscribers), `MANUAL_TRIGGER_SECRET` (any
     random string, only needed to use the manual test trigger above),
-    and optionally `CRON_SECRET` (Vercel sets/checks this automatically
+    optionally `UNSUBSCRIBE_SECRET` (any random string; without it the
+    unsubscribe signing key is derived from `RESEND_API_KEY` — see
+    above), and optionally `CRON_SECRET` (Vercel sets/checks this automatically
     for you when present — see Vercel's cron docs). A connected Vercel
     Blob store is also required (Project → Storage → connect a Blob
     store); without `RESEND_API_KEY` set, `notify-subscribers` no-ops
