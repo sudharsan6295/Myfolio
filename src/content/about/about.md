@@ -80,7 +80,7 @@ experience:
       - "Leading end-to-end delivery across enterprise PLM programs as Solution Architect, Project Manager, Scrum Master, and Product Owner — currently managing multiple concurrent projects."
       - "Proposed and architecting the company's on-premise-to-cloud transition framework for 3DExperience/Enovia — migration methodology, framework structure, and rollout roadmap, built from scratch."
       - "Delivered cost and timeline improvements across 5+ enterprise PLM engagements while sustaining 100% project transparency and zero unplanned downtime on every go-live."
-      - "Owned a 3DExperience 2021x to 2024x upgrade end to end — the project plan and Statement of Work through implementation, licensing, testing and documentation."
+      - "Owned 3DExperience upgrade end to end — the project plan and Statement of Work through implementation, testing and documentation."
       - "Built migration tooling on the TECHNIA Integration Framework (TIF), verification scripts that took most of the manual checking out of data imports."
     skills:
       - "Project Management"
