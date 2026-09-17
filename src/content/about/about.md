@@ -1,5 +1,4 @@
 ---
----
 name: "Sudharsan Balaji Vijayakumar"
 role: "Lead Solution Consultant at TECHNIA — Technical Program Manager by function, AI product thinker by direction"
 tagline: "Technical Program Manager with a decade across solution, project, and product delivery — PLM is my domain, not my ceiling."
