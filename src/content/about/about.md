@@ -1,7 +1,7 @@
 ---
 name: "Sudharsan Balaji Vijayakumar"
-role: "Lead Solution Consultant at TECHNIA — PLM Consultant by trade, AI product thinker by direction"
-tagline: "Lead Solution Consultant with a decade across project, product, and solution delivery — PLM Solution Consultant by trade, AI product thinker by direction."
+role: "Lead Solution Consultant at TECHNIA — Technical Program Manager by function, AI product thinker by direction"
+tagline: "Lead Solution Consultant with a decade across project, product, and solution delivery — Technical Program Manager by function, AI product thinker by direction."
 location: "Coimbatore, India"
 email: "sudharsan6295@gmail.com"
 resumeUrl: "/resume.pdf"
