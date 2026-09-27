@@ -7,7 +7,8 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { title, summary, status, stack, featured } = project.data;
+const { title, summary, status, featured, links } = project.data;
+const { demo, repo } = links;
 
 const statusTone: Record<string, "pen" | "highlight" | "ink"> = {
   live: "pen",
@@ -22,9 +23,8 @@ const edgeVar: Record<string, string> = {
 };
 ---
 
-<a
-  href={`/projects/${project.id}`}
-  class="group card-edge panel flex flex-col h-full p-6 sm:p-7 hover:border-pen/50 transition-colors"
+<div
+  class="group card-edge panel relative flex flex-col h-full p-6 sm:p-7 hover:border-pen/50 transition-colors"
   style={`--edge: ${edgeVar[tone]}`}
 >
   <div class="flex items-center justify-between gap-3 mb-4">
@@ -43,15 +43,34 @@ const edgeVar: Record<string, string> = {
   </div>
 
   <h3 class="font-display font-semibold text-xl leading-snug text-ink group-hover:text-pen transition-colors">
-    {title}
+    <a href={`/projects/${project.id}`} class="static after:absolute after:inset-0">
+      {title}
+    </a>
   </h3>
   <p class="mt-2 text-sm text-ink-soft leading-relaxed">{summary}</p>
 
-  <ul class="mt-auto pt-4 flex flex-wrap gap-1.5">
-    {stack.slice(0, 4).map((item) => (
-      <li class="font-mono text-[0.65rem] text-ink-soft border border-line rounded-[3px] px-1.5 py-0.5 bg-paper">
-        {item}
-      </li>
-    ))}
-  </ul>
-</a>
+  {(demo || repo) && (
+    <div class="relative z-10 mt-auto pt-4 flex flex-wrap gap-4">
+      {demo && (
+        <a
+          href={demo}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1 font-mono text-[0.65rem] uppercase tracking-[0.1em] text-pen hover:text-ink transition-colors"
+        >
+          Live demo ↗
+        </a>
+      )}
+      {repo && (
+        <a
+          href={repo}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1 font-mono text-[0.65rem] uppercase tracking-[0.1em] text-pen hover:text-ink transition-colors"
+        >
+          Source ↗
+        </a>
+      )}
+    </div>
+  )}
+</div>

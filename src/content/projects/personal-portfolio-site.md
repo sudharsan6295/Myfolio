@@ -6,6 +6,7 @@ startDate: 2026-08-23
 stack: ["Astro", "TypeScript", "Tailwind CSS", "Vercel Functions", "Vercel Blob", "Resend"]
 links:
   demo: "https://sudharsanbalaji.com"
+  repo: "https://github.com/sudharsan6295/Myfolio"
 featured: true
 order: 2
 ---
