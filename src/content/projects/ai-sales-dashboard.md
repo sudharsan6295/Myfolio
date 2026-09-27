@@ -1,9 +1,11 @@
 ---
 title: "Field-Brief Intelligence Dashboard"
 summary: "An on-demand AI-generated intelligence brief for any tracked customer — company overview, recent developments, and suggested talking points — sourced from the company's own website, LinkedIn, and web search, with citations, not guesses."
-status: "prototype"
+status: "live"
 startDate: 2026-08-01
 stack: ["Next.js", "TypeScript", "Tailwind CSS", "Gemini API", "Tavily", "Supabase (Postgres)", "Vercel"]
+links:
+  demo: "https://field-brief-beta.vercel.app/"
 featured: false
 order: 3
 ---
