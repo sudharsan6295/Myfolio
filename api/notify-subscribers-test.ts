@@ -9,6 +9,7 @@
 //
 // Usage once that's set: GET /api/notify-subscribers-test?secret=<value>
 import { runNotify } from "../src/lib/notify-logic.js";
+import { secureCompare } from "../src/lib/secure-compare.js";
 
 export async function GET(request: Request): Promise<Response> {
   // request.url is just the path in this runtime, not a full URL -- the
@@ -20,7 +21,7 @@ export async function GET(request: Request): Promise<Response> {
   if (!expected) {
     return new Response("MANUAL_TRIGGER_SECRET is not set -- refusing to run.", { status: 503 });
   }
-  if (secret !== expected) {
+  if (!secureCompare(secret ?? "", expected)) {
     return new Response("Forbidden", { status: 403 });
   }
 

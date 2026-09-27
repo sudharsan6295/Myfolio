@@ -10,6 +10,7 @@
 // triggered by an arbitrary public GET, only Vercel's own scheduler (or
 // someone who has the secret).
 import { runNotify } from "../src/lib/notify-logic.js";
+import { secureCompare } from "../src/lib/secure-compare.js";
 
 export async function GET(request: Request): Promise<Response> {
   // Fails CLOSED. This used to be `if (cronSecret) { ...check... }`, so an
@@ -25,7 +26,7 @@ export async function GET(request: Request): Promise<Response> {
     console.error("[notify] CRON_SECRET is not set -- refusing to run.");
     return new Response("Not configured", { status: 503 });
   }
-  if (request.headers.get("authorization") !== `Bearer ${cronSecret}`) {
+  if (!secureCompare(request.headers.get("authorization") ?? "", `Bearer ${cronSecret}`)) {
     return new Response("Unauthorized", { status: 401 });
   }
 
