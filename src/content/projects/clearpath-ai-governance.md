@@ -4,7 +4,8 @@ summary: "A reference site and toolkit for AI governance — rules by region (EU
 status: "prototype"
 startDate: 2026-10-01
 stack: ["Astro", "TypeScript", "Web Crypto", "Web Workers", "CSS"]
-links: {}
+links:
+  demo: "https://ai-governance-iota.vercel.app/"
 featured: false
 order: 8
 ---
