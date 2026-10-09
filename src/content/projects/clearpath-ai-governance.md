@@ -24,11 +24,13 @@ up front — exactly what a governance team shouldn't hand over casually.
 It gives each reader a path: leaders, builders, compliance, procurement or HR.
 Region pages show the instruments, key dates and regulators for the EU, US, UK,
 India and global frameworks, each record carrying a certainty label ("confirmed",
-"simplified", "unsettled", "unverified") and a review date. 32 in-browser tools
+"simplified", "unsettled", "unverified") and a review date. 29 in-browser tools
 cover the working steps — screening a system against the EU risk tiers, an AI
 register, vendor due diligence, impact rating, controls, incidents, a RACI, a
 policy builder, maturity roadmap and a board report — and 44 templates download
-as DOCX, XLSX, CSV or Markdown. Lessons and quizzes sit alongside.
+as DOCX, XLSX, CSV or Markdown. 19 lessons come with a quiz per role, and key
+dates export to your calendar as `.ics` files. Choose a role once and a "Your
+path" bar follows you around the site with the recommended next pages.
 
 ## How it is built
 
@@ -39,7 +41,10 @@ days. Tool state lives in the visitor's own browser (session storage by default,
 optional local saving), exports run client-side with hand-written DOCX, XLSX and
 ZIP writers, and workspaces can be exported with password encryption (AES-GCM).
 Rules logic is plain functions with unit tests, and the page security policy
-blocks every third-party request unless analytics is switched on.
+blocks every third-party request unless analytics is switched on. The
+visual system is a plain-CSS token set with automatic dark mode, checked with
+axe-core for contrast and accessibility, and every page gets its own share
+image generated at build time.
 
 ## A simple tech stack workflow to understand
 
@@ -57,7 +62,9 @@ in what you know shows up as a prompt to check, not a false all-clear.
 
 ## Where it stands
 
-Prototype. The structure, tools and tests are in place, and every legal record
-is still marked Draft: nothing is shown as confirmed until it's checked against
-a primary source and reviewed by counsel. It is reference material, not legal
-advice. Deployed on Vercel from a private repository for now.
+Prototype, live on Vercel. The structure, tools and tests are in place, and the
+interface has had an accessibility and dark-mode pass. Every legal record is
+still marked Draft: nothing is shown as confirmed until it's checked against a
+primary source and reviewed by counsel, and no human accessibility testing has
+happened yet. It is reference material, not legal advice. The source repository
+is private for now.
