@@ -321,6 +321,37 @@ body {
   border: none;
   padding: 0;
 }
+
+/* Code blocks are highlighted by Shiki with dual light/dark themes
+   (astro.config.mjs). Shiki writes the LIGHT theme as inline styles,
+   and an inline style beats any class rule — so every block showed a
+   white #fff background even on the dark page, and the .prose pre
+   background above never applied. Two fixes:
+   1. The block background always uses the site's paper token, as the
+      .prose pre rule intended (needs !important to beat the inline style).
+   2. In dark mode, text colours switch to Shiki's dark-theme values,
+      which it stores as --shiki-dark custom properties on every span.
+   Same three-state theme pattern as the tokens at the top of this file.
+   Measured: body text in a block is 13.3:1 (light) / 14.0:1 (dark). */
+.astro-code {
+  background-color: var(--color-paper) !important;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .astro-code,
+  :root:not([data-theme="light"]) .astro-code span {
+    color: var(--shiki-dark) !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+  }
+}
+:root[data-theme="dark"] .astro-code,
+:root[data-theme="dark"] .astro-code span {
+  color: var(--shiki-dark) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
 .prose table {
   width: 100%;
   border-collapse: collapse;
