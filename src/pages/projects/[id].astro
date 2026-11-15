@@ -12,7 +12,7 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props;
-const { title, summary, status, startDate, stack, links, coverImage, coverImageAlt } = project.data;
+const { title, summary, status, startDate, stack, links, coverImage, coverImageAlt, video, videoPoster } = project.data;
 const { Content, headings } = await render(project);
 
 // Table of contents — same pattern as blog/[id].astro's: H2 sections
@@ -105,6 +105,19 @@ const linkLabels: Record<string, string> = {
           alt={coverImageAlt ?? ""}
           class="mt-8 w-full rounded-md border border-line"
         />
+      )}
+
+      {video && (
+        <video
+          src={video}
+          poster={videoPoster}
+          controls
+          preload="metadata"
+          playsinline
+          class="mt-8 w-full rounded-md border border-line bg-black"
+        >
+          Your browser can't play this video.
+        </video>
       )}
 
       <div class="prose mt-10 max-w-none">

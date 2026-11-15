@@ -50,6 +50,10 @@ const projects = defineCollection({
       stack: z.array(z.string()).default([]),
       coverImage: image().optional(),
       coverImageAlt: z.string().optional(),
+      // Optional trailer/demo video, served from public/ (e.g. "/videos/x.mp4"),
+      // with an optional poster frame. Rendered above the write-up.
+      video: z.string().optional(),
+      videoPoster: z.string().optional(),
       links: z
         .object({
           demo: z.string().url().optional(),
